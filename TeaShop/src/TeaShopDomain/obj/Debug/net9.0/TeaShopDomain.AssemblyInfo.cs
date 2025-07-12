@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeaShopDomain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1544e5cc91f7efe9fffcd3576f29af63db4e3f1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6ff71d275aefc1b1043bb90bc985d088b0e8123")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeaShopDomain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeaShopDomain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShopDomain\\TeaShopDomain.csproj",
+      "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShopDomain\\TeaShopDomain.csproj",
       "projectName": "TeaShopDomain",
-      "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShopDomain\\TeaShopDomain.csproj",
+      "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShopDomain\\TeaShopDomain.csproj",
       "packagesPath": "C:\\Users\\maste\\.nuget\\packages\\",
-      "outputPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShopDomain\\obj\\",
+      "outputPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShopDomain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

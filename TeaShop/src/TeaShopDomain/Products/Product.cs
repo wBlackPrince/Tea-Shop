@@ -1,4 +1,4 @@
-namespace TeaShopDomain.Products;
+﻿namespace TeaShopDomain.Products;
 
 public class Product
 {
