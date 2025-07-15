@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "0pWH1LubPrXR1x3z2ZE0nmmbRw5tMo3zvdnvTF5/Vbs=",
+  "Source": "TeaShop.Web",
+  "BasePath": "_content/TeaShop.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -4,6 +4,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{96138CA1-3F4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaShopDomain", "src\TeaShopDomain\TeaShopDomain.csproj", "{A938945F-4E06-4204-8C66-89DE0A4E972A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaShop.Web", "src\TeaShop.Web\TeaShop.Web.csproj", "{3BD0AE7B-77FA-4F3C-B739-275597C3250C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaShop.Presenters", "src\TeaShop.Presenters\TeaShop.Presenters.csproj", "{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{730A6653-1502-44AC-9F96-17F03CA058D0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaShop.Contract", "src\TeaShop.Contract\TeaShop.Contract.csproj", "{647E5033-D105-45F4-9403-1FEA7B4BFF38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -11,11 +23,26 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A938945F-4E06-4204-8C66-89DE0A4E972A} = {96138CA1-3F44-44C8-879F-E49944B9001A}
+		{3BD0AE7B-77FA-4F3C-B739-275597C3250C} = {96138CA1-3F44-44C8-879F-E49944B9001A}
+		{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B} = {96138CA1-3F44-44C8-879F-E49944B9001A}
+		{647E5033-D105-45F4-9403-1FEA7B4BFF38} = {96138CA1-3F44-44C8-879F-E49944B9001A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A938945F-4E06-4204-8C66-89DE0A4E972A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A938945F-4E06-4204-8C66-89DE0A4E972A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A938945F-4E06-4204-8C66-89DE0A4E972A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A938945F-4E06-4204-8C66-89DE0A4E972A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BD0AE7B-77FA-4F3C-B739-275597C3250C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BD0AE7B-77FA-4F3C-B739-275597C3250C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BD0AE7B-77FA-4F3C-B739-275597C3250C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BD0AE7B-77FA-4F3C-B739-275597C3250C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC83A3CC-AB1E-4E9C-931D-A8C5FC06B31B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{647E5033-D105-45F4-9403-1FEA7B4BFF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{647E5033-D105-45F4-9403-1FEA7B4BFF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{647E5033-D105-45F4-9403-1FEA7B4BFF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{647E5033-D105-45F4-9403-1FEA7B4BFF38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
