@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TeaShop.Contract;
 using TeaShop.Contract.Comments;
 
-namespace TeaShop.Presenters;
+namespace TeaShop.Presenters.Comments;
 
 [ApiController]
 [Route("[controller]")]
