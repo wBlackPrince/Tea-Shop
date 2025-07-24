@@ -4429,8 +4429,8 @@
     },
     "TeaShop.Application/1.0.0": {
       "type": "project",
-      "path": "../../TeaShop.Application/TeaShop.Application.csproj",
-      "msbuildProject": "../../TeaShop.Application/TeaShop.Application.csproj"
+      "path": "../TeaShop.Application/TeaShop.Application.csproj",
+      "msbuildProject": "../TeaShop.Application/TeaShop.Application.csproj"
     },
     "TeaShop.Contract/1.0.0": {
       "type": "project",

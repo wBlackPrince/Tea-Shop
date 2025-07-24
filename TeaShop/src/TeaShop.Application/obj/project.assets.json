@@ -531,13 +531,13 @@
     },
     "TeaShop.Contract/1.0.0": {
       "type": "project",
-      "path": "../src/TeaShop.Contract/TeaShop.Contract.csproj",
-      "msbuildProject": "../src/TeaShop.Contract/TeaShop.Contract.csproj"
+      "path": "../TeaShop.Contract/TeaShop.Contract.csproj",
+      "msbuildProject": "../TeaShop.Contract/TeaShop.Contract.csproj"
     },
     "TeaShopDomain/1.0.0": {
       "type": "project",
-      "path": "../src/TeaShopDomain/TeaShopDomain.csproj",
-      "msbuildProject": "../src/TeaShopDomain/TeaShopDomain.csproj"
+      "path": "../TeaShopDomain/TeaShopDomain.csproj",
+      "msbuildProject": "../TeaShopDomain/TeaShopDomain.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -557,11 +557,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShop.Application\\TeaShop.Application.csproj",
+      "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Application\\TeaShop.Application.csproj",
       "projectName": "TeaShop.Application",
-      "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShop.Application\\TeaShop.Application.csproj",
+      "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Application\\TeaShop.Application.csproj",
       "packagesPath": "C:\\Users\\maste\\.nuget\\packages\\",
-      "outputPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShop.Application\\obj\\",
+      "outputPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

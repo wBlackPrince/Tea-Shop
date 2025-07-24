@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\TeaShop.Application\TeaShop.Application.csproj" />
+      <ProjectReference Include="..\TeaShop.Application\TeaShop.Application.csproj" />
       <ProjectReference Include="..\TeaShop.Contract\TeaShop.Contract.csproj" />
       <ProjectReference Include="..\TeaShopDomain\TeaShopDomain.csproj" />
     </ItemGroup>

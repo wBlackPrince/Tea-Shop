@@ -4316,8 +4316,8 @@
     },
     "TeaShop.Application/1.0.0": {
       "type": "project",
-      "path": "../../TeaShop.Application/TeaShop.Application.csproj",
-      "msbuildProject": "../../TeaShop.Application/TeaShop.Application.csproj"
+      "path": "../TeaShop.Application/TeaShop.Application.csproj",
+      "msbuildProject": "../TeaShop.Application/TeaShop.Application.csproj"
     },
     "TeaShop.Contract/1.0.0": {
       "type": "project",
@@ -4372,14 +4372,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Application\\TeaShop.Application.csproj": {
+              "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Application\\TeaShop.Application.csproj"
+            },
             "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Contract\\TeaShop.Contract.csproj": {
               "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Contract\\TeaShop.Contract.csproj"
             },
             "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShopDomain\\TeaShopDomain.csproj": {
               "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShopDomain\\TeaShopDomain.csproj"
-            },
-            "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShop.Application\\TeaShop.Application.csproj": {
-              "projectPath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\TeaShop.Application\\TeaShop.Application.csproj"
             }
           }
         }
