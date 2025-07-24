@@ -1,22 +1,62 @@
 namespace TeaShopDomain.Comments;
 
+/// <summary>
+/// Domain-модель для Id
+/// </summary>
 public class Comment
 {
+
+    public Comment(Guid id, Guid userId, Guid reviewId, Comment? parentComment, int Rate)
+    {
+        Id = id;
+        UserId = userId;
+        ReviewId = reviewId;
+        Parent = parentComment;
+        Rate = Rate;
+    }
+
+    /// <summary>
+    /// Gets or sets id комментария.
+    /// </summary>
     public Guid Id { get; set; }
 
-    public required Guid UserId { get; set; }
+    /// <summary>
+    /// Gets or sets id пользователя
+    /// </summary>
+    public Guid UserId { get; set; }
 
-    public required Guid ReviewId { get; set; }
+    /// <summary>
+    /// Gets or sets id обзора
+    /// </summary>
+    public Guid ReviewId { get; set; }
 
-    public required int Rate { get; set; }
+    /// <summary>
+    /// Gets or sets рейтинга комментария
+    /// </summary>
+    public int Rate { get; set; }
 
+    /// <summary>
+    /// Gets or sets родительского комментария
+    /// </summary>
     public Comment? Parent { get; set; }
 
+    /// <summary>
+    /// Gets or sets идентификаторов дочерних комментариев
+    /// </summary>
     public List<Guid> ChildrenIds { get; set; } = [];
 
+    /// <summary>
+    /// Gets or sets текста комментария
+    /// </summary>
     public string Text { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Gets or sets времени создания комментария
+    /// </summary>
     public DateTime CreatedAt { get; set; }
 
+    /// <summary>
+    /// Gets or sets времени обновления комментария
+    /// </summary>
     public DateTime? UpdatedAt { get; set; }
 }
