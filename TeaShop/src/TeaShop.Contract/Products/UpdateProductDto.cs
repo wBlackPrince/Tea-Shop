@@ -8,5 +8,6 @@ public record UpdateProductDto(
     string[] Ingridients,
     string Allergens,
     string PreparationMethod,
-    Guid[] TagsIds
+    Guid[] TagsIds,
+    Guid [] PhotosIds
 );

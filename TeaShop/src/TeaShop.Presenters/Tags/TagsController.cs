@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TeaShop.Contract;
 using TeaShop.Contract.Tags;
 
-namespace TeaShop.Presenters;
+namespace TeaShop.Presenters.Tags;
 
 [ApiController]
 [Route("[controller]")]

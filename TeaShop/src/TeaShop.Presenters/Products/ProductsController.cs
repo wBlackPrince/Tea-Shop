@@ -1,19 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
-using TeaShop.Contract;
+using TeaShop.Application.Products;
 using TeaShop.Contract.Products;
 
-namespace TeaShop.Presenters;
+namespace TeaShop.Presenters.Products;
 
 [ApiController]
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
+    private readonly IProductService _service;
+
+    public ProductsController(IProductService service)
+    {
+        _service = service;
+    }
+
     [HttpPost]
     public async Task<ActionResult<string>> CreateProduct(
         [FromBody] CreateProductDto request,
         CancellationToken cancellationToken)
     {
-        return this.Ok("Created product");
+        Guid productId = await _service.Create(request, cancellationToken);
+
+        return this.Ok($"Created product {productId}");
     }
 
 
@@ -71,5 +80,6 @@ public class ProductsController : ControllerBase
     {
         return this.Ok("Winter products");
     }
-
 }
+
+
