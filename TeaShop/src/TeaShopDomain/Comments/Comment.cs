@@ -6,13 +6,13 @@ namespace TeaShopDomain.Comments;
 public class Comment
 {
 
-    public Comment(Guid id, Guid userId, Guid reviewId, Comment? parentComment, int Rate)
+    public Comment(Guid id, Guid userId, Guid reviewId, Guid? parentId, int rate)
     {
         Id = id;
         UserId = userId;
         ReviewId = reviewId;
-        Parent = parentComment;
-        Rate = Rate;
+        ParentId = parentId;
+        Rate = rate;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class Comment
     /// <summary>
     /// Gets or sets родительского комментария
     /// </summary>
-    public Comment? Parent { get; set; }
+    public Guid? ParentId { get; set; }
 
     /// <summary>
     /// Gets or sets идентификаторов дочерних комментариев

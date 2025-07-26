@@ -20,10 +20,10 @@ public class Tag
     /// <summary>
     /// Gets or sets идентификатора имени тега
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets описания тега
     /// </summary>
-    public required string Description { get; set; }
+    public string Description { get; set; }
 }
