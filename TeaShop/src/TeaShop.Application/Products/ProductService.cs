@@ -9,21 +9,21 @@ public class ProductService : IProductService
 {
     private readonly IProductsRepository _productsRepository;
     private readonly ILogger<ProductService> _logger;
-    private readonly IValidator<CreateProductDto> _validator;
+    private readonly IValidator<CreateProductDto> _createProductValidator;
 
     public ProductService(
         IProductsRepository productsRepository,
         ILogger<ProductService> logger,
-        IValidator<CreateProductDto> validator)
+        IValidator<CreateProductDto> createProductValidator)
     {
         _productsRepository = productsRepository;
         _logger = logger;
-        _validator = validator;
+        _createProductValidator = createProductValidator;
     }
 
     public async Task<Guid> Create(CreateProductDto request, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(request, cancellationToken);
+        var result = await _createProductValidator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
         {
             throw new ValidationException(result.Errors);

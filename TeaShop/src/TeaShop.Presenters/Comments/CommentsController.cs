@@ -7,8 +7,9 @@ namespace TeaShop.Presenters.Comments;
 [Route("[controller]")]
 public class CommentsController: ControllerBase
 {
-    [HttpPost]
+    [HttpPost("{commentId:guid}/replies")]
     public async Task<IActionResult> CreateComment(
+        [FromRoute] Guid commentId,
         [FromBody] CreateCommentDto request,
         CancellationToken cancellationToken)
     {
