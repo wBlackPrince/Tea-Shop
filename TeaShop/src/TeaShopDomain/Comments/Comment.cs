@@ -6,13 +6,14 @@ namespace TeaShopDomain.Comments;
 public class Comment
 {
 
-    public Comment(Guid id, Guid userId, Guid reviewId, Guid? parentId, int rate)
+    public Comment(Guid id, Guid userId, Guid reviewId, Guid? parentId, int rate, string text)
     {
         Id = id;
         UserId = userId;
         ReviewId = reviewId;
         ParentId = parentId;
         Rate = rate;
+        Text = text;
     }
 
     /// <summary>

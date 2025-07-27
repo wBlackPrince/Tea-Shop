@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\TeaShop.Infrastructure.Postgres\TeaShop.Infrastructure.Postgres.csproj" />
       <ProjectReference Include="..\TeaShop.Presenters\TeaShop.Presenters.csproj" />
       <ProjectReference Include="..\TeaShopDomain\TeaShopDomain.csproj" />
     </ItemGroup>

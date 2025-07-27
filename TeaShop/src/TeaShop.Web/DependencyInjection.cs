@@ -1,4 +1,5 @@
 using TeaShop.Application;
+using TeaShop.Infrastructure.Postgres;
 
 namespace TeaShop.Web;
 
@@ -8,6 +9,7 @@ public static class DependencyInjection
     {
         services.AddApplication();
         services.AddWebDependencies();
+        services.AddPostgresInfrastructure();
 
         return services;
     }

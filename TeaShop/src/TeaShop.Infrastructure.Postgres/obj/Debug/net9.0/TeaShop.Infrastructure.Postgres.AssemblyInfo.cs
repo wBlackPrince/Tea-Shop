@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeaShop.Infrastructure.Postgres")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+005ce46f82679b1c7931323f6ea817ca81186802")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df094177229786095311a4623fc5ab2faf0cac50")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeaShop.Infrastructure.Postgres")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeaShop.Infrastructure.Postgres")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

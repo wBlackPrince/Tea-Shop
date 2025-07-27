@@ -42,7 +42,8 @@ public class CommentsService: ICommentsService
             request.UserId,
             request.ReviewId,
             parentId,
-            0);
+            0,
+            request.Text);
 
         await _commentsRepository.SaveAsync(comment, cancellationToken);
 
