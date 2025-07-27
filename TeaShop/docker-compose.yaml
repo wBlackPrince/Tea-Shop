@@ -1,0 +1,16 @@
+services:
+  postgres-teashop:
+    container_name: postgres-teashop
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: teashop_db
+      POSTGRES_USER: teashop_postgres
+      POSTGRES_PASSWORD: teashop_postgres
+    ports:
+      - "5435:5432" 
+    volumes:
+      - postgres-teashop-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-teashop-data:

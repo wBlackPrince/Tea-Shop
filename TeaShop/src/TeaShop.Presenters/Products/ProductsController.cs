@@ -57,25 +57,25 @@ public class ProductsController : ControllerBase
         return this.Ok("Get product by tag");
     }
 
-    [HttpGet("/seasonal/spring")]
+    [HttpGet("seasonal/spring")]
     public async Task<IActionResult> GetSpringProducts(CancellationToken cancellationToken)
     {
         return this.Ok("Spring products");
     }
 
-    [HttpGet("/seasonal/summer")]
+    [HttpGet("seasonal/summer")]
     public async Task<IActionResult> GetSummerProducts(CancellationToken cancellationToken)
     {
         return this.Ok("Summer products");
     }
 
-    [HttpGet("/seasonal/autumn")]
+    [HttpGet("seasonal/autumn")]
     public async Task<IActionResult> GetAutumnProducts(CancellationToken cancellationToken)
     {
         return this.Ok("Autumn products");
     }
 
-    [HttpGet("/seasonal/winter")]
+    [HttpGet("seasonal/winter")]
     public async Task<IActionResult> GetWinterProducts(CancellationToken cancellationToken)
     {
         return this.Ok("Winter products");

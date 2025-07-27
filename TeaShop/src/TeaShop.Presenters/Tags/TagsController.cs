@@ -15,7 +15,7 @@ public class TagsController: ControllerBase
         return Ok("Created Tag");
     }
 
-    [HttpGet("/popular")]
+    [HttpGet("popular")]
     public async Task<IActionResult> GetPopularTags(CancellationToken cancellationToken)
     {
         return Ok("Get popular Tags");

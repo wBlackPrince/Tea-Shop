@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TeaShop.Contract.Comments;
 using TeaShop.Contract.Reviews;
 using TeaShop.Contract.Tags;
 
@@ -14,6 +15,15 @@ public class ReviewsController: ControllerBase
         CancellationToken cancellationToken)
     {
         return Ok("Created review");
+    }
+
+    [HttpPost("{reviewId:guid}/comments")]
+    public async Task<IActionResult> CreateCommentToReview(
+        [FromBody] CreateCommentDto request,
+        CancellationToken cancellationToken
+    )
+    {
+        return Ok($"Created comment to review with {request.ReviewId} id");
     }
 
     [HttpPut("{reviewId:guid}")]
