@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "dgSpecHash": "WV02ZU66mX0=",
+  "success": true,
+  "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\TeaShop\\src\\TeaShop.Infrastructure.Postgres\\TeaShop.Infrastructure.Postgres.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\maste\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.1\\microsoft.entityframeworkcore.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.1\\microsoft.entityframeworkcore.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.1\\microsoft.entityframeworkcore.analyzers.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\9.0.1\\microsoft.entityframeworkcore.relational.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.1\\microsoft.extensions.caching.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.1\\microsoft.extensions.caching.memory.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.1\\microsoft.extensions.configuration.abstractions.9.0.1.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.0-preview.6.25358.103\\microsoft.extensions.dependencyinjection.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0-preview.6.25358.103\\microsoft.extensions.dependencyinjection.abstractions.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.logging\\10.0.0-preview.6.25358.103\\microsoft.extensions.logging.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0-preview.6.25358.103\\microsoft.extensions.logging.abstractions.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.options\\10.0.0-preview.6.25358.103\\microsoft.extensions.options.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.0-preview.6.25358.103\\microsoft.extensions.primitives.10.0.0-preview.6.25358.103.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.4\\npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\stylecop.analyzers\\1.2.0-beta.556\\stylecop.analyzers.1.2.0-beta.556.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.556\\stylecop.analyzers.unstable.1.2.0.556.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\system.diagnostics.diagnosticsource\\10.0.0-preview.6.25358.103\\system.diagnostics.diagnosticsource.10.0.0-preview.6.25358.103.nupkg.sha512"
+  ],
+  "logs": []
+}

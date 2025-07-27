@@ -16,3 +16,5 @@ D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\obj\Debug\net9.0\Te
 D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\obj\Debug\net9.0\ref\TeaShop.Presenters.dll
 D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\bin\Debug\net9.0\TeaShop.Contract.dll
 D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\bin\Debug\net9.0\TeaShop.Contract.pdb
+D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\bin\Debug\net9.0\TeaShop.Application.dll
+D:\MyWebApplications\Tea-Shop\TeaShop\src\TeaShop.Presenters\bin\Debug\net9.0\TeaShop.Application.pdb
