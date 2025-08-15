@@ -1,8 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Domain", "src\Tea-Shop.Domain\Tea-Shop.Domain.csproj", "{5327AD48-B516-4636-979B-977D1D18E85E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{110BF1F7-28C6-45E0-84D0-A0EE96CA3402}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5327AD48-B516-4636-979B-977D1D18E85E} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5327AD48-B516-4636-979B-977D1D18E85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5327AD48-B516-4636-979B-977D1D18E85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5327AD48-B516-4636-979B-977D1D18E85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5327AD48-B516-4636-979B-977D1D18E85E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
