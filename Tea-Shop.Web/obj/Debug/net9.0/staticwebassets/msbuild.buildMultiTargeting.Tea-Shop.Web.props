@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Tea-Shop.Web.props" />
+</Project>

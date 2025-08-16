@@ -17,6 +17,7 @@ public class Product
     /// <param name="id">Идентификатор продукта.</param>
     /// <param name="title">Заголовок.</param>
     /// <param name="description">Описание.</param>
+    /// <param name="season">Сезон.</param>
     /// <param name="amount">Количество.</param>
     /// <param name="rating">Рейтинг.</param>
     /// <param name="ingrindients">Список ингриндиентов.</param>
@@ -29,15 +30,16 @@ public class Product
         string description,
         int amount,
         int rating,
+        Season season,
         IEnumerable<Ingrindient> ingrindients,
         IEnumerable<Guid> tagsIds,
         string preparationMethod,
-        IEnumerable<Guid> photosIds
-        )
+        IEnumerable<Guid> photosIds)
     {
         Id = id;
         Title = title;
         Description = description;
+        Season = season;
         Amount = amount;
         Rating = rating;
         Ingrindients = ingrindients.ToArray();
@@ -60,6 +62,11 @@ public class Product
     /// Gets or sets описание продукта
     /// </summary>
     public string Description { get; set; }
+
+    /// <summary>
+    /// Gets or sets сезон данного продукта
+    /// </summary>
+    Season Season { get; set; }
 
     /// <summary>
     /// Gets or sets цену продукта
