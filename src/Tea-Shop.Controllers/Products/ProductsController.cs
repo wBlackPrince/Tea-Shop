@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application;
 using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop;
@@ -7,12 +8,19 @@ namespace Tea_Shop;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
+    private readonly IProductsService _productService;
+
+    public ProductsController(IProductsService productService)
+    {
+        _productService = productService;
+    }
+
     [HttpGet("{productId:guid}")]
     public async Task<IActionResult> GetProduct(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        return Ok("Get product");
+         return Ok(await _productService.GetProduct(productId, cancellationToken));
     }
 
     [HttpGet("{productId:guid}/ingrindients")]
@@ -28,15 +36,16 @@ public class ProductsController : ControllerBase
         CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
-        return Ok("Created product");
+        return Ok(await _productService.CreateProduct(request, cancellationToken));
     }
 
     [HttpPatch("{productId:guid}/price")]
     public async Task<IActionResult> UpdateProductPrice(
+        [FromRoute] Guid productId,
         UpdateProductPriceRequestDto request,
         CancellationToken cancellationToken)
     {
-        return Ok("Updated product's price by id");
+        return Ok(await _productService.UpdateProductPrice(productId, request, cancellationToken));
     }
 
     [HttpPatch("{productId:guid}/amount")]
@@ -52,7 +61,7 @@ public class ProductsController : ControllerBase
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        return Ok("Deleted product");
+        return Ok(await _productService.DeleteProduct(productId, cancellationToken));
     }
 
 

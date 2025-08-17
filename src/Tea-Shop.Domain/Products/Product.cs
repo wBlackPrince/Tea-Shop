@@ -28,8 +28,7 @@ public class Product
         Guid id,
         string title,
         string description,
-        int amount,
-        int rating,
+        float amount,
         Season season,
         IEnumerable<Ingrindient> ingrindients,
         IEnumerable<Guid> tagsIds,
@@ -41,7 +40,6 @@ public class Product
         Description = description;
         Season = season;
         Amount = amount;
-        Rating = rating;
         Ingrindients = ingrindients.ToArray();
         TagsIds = tagsIds.ToArray();
         PreparationMethod = preparationMethod;
@@ -81,7 +79,7 @@ public class Product
     /// <summary>
     /// Gets or sets рейтинг продукта
     /// </summary>
-    public int Rating { get; set; }
+    public int Rating { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets список ингридиентов

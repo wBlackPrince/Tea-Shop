@@ -1,7 +1,8 @@
+using Tea_Shop.Web;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddProgramDependencies();
 
 var app = builder.Build();
 

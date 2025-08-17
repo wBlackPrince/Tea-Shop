@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Tea-Shop.Application\Tea-Shop.Application.csproj" />
       <ProjectReference Include="..\Tea-Shop.Contract\Tea-Shop.Contract.csproj" />
       <ProjectReference Include="..\Tea-Shop.Domain\Tea-Shop.Domain.csproj" />
     </ItemGroup>

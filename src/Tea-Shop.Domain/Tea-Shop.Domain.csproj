@@ -7,4 +7,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Tea-Shop.Contract\Tea-Shop.Contract.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -16,7 +16,7 @@ public class Ingrindient
     /// <param name="name">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="isAllergen">Является ли аллергенным.</param>
-    public Ingrindient(Guid id, float amount, string name, string description, string isAllergen)
+    public Ingrindient(Guid id, float amount, string name, string description, bool isAllergen)
     {
         Id = id;
         Amount = amount;
@@ -48,5 +48,5 @@ public class Ingrindient
     /// <summary>
     /// Gets or sets Аллергенен ли ингриндиент
     /// </summary>
-    public string IsAllergen { get; set; }
+    public bool IsAllergen { get; set; }
 }
