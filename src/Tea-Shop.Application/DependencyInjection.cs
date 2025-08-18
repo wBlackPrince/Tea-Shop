@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Tea_Shop.Application.Products;
 
 namespace Tea_Shop.Application;
 

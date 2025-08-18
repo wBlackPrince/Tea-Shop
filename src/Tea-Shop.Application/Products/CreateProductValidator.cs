@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Application;
+namespace Tea_Shop.Application.Products;
 
 public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
 {

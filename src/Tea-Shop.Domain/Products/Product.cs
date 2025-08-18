@@ -18,6 +18,7 @@ public class Product
     /// <param name="title">Заголовок.</param>
     /// <param name="description">Описание.</param>
     /// <param name="season">Сезон.</param>
+    /// /// <param name="price">Цена.</param>
     /// <param name="amount">Количество.</param>
     /// <param name="rating">Рейтинг.</param>
     /// <param name="ingrindients">Список ингриндиентов.</param>
@@ -28,6 +29,7 @@ public class Product
         Guid id,
         string title,
         string description,
+        float price,
         float amount,
         Season season,
         IEnumerable<Ingrindient> ingrindients,
@@ -39,6 +41,7 @@ public class Product
         Title = title;
         Description = description;
         Season = season;
+        Price = price;
         Amount = amount;
         Ingrindients = ingrindients.ToArray();
         TagsIds = tagsIds.ToArray();
@@ -64,7 +67,7 @@ public class Product
     /// <summary>
     /// Gets or sets сезон данного продукта
     /// </summary>
-    Season Season { get; set; }
+    public Season Season { get; set; }
 
     /// <summary>
     /// Gets or sets цену продукта
@@ -84,7 +87,7 @@ public class Product
     /// <summary>
     /// Gets or sets список ингридиентов
     /// </summary>
-    public Ingrindient[] Ingrindients { get; set; } =  new Ingrindient[0];
+    public Ingrindient[] Ingrindients { get; set; } = new Ingrindient[0];
 
     /// <summary>
     /// Gets or sets метод приготовления

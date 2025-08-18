@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Tea_Shop.Contract.Products;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Application;
+namespace Tea_Shop.Application.Products;
 
 public class ProductsService : IProductsService
 {
@@ -60,6 +60,7 @@ public class ProductsService : IProductsService
             productId,
             request.Title,
             request.Description,
+            request.Price,
             request.Amount,
             (Season)Enum.Parse(typeof(Season), request.Season),
             ingrindients,

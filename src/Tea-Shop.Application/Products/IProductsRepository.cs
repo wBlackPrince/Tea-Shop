@@ -1,6 +1,6 @@
 ﻿using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Application;
+namespace Tea_Shop.Application.Products;
 
 public interface IProductsRepository
 {

@@ -1,6 +1,6 @@
 ﻿using Tea_Shop.Contract.Products;
 
-namespace Tea_Shop.Application;
+namespace Tea_Shop.Application.Products;
 
 public interface IProductsService
 {

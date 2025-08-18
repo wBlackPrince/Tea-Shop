@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v9.0": {
       "Tea-Shop.Domain/1.0.0": {
         "dependencies": {
-          "StyleCop.Analyzers": "1.2.0-beta.556"
+          "StyleCop.Analyzers": "1.2.0-beta.556",
+          "Tea-Shop.Contract": "1.0.0"
         },
         "runtime": {
           "Tea-Shop.Domain.dll": {}
@@ -19,7 +20,15 @@
           "StyleCop.Analyzers.Unstable": "1.2.0.556"
         }
       },
-      "StyleCop.Analyzers.Unstable/1.2.0.556": {}
+      "StyleCop.Analyzers.Unstable/1.2.0.556": {},
+      "Tea-Shop.Contract/1.0.0": {
+        "runtime": {
+          "Tea-Shop.Contract.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -41,6 +50,11 @@
       "sha512": "sha512-zvn9Mqs/ox/83cpYPignI8hJEM2A93s2HkHs8HYMOAQW0PkampyoErAiIyKxgTLqbbad29HX/shv/6LGSjPJNQ==",
       "path": "stylecop.analyzers.unstable/1.2.0.556",
       "hashPath": "stylecop.analyzers.unstable.1.2.0.556.nupkg.sha512"
+    },
+    "Tea-Shop.Contract/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

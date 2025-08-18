@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Tea_Shop.Application;
+using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Products;
 
-namespace Tea_Shop;
+namespace Tea_Shop.Products;
 
 [ApiController]
 [Route("[controller]")]

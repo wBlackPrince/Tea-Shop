@@ -10,3 +10,7 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\Tea-Shop.Doma
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\refint\Tea-Shop.Domain.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\Tea-Shop.Domain.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\ref\Tea-Shop.Domain.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\bin\Debug\net9.0\Tea-Shop.Contract.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\bin\Debug\net9.0\Tea-Shop.Contract.pdb
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\Tea-Shop.Domain.csproj.AssemblyReference.cache
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Domain\obj\Debug\net9.0\Tea-Shop.9751F584.Up2Date

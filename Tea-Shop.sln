@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Web", "src\Tea-Sho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Application", "src\Tea-Shop.Application\Tea-Shop.Application.csproj", "{5B7B8262-010C-4D42-9C9D-39D38C69D2C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.Postgres", "src\Tea-Shop.Infrastructure.Postgres\Tea-Shop.Infrastructure.Postgres.csproj", "{0902EE51-BFB8-418D-9F1C-FD90850A41EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.ElasticSearch", "src\Tea-Shop.Infrastructure.ElasticSearch\Tea-Shop.Infrastructure.ElasticSearch.csproj", "{23D87472-E5D6-4EE2-9750-E089FB07AB22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.S3", "src\Tea-Shop.Infrastructure.S3\Tea-Shop.Infrastructure.S3.csproj", "{93E19F9A-8BC8-451F-A778-5D54F489DDDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +35,9 @@ Global
 		{E51A5BB9-743F-4776-ABE8-AD75190E27FB} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{7F4048CE-205A-45B1-AF0C-7076C6FA5B03} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{5B7B8262-010C-4D42-9C9D-39D38C69D2C3} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
+		{0902EE51-BFB8-418D-9F1C-FD90850A41EA} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
+		{23D87472-E5D6-4EE2-9750-E089FB07AB22} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
+		{93E19F9A-8BC8-451F-A778-5D54F489DDDE} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5327AD48-B516-4636-979B-977D1D18E85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -51,5 +60,17 @@ Global
 		{5B7B8262-010C-4D42-9C9D-39D38C69D2C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B7B8262-010C-4D42-9C9D-39D38C69D2C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B7B8262-010C-4D42-9C9D-39D38C69D2C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D87472-E5D6-4EE2-9750-E089FB07AB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23D87472-E5D6-4EE2-9750-E089FB07AB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23D87472-E5D6-4EE2-9750-E089FB07AB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23D87472-E5D6-4EE2-9750-E089FB07AB22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -345,6 +345,256 @@
         }
       }
     },
+    "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj",
+        "projectName": "Tea-Shop.Infrastructure.ElasticSearch",
+        "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj",
+        "packagesPath": "C:\\Users\\maste\\.nuget\\packages\\",
+        "outputPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\maste\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0-beta.556, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj",
+        "projectName": "Tea-Shop.Infrastructure.Postgres",
+        "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj",
+        "packagesPath": "C:\\Users\\maste\\.nuget\\packages\\",
+        "outputPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\maste\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.66, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0-beta.556, )"
+            },
+            "linq2db": {
+              "target": "Package",
+              "version": "[6.0.0-rc.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\Tea-Shop.Infrastructure.S3.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\Tea-Shop.Infrastructure.S3.csproj",
+        "projectName": "Tea-Shop.Infrastructure.S3",
+        "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\Tea-Shop.Infrastructure.S3.csproj",
+        "packagesPath": "C:\\Users\\maste\\.nuget\\packages\\",
+        "outputPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\maste\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0-beta.556, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Web\\Tea-Shop.Web.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -382,6 +632,15 @@
               },
               "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Domain\\Tea-Shop.Domain.csproj": {
                 "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Domain\\Tea-Shop.Domain.csproj"
+              },
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj"
+              },
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj"
+              },
+              "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\Tea-Shop.Infrastructure.S3.csproj": {
+                "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.S3\\Tea-Shop.Infrastructure.S3.csproj"
               }
             }
           }

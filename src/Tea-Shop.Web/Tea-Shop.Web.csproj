@@ -16,6 +16,9 @@
       <ProjectReference Include="..\Tea-Shop.Contract\Tea-Shop.Contract.csproj" />
       <ProjectReference Include="..\Tea-Shop.Controllers\Tea-Shop.Controllers.csproj" />
       <ProjectReference Include="..\Tea-Shop.Domain\Tea-Shop.Domain.csproj" />
+      <ProjectReference Include="..\Tea-Shop.Infrastructure.ElasticSearch\Tea-Shop.Infrastructure.ElasticSearch.csproj" />
+      <ProjectReference Include="..\Tea-Shop.Infrastructure.Postgres\Tea-Shop.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Tea-Shop.Infrastructure.S3\Tea-Shop.Infrastructure.S3.csproj" />
     </ItemGroup>
 
 </Project>
