@@ -3,10 +3,10 @@
 /// <summary>
 /// Domain-модель ингридиента
 /// </summary>
-public class Ingrindient
+public class Ingrendient
 {
     // Для Ef Core
-    private Ingrindient() { }
+    private Ingrendient() { }
 
     /// <summary>
     /// Initializes a new instance of the "Ingridient" class.
@@ -16,7 +16,7 @@ public class Ingrindient
     /// <param name="name">Название.</param>
     /// <param name="description">Описание.</param>
     /// <param name="isAllergen">Является ли аллергенным.</param>
-    public Ingrindient(Guid id, float amount, string name, string description, bool isAllergen)
+    public Ingrendient(Guid id, float amount, string name, string description, bool isAllergen)
     {
         Id = id;
         Amount = amount;

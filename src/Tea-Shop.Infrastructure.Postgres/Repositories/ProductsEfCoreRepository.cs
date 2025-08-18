@@ -2,7 +2,7 @@
 using Tea_Shop.Application.Products;
 using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Infrastructure.Postgres;
+namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
 public class ProductsEfCoreRepository: IProductsRepository
 {

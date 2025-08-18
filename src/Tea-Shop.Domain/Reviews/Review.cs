@@ -69,7 +69,7 @@ public class Review
     /// <summary>
     /// Get or sets список идентификаторов комменатриев
     /// </summary>
-    public Guid[] commentIds { get; set; } = new Guid[0];
+    public List<Guid> commentIds { get; set; } = new List<Guid>();
 
     /// <summary>
     /// Get or sets время создания

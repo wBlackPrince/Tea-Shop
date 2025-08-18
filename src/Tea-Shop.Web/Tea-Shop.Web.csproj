@@ -19,6 +19,7 @@
       <ProjectReference Include="..\Tea-Shop.Infrastructure.ElasticSearch\Tea-Shop.Infrastructure.ElasticSearch.csproj" />
       <ProjectReference Include="..\Tea-Shop.Infrastructure.Postgres\Tea-Shop.Infrastructure.Postgres.csproj" />
       <ProjectReference Include="..\Tea-Shop.Infrastructure.S3\Tea-Shop.Infrastructure.S3.csproj" />
+      <ProjectReference Include="..\Tea-Shop.Shared\Tea-Shop.Shared.csproj" />
     </ItemGroup>
 
 </Project>

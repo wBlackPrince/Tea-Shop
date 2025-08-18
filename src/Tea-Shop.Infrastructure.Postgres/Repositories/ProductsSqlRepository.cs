@@ -1,10 +1,8 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Configuration;
-using Npgsql;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Infrastructure.Postgres;
+namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
 public class ProductsSqlRepository: IProductsRepository
 {

@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "CSharpFunctionalExtensions/3.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/CSharpFunctionalExtensions.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/CSharpFunctionalExtensions.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Dapper/2.1.66": {
         "type": "package",
         "compile": {
@@ -412,7 +425,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
-          "Tea-Shop.Contract": "1.0.0"
+          "CSharpFunctionalExtensions": "3.6.0",
+          "Tea-Shop.Contract": "1.0.0",
+          "Tea-Shop.Shared": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Tea-Shop.Domain.dll": {}
@@ -420,10 +435,40 @@
         "runtime": {
           "bin/placeholder/Tea-Shop.Domain.dll": {}
         }
+      },
+      "Tea-Shop.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Tea-Shop.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tea-Shop.Shared.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "CSharpFunctionalExtensions/3.6.0": {
+      "sha512": "c+oWbfDKKjpOLPMxn/iPn1GL24YTJMtOiGfj0AsDKZ2v6/Mr6V7BfzfWLg6KqNRx3KRy3KcQE680SwvDTI/jcg==",
+      "type": "package",
+      "path": "csharpfunctionalextensions/3.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "csharpfunctionalextensions.3.6.0.nupkg.sha512",
+        "csharpfunctionalextensions.nuspec",
+        "lib/net6.0/CSharpFunctionalExtensions.dll",
+        "lib/net6.0/CSharpFunctionalExtensions.pdb",
+        "lib/net6.0/CSharpFunctionalExtensions.xml",
+        "lib/net8.0/CSharpFunctionalExtensions.dll",
+        "lib/net8.0/CSharpFunctionalExtensions.pdb",
+        "lib/net8.0/CSharpFunctionalExtensions.xml",
+        "lib/netstandard2.0/CSharpFunctionalExtensions.dll",
+        "lib/netstandard2.0/CSharpFunctionalExtensions.pdb",
+        "lib/netstandard2.0/CSharpFunctionalExtensions.xml"
+      ]
+    },
     "Dapper/2.1.66": {
       "sha512": "/q77jUgDOS+bzkmk3Vy9SiWMaetTw+NOoPAV0xPBsGVAyljd5S6P+4RUW7R3ZUGGr9lDRyPKgAMj2UAOwvqZYw==",
       "type": "package",
@@ -1043,6 +1088,11 @@
       "type": "project",
       "path": "../Tea-Shop.Domain/Tea-Shop.Domain.csproj",
       "msbuildProject": "../Tea-Shop.Domain/Tea-Shop.Domain.csproj"
+    },
+    "Tea-Shop.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Tea-Shop.Shared/Tea-Shop.Shared.csproj",
+      "msbuildProject": "../Tea-Shop.Shared/Tea-Shop.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {

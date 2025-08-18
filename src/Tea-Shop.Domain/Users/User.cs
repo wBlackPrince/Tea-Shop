@@ -1,3 +1,5 @@
+using Tea_Shop.Domain.Products;
+
 namespace Tea_Shop.Domain.Users;
 
 /// <summary>
@@ -5,6 +7,8 @@ namespace Tea_Shop.Domain.Users;
 /// </summary>
 public class User
 {
+    private List<Order> _orders;
+
     // для Ef Core
     private User() {}
 
@@ -92,4 +96,12 @@ public class User
     /// Gets or sets Способность пользователя пользоваться приложением
     /// </summary>
     public bool IsActive { get; set; } = true;
+
+
+    public IReadOnlyList<Order> Orders => _orders;
+
+    public void AddOrder(Order order)
+    {
+        _orders.Add(order);
+    }
 }

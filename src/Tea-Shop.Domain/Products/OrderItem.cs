@@ -1,4 +1,7 @@
-﻿namespace Tea_Shop.Domain.Products;
+﻿using CSharpFunctionalExtensions;
+using Tea_Shop.Shared;
+
+namespace Tea_Shop.Domain.Products;
 
 /// <summary>
 /// Domain-модель заказанного элемента
@@ -11,7 +14,7 @@ public class OrderItem
     /// <param name="id">Идентификатор заказанного элемента.</param>
     /// <param name="product">Продукт.</param>
     /// <param name="quantity">Количество продукта.</param>
-    public OrderItem(Guid id, Product product, int quantity)
+    private OrderItem(Guid id, Product product, int quantity)
     {
         Id = id;
         Product = product;
@@ -32,4 +35,16 @@ public class OrderItem
     /// Gets or sets Количество заказанного элемента
     /// </summary>
     public int Quantity { get; set; }
+
+    public static Result<OrderItem, Error> Create(Guid id, Product product, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            return Error.Failure(
+                "orderItem.quantity",
+                "Order item's quantity must be greater than zero");
+        }
+
+        return new OrderItem(id, product, quantity);
+    }
 }

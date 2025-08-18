@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Products;
+using Tea_Shop.Infrastructure.Postgres.Repositories;
 
 namespace Tea_Shop.Infrastructure.Postgres;
 

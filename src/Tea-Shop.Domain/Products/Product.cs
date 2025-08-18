@@ -7,6 +7,10 @@ namespace Tea_Shop.Domain.Products;
 /// </summary>
 public class Product
 {
+
+    private List<ProductsIngrendients> _ingredients;
+    private List<ProductsTags> _tags;
+
     // Для Ef Core
     private Product() { }
 
@@ -21,7 +25,7 @@ public class Product
     /// /// <param name="price">Цена.</param>
     /// <param name="amount">Количество.</param>
     /// <param name="rating">Рейтинг.</param>
-    /// <param name="ingrindients">Список ингриндиентов.</param>
+    /// <param name="ingredients">Список ингриндиентов.</param>
     /// <param name="tagsIds">Список идентификаторов. тегов.</param>
     /// <param name="preparationMethod">Метод приготовления в виде текста.</param>
     /// <param name="photosIds">Список идентификаторов фото.</param>
@@ -32,7 +36,7 @@ public class Product
         float price,
         float amount,
         Season season,
-        IEnumerable<Ingrindient> ingrindients,
+        IEnumerable<Ingrendient> ingredients,
         IEnumerable<Guid> tagsIds,
         string preparationMethod,
         IEnumerable<Guid> photosIds)
@@ -43,8 +47,19 @@ public class Product
         Season = season;
         Price = price;
         Amount = amount;
-        Ingrindients = ingrindients.ToArray();
-        TagsIds = tagsIds.ToArray();
+
+        var productIngredients = ingredients
+            .Select(i => new ProductsIngrendients(Guid.NewGuid(), this, i))
+            .ToList();
+
+        _ingredients = productIngredients;
+
+        var productsTags = tagsIds
+            .Select(tId => new ProductsTags(Guid.NewGuid(), this, tId))
+            .ToList();
+
+        _tags = productsTags;
+
         PreparationMethod = preparationMethod;
         PhotosIds = photosIds.ToArray();
     }
@@ -87,7 +102,7 @@ public class Product
     /// <summary>
     /// Gets or sets список ингридиентов
     /// </summary>
-    public Ingrindient[] Ingrindients { get; set; } = new Ingrindient[0];
+    public IReadOnlyList<ProductsIngrendients> Ingrindients => _ingredients;
 
     /// <summary>
     /// Gets or sets метод приготовления
@@ -97,7 +112,7 @@ public class Product
     /// <summary>
     /// Gets or sets список идентификаторов тегов продукта
     /// </summary>
-    public Guid[] TagsIds { get; set; } = new Guid[0];
+    public IReadOnlyList<ProductsTags> TagsIds => _tags;
 
     /// <summary>
     /// Gets or sets список идентификаторов фото продукта
