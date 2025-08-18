@@ -9,6 +9,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Tea-Shop.Contract\Tea-Shop.Contract.csproj" />
+      <ProjectReference Include="..\Tea-Shop.Shared\Tea-Shop.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
     </ItemGroup>
 
 </Project>

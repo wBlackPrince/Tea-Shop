@@ -15,6 +15,7 @@ public class Comment
     /// <param name="id">Идентификатор комментария.</param>
     /// <param name="userId">Идентификатор пользователя.</param>
     /// <param name="text">Текст комментраия.</param>
+    /// <param name="reviewId">Идентификатор обзора.</param>
     /// <param name="rating">Рейтинг комменатрия.</param>
     /// <param name="parentId">Идентификатор родительского комменатрия.</param>
     /// <param name="createdAt">Дата создания.</param>
@@ -22,6 +23,7 @@ public class Comment
     public Comment(
         Guid id,
         Guid userId,
+        Guid reviewId,
         string text,
         DateTime createdAt,
         DateTime updatedAt,
@@ -30,6 +32,7 @@ public class Comment
         Id = id;
         ParentId = parentId;
         UserId = userId;
+        reviewId = reviewId;
         Text = text;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
@@ -59,6 +62,11 @@ public class Comment
     /// Get or sets рейтинг комментария
     /// </summary>
     public int Rating { get; set; } = 0;
+
+    /// <summary>
+    /// Get or sets идентификатор обзора
+    /// </summary>
+    public Guid reviewId { get; set; }
 
     /// <summary>
     /// Get or sets идентификатор родительского комментария

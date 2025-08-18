@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "j9HurTRFl5M=",
+  "dgSpecHash": "/HprhZfTPqI=",
   "success": true,
   "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Application\\Tea-Shop.Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\maste\\.nuget\\packages\\csharpfunctionalextensions\\3.6.0\\csharpfunctionalextensions.3.6.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.0-preview.7.25380.108\\microsoft.extensions.dependencyinjection.10.0.0-preview.7.25380.108.nupkg.sha512",

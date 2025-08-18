@@ -48,8 +48,8 @@ public class ProductsService : IProductsService
 
         Guid productId = Guid.NewGuid();
 
-        Ingrindient[] ingrindients = request.Ingridients
-            .Select(ingrRequest => new Ingrindient(
+        Ingrendient[] ingrindients = request.Ingridients
+            .Select(ingrRequest => new Ingrendient(
                 Guid.NewGuid(),
                 ingrRequest.Amount,
                 ingrRequest.Name,

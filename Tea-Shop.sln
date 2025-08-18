@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.Ela
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.S3", "src\Tea-Shop.Infrastructure.S3\Tea-Shop.Infrastructure.S3.csproj", "{93E19F9A-8BC8-451F-A778-5D54F489DDDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Shared", "src\Tea-Shop.Shared\Tea-Shop.Shared.csproj", "{19B88430-2146-46D7-BCDF-9CB8FC9643F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,7 @@ Global
 		{0902EE51-BFB8-418D-9F1C-FD90850A41EA} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{23D87472-E5D6-4EE2-9750-E089FB07AB22} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{93E19F9A-8BC8-451F-A778-5D54F489DDDE} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
+		{19B88430-2146-46D7-BCDF-9CB8FC9643F6} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5327AD48-B516-4636-979B-977D1D18E85E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -72,5 +75,9 @@ Global
 		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93E19F9A-8BC8-451F-A778-5D54F489DDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B88430-2146-46D7-BCDF-9CB8FC9643F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B88430-2146-46D7-BCDF-9CB8FC9643F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B88430-2146-46D7-BCDF-9CB8FC9643F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B88430-2146-46D7-BCDF-9CB8FC9643F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

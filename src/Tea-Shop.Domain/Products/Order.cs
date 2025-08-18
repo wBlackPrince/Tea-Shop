@@ -1,10 +1,16 @@
-﻿namespace Tea_Shop.Domain.Products;
+﻿using System.Runtime.InteropServices.JavaScript;
+using CSharpFunctionalExtensions;
+using Tea_Shop.Shared;
+
+namespace Tea_Shop.Domain.Products;
 
 /// <summary>
 /// Domain-модель заказа
 /// </summary>
 public class Order
 {
+    private readonly List<OrderItem> _orderItems;
+
     // Для Ef Core
     private Order() { }
 
@@ -37,7 +43,7 @@ public class Order
         PaymentWay = paymentWay;
         ExpectedDeliveryTime = expectedDeliveryTime;
         OrderStatus = orderStatus;
-        OrderItems = orderItems.ToArray();
+        _orderItems = orderItems.ToList();
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
@@ -75,7 +81,9 @@ public class Order
     /// <summary>
     /// Gets or sets список доставочных товаров
     /// </summary>
-    public OrderItem[] OrderItems { get; set; }
+    public IReadOnlyList<OrderItem> OrderItems => _orderItems;
+
+    public int OrderItemsCount => _orderItems.Count;
 
     /// <summary>
     /// Get or sets время создания
@@ -86,4 +94,17 @@ public class Order
     /// Get or sets время обновления
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+
+
+    public UnitResult<Error> AddOrderItem(OrderItem orderItem)
+    {
+        if (OrderItemsCount > (int)ProductConstants.ORDER_ITEMS_LIMIT)
+        {
+            return Error.Conflict("orders.orders_items.LIMIT", "Too many order items");
+        }
+
+        _orderItems.Add(orderItem);
+
+        return UnitResult.Success<Error>();
+    }
 }

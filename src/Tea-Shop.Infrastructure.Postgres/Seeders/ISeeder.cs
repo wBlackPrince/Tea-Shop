@@ -1,4 +1,4 @@
-﻿namespace Tea_Shop.Infrastructure.Postgres;
+﻿namespace Tea_Shop.Infrastructure.Postgres.Seeders;
 
 public interface ISeeder
 {
