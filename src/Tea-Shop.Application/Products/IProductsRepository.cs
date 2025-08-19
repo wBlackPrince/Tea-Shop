@@ -11,4 +11,6 @@ public interface IProductsRepository
     Task<Guid> UpdateProductPrice(Guid productId, float price, CancellationToken cancellationToken);
 
     Task<Guid> DeleteProduct(Guid productId, CancellationToken cancellationToken);
+
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

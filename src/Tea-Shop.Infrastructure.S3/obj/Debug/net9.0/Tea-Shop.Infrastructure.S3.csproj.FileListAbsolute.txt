@@ -18,3 +18,5 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\obj\Debug\net9.0\Te
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\obj\Debug\net9.0\refint\Tea-Shop.Infrastructure.S3.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\obj\Debug\net9.0\Tea-Shop.Infrastructure.S3.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\obj\Debug\net9.0\ref\Tea-Shop.Infrastructure.S3.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\bin\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.S3\bin\Debug\net9.0\Tea-Shop.Shared.pdb

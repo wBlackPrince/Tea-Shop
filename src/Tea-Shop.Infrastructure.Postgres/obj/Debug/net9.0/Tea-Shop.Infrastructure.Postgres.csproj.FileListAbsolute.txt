@@ -18,3 +18,5 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\obj\Debug\net
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\obj\Debug\net9.0\refint\Tea-Shop.Infrastructure.Postgres.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\obj\Debug\net9.0\Tea-Shop.Infrastructure.Postgres.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\obj\Debug\net9.0\ref\Tea-Shop.Infrastructure.Postgres.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\bin\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.Postgres\bin\Debug\net9.0\Tea-Shop.Shared.pdb

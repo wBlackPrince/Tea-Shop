@@ -4,6 +4,8 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;
 
+public record OrderId(Guid Value);
+
 /// <summary>
 /// Domain-модель заказа
 /// </summary>
@@ -27,7 +29,7 @@ public class Order
     /// <param name="createdAt">Дата создания.</param>
     /// <param name="updatedAt">Дата обновления.</param>
     public Order(
-        Guid id,
+        OrderId id,
         Guid userId,
         string deliveryAddress,
         PaymentWay paymentWay,
@@ -51,7 +53,7 @@ public class Order
     /// <summary>
     /// Gets or sets идентификатор заказа
     /// </summary>
-    public Guid Id { get; set; }
+    public OrderId Id { get; set; }
 
     /// <summary>
     /// Gets or sets идентификатор пользователя

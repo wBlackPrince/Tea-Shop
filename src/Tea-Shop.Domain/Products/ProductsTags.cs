@@ -1,15 +1,20 @@
 ﻿namespace Tea_Shop.Domain.Products;
 
+public record ProductsTagsId(Guid Value);
+
 public class ProductsTags
 {
-    public ProductsTags(Guid id, Product product, Guid tagId)
+    // для ef core
+    private ProductsTags() { }
+
+    public ProductsTags(ProductsTagsId id, Product product, Guid tagId)
     {
         Id = id;
         Product = product;
         TagId = tagId;
     }
 
-    public Guid Id { get; set; }
+    public ProductsTagsId Id { get; set; }
 
     public Product Product { get; set; }
 

@@ -2,13 +2,14 @@
 
 namespace Tea_Shop.Domain.Products;
 
+
+public record ProductId(Guid Value);
+
 /// <summary>
 /// Domain-модель продукта
 /// </summary>
 public class Product
 {
-
-    private List<ProductsIngrendients> _ingredients;
     private List<ProductsTags> _tags;
 
     // Для Ef Core
@@ -27,10 +28,11 @@ public class Product
     /// <param name="rating">Рейтинг.</param>
     /// <param name="ingredients">Список ингриндиентов.</param>
     /// <param name="tagsIds">Список идентификаторов. тегов.</param>
-    /// <param name="preparationMethod">Метод приготовления в виде текста.</param>
+    /// <param name="preparationDescription">Метод приготовления в виде текста.</param>
+    /// /// <param name="preparationTime">Время приготовления.</param>
     /// <param name="photosIds">Список идентификаторов фото.</param>
     public Product(
-        Guid id,
+        ProductId id,
         string title,
         string description,
         float price,
@@ -38,7 +40,8 @@ public class Product
         Season season,
         IEnumerable<Ingrendient> ingredients,
         IEnumerable<Guid> tagsIds,
-        string preparationMethod,
+        string preparationDescription,
+        int preparationTime,
         IEnumerable<Guid> photosIds)
     {
         Id = id;
@@ -49,25 +52,27 @@ public class Product
         Amount = amount;
 
         var productIngredients = ingredients
-            .Select(i => new ProductsIngrendients(Guid.NewGuid(), this, i))
-            .ToList();
+            .Select(i => new Ingrendient(i.Amount, i.Name, i.IsAllergen));
 
-        _ingredients = productIngredients;
+        Ingrindients = productIngredients.ToList();
 
         var productsTags = tagsIds
-            .Select(tId => new ProductsTags(Guid.NewGuid(), this, tId))
+            .Select(tId => new ProductsTags(
+                 new ProductsTagsId(Guid.NewGuid()),
+                this,
+                tId))
             .ToList();
 
         _tags = productsTags;
 
-        PreparationMethod = preparationMethod;
+        PreparationMethod = PreparationMethod.Create(preparationTime, preparationDescription).Value;
         PhotosIds = photosIds.ToArray();
     }
 
     /// <summary>
     /// Gets or sets идентификатор продукта
     /// </summary>
-    public Guid Id { get; set; }
+    public ProductId Id { get; set; }
 
     /// <summary>
     /// Gets or sets заголовок продукта
@@ -102,12 +107,12 @@ public class Product
     /// <summary>
     /// Gets or sets список ингридиентов
     /// </summary>
-    public IReadOnlyList<ProductsIngrendients> Ingrindients => _ingredients;
+    public List<Ingrendient> Ingrindients { get; set; }
 
     /// <summary>
     /// Gets or sets метод приготовления
     /// </summary>
-    public string PreparationMethod { get; set; }
+    public PreparationMethod? PreparationMethod { get; set; }
 
     /// <summary>
     /// Gets or sets список идентификаторов тегов продукта

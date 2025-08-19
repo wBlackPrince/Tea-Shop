@@ -7,6 +7,7 @@ public record CreateProductRequestDto(
     string Description,
     string Season,
     CreateIngrindientRequestDto[] Ingridients,
-    string PreparationmMethod,
+    string PreparationDescription,
+    int PreparationTime,
     Guid[] TagsIds,
     Guid[] PhotosIds);

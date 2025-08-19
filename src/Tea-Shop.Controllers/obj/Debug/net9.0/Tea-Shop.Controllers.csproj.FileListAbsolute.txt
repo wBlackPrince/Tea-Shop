@@ -18,3 +18,5 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop.Contract.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop.Application.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop.Application.pdb
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Controllers\bin\Debug\net9.0\Tea-Shop.Shared.pdb

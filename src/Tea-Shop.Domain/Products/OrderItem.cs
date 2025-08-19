@@ -3,18 +3,24 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;
 
+
+public record OrderItemId(Guid Value);
+
 /// <summary>
 /// Domain-модель заказанного элемента
 /// </summary>
 public class OrderItem
 {
+    // для Ef Core
+    private OrderItem() { }
+
     /// <summary>
     /// Initializes a new instance of the "OrderItem" class.
     /// </summary>
     /// <param name="id">Идентификатор заказанного элемента.</param>
     /// <param name="product">Продукт.</param>
     /// <param name="quantity">Количество продукта.</param>
-    private OrderItem(Guid id, Product product, int quantity)
+    private OrderItem(OrderItemId id, Product product, int quantity)
     {
         Id = id;
         Product = product;
@@ -24,7 +30,7 @@ public class OrderItem
     /// <summary>
     /// Gets or sets Идентификатор заказанного элемента
     /// </summary>
-    public Guid Id { get; set; }
+    public OrderItemId Id { get; set; }
 
     /// <summary>
     /// Gets or sets Продукта заказанного элемента
@@ -36,7 +42,7 @@ public class OrderItem
     /// </summary>
     public int Quantity { get; set; }
 
-    public static Result<OrderItem, Error> Create(Guid id, Product product, int quantity)
+    public static Result<OrderItem, Error> Create(OrderItemId id, Product product, int quantity)
     {
         if (quantity <= 0)
         {

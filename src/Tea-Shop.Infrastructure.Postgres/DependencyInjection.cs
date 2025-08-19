@@ -10,7 +10,6 @@ public static class DependencyInjection
     public static IServiceCollection AddPostgresDependencies(this IServiceCollection services)
     {
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
-        services.AddScoped<ProductsDbContext>();
         services.AddScoped<IProductsRepository, ProductsEfCoreRepository>();
         // выбираем для DI либо ef core либо postgres
         //services.AddScoped<IProductsRepository, ProductsSqlRepository>();

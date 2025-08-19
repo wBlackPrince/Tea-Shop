@@ -1,8 +1,11 @@
+using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProgramDependencies();
+builder.Services.AddScoped<ProductsDbContext>(_ => new ProductsDbContext(
+    builder.Configuration.GetConnectionString("TeaShopDb")!));
 
 var app = builder.Build();
 

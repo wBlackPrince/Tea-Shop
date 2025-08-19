@@ -18,3 +18,5 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\obj\Debu
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\obj\Debug\net9.0\refint\Tea-Shop.Infrastructure.ElasticSearch.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\obj\Debug\net9.0\Tea-Shop.Infrastructure.ElasticSearch.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\obj\Debug\net9.0\ref\Tea-Shop.Infrastructure.ElasticSearch.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\bin\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Infrastructure.ElasticSearch\bin\Debug\net9.0\Tea-Shop.Shared.pdb

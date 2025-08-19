@@ -1,0 +1,12 @@
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\bin\Debug\net9.0\Tea-Shop.Shared.deps.json
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\bin\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\bin\Debug\net9.0\Tea-Shop.Shared.pdb
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.AssemblyInfoInputs.cache
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.AssemblyInfo.cs
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.csproj.CoreCompileInputs.cache
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.sourcelink.json
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\refint\Tea-Shop.Shared.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\Tea-Shop.Shared.pdb
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Shared\obj\Debug\net9.0\ref\Tea-Shop.Shared.dll

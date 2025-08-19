@@ -16,16 +16,16 @@ public class ProductsEfCoreRepository: IProductsRepository
     public async Task<Guid> GetProduct(Guid productId, CancellationToken cancellationToken)
     {
         var result = _dbContext.Products
-            .FirstOrDefault(p => p.Id == productId);
+            .FirstOrDefault(p => p.Id.Value == productId);
 
-        return result.Id;
+        return result.Id.Value;
     }
 
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)
     {
         await _dbContext.Products.AddAsync(product, cancellationToken);
 
-        return product.Id;
+        return product.Id.Value;
     }
 
     public async Task<Guid> UpdateProductPrice(
@@ -34,7 +34,7 @@ public class ProductsEfCoreRepository: IProductsRepository
         CancellationToken cancellationToken)
     {
         await _dbContext.Products
-            .Where(p => p.Id == productId)
+            .Where(p => p.Id.Value == productId)
             .ExecuteUpdateAsync(setter
                 => setter.SetProperty(p => p.Price, price));
 
@@ -46,9 +46,14 @@ public class ProductsEfCoreRepository: IProductsRepository
         CancellationToken cancellationToken)
     {
         await _dbContext.Products
-            .Where(p => p.Id == productId)
+            .Where(p => p.Id.Value == productId)
             .ExecuteDeleteAsync();
 
         return productId;
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

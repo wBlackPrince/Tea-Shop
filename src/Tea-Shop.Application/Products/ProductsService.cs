@@ -46,14 +46,12 @@ public class ProductsService : IProductsService
             throw new ValidationException(validationResult.Errors);
         }
 
-        Guid productId = Guid.NewGuid();
+        ProductId productId = new ProductId(Guid.NewGuid());
 
         Ingrendient[] ingrindients = request.Ingridients
             .Select(ingrRequest => new Ingrendient(
-                Guid.NewGuid(),
                 ingrRequest.Amount,
                 ingrRequest.Name,
-                ingrRequest.Description,
                 ingrRequest.IsAllergen)).ToArray();
 
         Product product = new Product(
@@ -65,16 +63,17 @@ public class ProductsService : IProductsService
             (Season)Enum.Parse(typeof(Season), request.Season),
             ingrindients,
             request.TagsIds,
-            request.PreparationmMethod,
+            request.PreparationDescription,
+            request.PreparationTime,
             request.PhotosIds);
 
         await _productsRepository.CreateProduct(product, cancellationToken);
 
-        // Сохранение сущности Product в базе данных
+        await _productsRepository.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Create product {productId}", productId);
 
-        return productId;
+        return productId.Value;
     }
 
     public async Task<Guid> UpdateProductPrice(

@@ -56,4 +56,9 @@ public class ProductsSqlRepository: IProductsRepository
 
         return productId;
     }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        throw new System.NotImplementedException();
+    }
 }
