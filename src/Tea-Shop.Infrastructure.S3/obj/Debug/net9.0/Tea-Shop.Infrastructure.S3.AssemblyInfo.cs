@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tea-Shop.Infrastructure.S3")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56a09d9528a22d17263abe8dd3a3a562e471f35e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6762f0426fcec23dd69e2058efec3790a4f9eda8")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tea-Shop.Infrastructure.S3")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tea-Shop.Infrastructure.S3")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

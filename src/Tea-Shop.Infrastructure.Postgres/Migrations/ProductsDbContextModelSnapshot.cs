@@ -22,10 +22,57 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("review_id");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_comments");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("comments", (string)null);
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -57,19 +104,24 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.HasKey("Id")
                         .HasName("ipk_orders");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("orders", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
@@ -88,7 +140,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
             modelBuilder.Entity("Tea_Shop.Domain.Products.Product", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<float>("Amount")
                         .HasColumnType("real")
@@ -132,27 +185,178 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
             modelBuilder.Entity("Tea_Shop.Domain.Products.ProductsTags", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("TagId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("tag_id");
+
+                    b.Property<Guid>("product_id")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_products_tags_id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("product_id");
 
                     b.ToTable("products_tags", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("pk_reviews");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("reviews", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Tags.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tags");
+
+                    b.ToTable("tags", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Users.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("AvatarId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("avatar_id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("middle_name");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("phone_number");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Reviews.Review", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.OrderItem", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Products.Order", null)
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Tea_Shop.Domain.Products.Product", "Product")
                         .WithMany()
@@ -165,39 +369,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.Product", b =>
                 {
-                    b.OwnsMany("Tea_Shop.Domain.Products.Ingrendient", "Ingrindients", b1 =>
-                        {
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            b1.Property<float>("Amount")
-                                .HasColumnType("real")
-                                .HasColumnName("ingredient_amount");
-
-                            b1.Property<bool>("IsAllergen")
-                                .HasColumnType("boolean")
-                                .HasColumnName("ingredient_is_allergen");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("character varying(50)")
-                                .HasColumnName("ingredient_name");
-
-                            b1.HasKey("ProductId", "__synthesizedOrdinal");
-
-                            b1.ToTable("products");
-
-                            b1.ToJson("ingredients");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
                     b.OwnsOne("Tea_Shop.Domain.Products.PreparationMethod", "PreparationMethod", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
@@ -205,8 +376,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                             b1.Property<string>("Description")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasColumnType("text")
                                 .HasColumnName("preparation_description");
 
                             b1.Property<int>("PreparationTime")
@@ -217,24 +387,78 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                             b1.ToTable("products");
 
+                            b1.ToJson("ingredients");
+
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");
-                        });
 
-                    b.Navigation("Ingrindients");
+                            b1.OwnsMany("Tea_Shop.Domain.Products.Ingrendient", "Ingredients", b2 =>
+                                {
+                                    b2.Property<Guid>("PreparationMethodProductId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<float>("Amount")
+                                        .HasColumnType("real")
+                                        .HasColumnName("ingredient_amount");
+
+                                    b2.Property<bool>("IsAllergen")
+                                        .HasColumnType("boolean")
+                                        .HasColumnName("ingredient_is_allergen");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(50)
+                                        .HasColumnType("character varying(50)")
+                                        .HasColumnName("ingredient_name");
+
+                                    b2.HasKey("PreparationMethodProductId", "__synthesizedOrdinal");
+
+                                    b2.ToTable("products");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PreparationMethodProductId");
+                                });
+
+                            b1.Navigation("Ingredients");
+                        });
 
                     b.Navigation("PreparationMethod");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.ProductsTags", b =>
                 {
+                    b.HasOne("Tea_Shop.Domain.Tags.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Tea_Shop.Domain.Products.Product", "Product")
                         .WithMany("TagsIds")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("product_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>

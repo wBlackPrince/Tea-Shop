@@ -1,4 +1,11 @@
-﻿namespace Tea_Shop.Domain.Reviews;
+﻿using Tea_Shop.Domain.Comments;
+using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Users;
+
+namespace Tea_Shop.Domain.Reviews;
+
+
+public record ReviewId(Guid Value);
 
 /// <summary>
 /// Domain-модель обзора
@@ -19,9 +26,9 @@ public class Review
     /// <param name="createdAt">Дата создания.</param>
     /// <param name="updatedAt">Дата обновления.</param>
     public Review(
-        Guid id,
-        Guid productId,
-        Guid userId,
+        ReviewId id,
+        ProductId productId,
+        UserId userId,
         string title,
         string text,
         DateTime createdAt,
@@ -39,17 +46,17 @@ public class Review
     /// <summary>
     /// Gets or sets идентификатор обзора
     /// </summary>
-    public Guid Id { get; set; }
+    public ReviewId Id { get; set; }
 
     /// <summary>
     /// Gets or sets идентификатор продукта
     /// </summary>
-    public Guid ProductId { get; set; }
+    public ProductId ProductId { get; set; }
 
     /// <summary>
     /// Gets or sets идентификатор пользователя
     /// </summary>
-    public Guid UserId { get; set; }
+    public UserId UserId { get; set; }
 
     /// <summary>
     /// Gets or sets заголовок обзора
@@ -65,11 +72,6 @@ public class Review
     /// Get or sets рейтинг обзора
     /// </summary>
     public int Rating { get; set; } = 0;
-
-    /// <summary>
-    /// Get or sets список идентификаторов комменатриев
-    /// </summary>
-    public List<Guid> commentIds { get; set; } = new List<Guid>();
 
     /// <summary>
     /// Get or sets время создания

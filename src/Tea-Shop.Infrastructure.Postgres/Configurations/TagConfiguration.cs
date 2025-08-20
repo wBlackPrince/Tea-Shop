@@ -1,0 +1,31 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Tags;
+
+namespace Tea_Shop.Infrastructure.Postgres.Configurations;
+
+public class TagConfiguration: IEntityTypeConfiguration<Tag>
+{
+    public void Configure(EntityTypeBuilder<Tag> builder)
+    {
+        builder.ToTable("tags");
+
+        builder
+            .HasKey(t => t.Id)
+            .HasName("pk_tags");
+
+        builder
+            .Property(t => t.Id)
+            .HasConversion(t => t.Value, id => new TagId(id))
+            .HasColumnName("id");
+
+        builder
+            .Property(t => t.Name)
+            .HasColumnName("name");
+
+        builder
+            .Property(t => t.Description)
+            .HasColumnName("description");
+    }
+}

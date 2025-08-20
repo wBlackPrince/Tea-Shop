@@ -25,8 +25,6 @@ public class Product
     /// <param name="season">Сезон.</param>
     /// /// <param name="price">Цена.</param>
     /// <param name="amount">Количество.</param>
-    /// <param name="rating">Рейтинг.</param>
-    /// <param name="ingredients">Список ингриндиентов.</param>
     /// <param name="tagsIds">Список идентификаторов. тегов.</param>
     /// <param name="preparationDescription">Метод приготовления в виде текста.</param>
     /// /// <param name="preparationTime">Время приготовления.</param>
@@ -51,21 +49,23 @@ public class Product
         Price = price;
         Amount = amount;
 
-        var productIngredients = ingredients
-            .Select(i => new Ingrendient(i.Amount, i.Name, i.IsAllergen));
-
-        Ingrindients = productIngredients.ToList();
-
         var productsTags = tagsIds
             .Select(tId => new ProductsTags(
                  new ProductsTagsId(Guid.NewGuid()),
                 this,
-                tId))
+                new TagId(tId)))
             .ToList();
 
         _tags = productsTags;
 
-        PreparationMethod = PreparationMethod.Create(preparationTime, preparationDescription).Value;
+        var productIngredients = ingredients
+            .Select(i => new Ingrendient(i.Amount, i.Name, i.IsAllergen))
+            .ToList();
+
+        PreparationMethod = PreparationMethod.Create(
+            preparationTime,
+            preparationDescription,
+            productIngredients).Value;
         PhotosIds = photosIds.ToArray();
     }
 
@@ -103,11 +103,6 @@ public class Product
     /// Gets or sets рейтинг продукта
     /// </summary>
     public int Rating { get; set; } = 0;
-
-    /// <summary>
-    /// Gets or sets список ингридиентов
-    /// </summary>
-    public List<Ingrendient> Ingrindients { get; set; }
 
     /// <summary>
     /// Gets or sets метод приготовления

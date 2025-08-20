@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
@@ -15,8 +16,10 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
             .HasKey(p => p.Id)
             .HasName("pk_products");
 
-        builder.Property(p => p.Id)
-            .HasConversion(p => p.Value, id => new ProductId(id));
+        builder
+            .Property(p => p.Id)
+            .HasConversion(p => p.Value, id => new ProductId(id))
+            .HasColumnName("id");
 
         builder
             .Property(p => p.Title)
@@ -43,34 +46,45 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
         builder.Property(p => p.Rating)
             .HasColumnName("rating");
 
-        builder.OwnsOne(p => p.PreparationMethod, pb =>
-        {
-            pb.Property(pm => pm.PreparationTime)
-                .IsRequired()
-                .HasColumnName("preparation_time");
-            pb.Property(pm => pm.Description)
-                .IsRequired()
-                .HasMaxLength(Constants.Limit100)
-                .HasColumnName("preparation_description");
-        });
-
-        builder.Navigation(p => p.PreparationMethod).IsRequired(false);
-
-        builder.OwnsMany(
-            p => p.Ingrindients,
+        builder.OwnsOne(
+            p => p.PreparationMethod,
             pb =>
             {
                 pb.ToJson("ingredients");
 
-                pb.Property(i => i.Name)
-                    .HasMaxLength(Constants.Limit50)
-                    .HasColumnName("ingredient_name");
+                pb.Property(p => p.PreparationTime)
+                    .HasColumnName("preparation_time");
 
-                pb.Property(i => i.Amount)
-                    .HasColumnName("ingredient_amount");
+                pb.Property(p => p.Description)
+                    .HasColumnName("preparation_description");
 
-                pb.Property(i => i.IsAllergen)
-                    .HasColumnName("ingredient_is_allergen");
+                pb.OwnsMany(p => p.Ingredients, ib =>
+                {
+                    ib.Property(i => i.Name)
+                        .HasMaxLength(Constants.Limit50)
+                        .HasColumnName("ingredient_name");
+
+                    ib.Property(i => i.Amount)
+                        .HasColumnName("ingredient_amount");
+
+                    ib.Property(i => i.IsAllergen)
+                        .HasColumnName("ingredient_is_allergen");
+                });
+
             });
+
+        builder
+            .HasMany<OrderItem>()
+            .WithOne(oi => oi.Product)
+            .HasForeignKey(oi => oi.ProductId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany<Review>()
+            .WithOne()
+            .HasForeignKey(r => r.ProductId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

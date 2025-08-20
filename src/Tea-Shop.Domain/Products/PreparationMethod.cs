@@ -6,17 +6,28 @@ namespace Tea_Shop.Domain.Products;
 
 public record PreparationMethod
 {
-    private PreparationMethod(int preparationTime, string description)
+    private PreparationMethod(){}
+
+    private PreparationMethod(
+        int preparationTime,
+        string description,
+        List<Ingrendient> ingredients)
     {
         PreparationTime = preparationTime;
         Description = description;
+        Ingredients = ingredients;
     }
 
     public int PreparationTime { get; }
 
     public string Description { get; }
 
-    public static Result<PreparationMethod, Error> Create(int preparationTime, string description)
+    public List<Ingrendient> Ingredients { get; }
+
+    public static Result<PreparationMethod, Error> Create(
+        int preparationTime,
+        string description,
+        List<Ingrendient> ingredients)
     {
         if (string.IsNullOrWhiteSpace(description))
             return Error.Validation("product.preparationMethod", "preparationTime must be a positive number");
@@ -31,6 +42,6 @@ public record PreparationMethod
         }
 
 
-        return new PreparationMethod(preparationTime, description);
+        return new PreparationMethod(preparationTime, description, ingredients);
     }
 }

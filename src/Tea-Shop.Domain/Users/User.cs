@@ -2,13 +2,14 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Domain.Users;
 
+
+public record UserId(Guid Value);
+
 /// <summary>
 /// Domain-модель пользователя
 /// </summary>
 public class User
 {
-    private List<Order> _orders;
-
     // для Ef Core
     private User() {}
 
@@ -25,7 +26,7 @@ public class User
     /// <param name="avatarId">Идентификатор аватара.</param>
     /// <param name="middleName">Отчество.</param>
     public User(
-        Guid id,
+        UserId id,
         string password,
         string firstName,
         string lastName,
@@ -50,7 +51,7 @@ public class User
     /// <summary>
     /// Gets or sets Идентификатор пользователя
     /// </summary>
-    public Guid Id { get; set; }
+    public UserId Id { get; set; }
 
     /// <summary>
     /// Gets or sets Пароль пользователя
@@ -96,12 +97,4 @@ public class User
     /// Gets or sets Способность пользователя пользоваться приложением
     /// </summary>
     public bool IsActive { get; set; } = true;
-
-
-    public IReadOnlyList<Order> Orders => _orders;
-
-    public void AddOrder(Order order)
-    {
-        _orders.Add(order);
-    }
 }

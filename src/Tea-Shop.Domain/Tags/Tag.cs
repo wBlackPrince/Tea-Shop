@@ -1,5 +1,8 @@
 namespace Tea_Shop.Domain.Tags;
 
+
+public record TagId(Guid Value);
+
 /// <summary>
 /// Domain-модель тега
 /// </summary>
@@ -15,7 +18,7 @@ public class Tag
     /// <param name="tagId">Идентфикатор тега.</param>
     /// <param name="name">Название тега.</param>
     /// <param name="description">Описание тега.</param>
-    public Tag(Guid tagId, string name, string description)
+    public Tag(TagId tagId, string name, string description)
     {
         Id = tagId;
         Name = name;
@@ -25,7 +28,7 @@ public class Tag
     /// <summary>
     /// Gets or sets идентификатор тега
     /// </summary>
-    Guid Id { get; set; }
+    public TagId Id { get; set; }
 
     /// <summary>
     /// Gets or sets имя тега

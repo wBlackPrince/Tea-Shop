@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres;
 
@@ -23,4 +26,10 @@ public class ProductsDbContext: DbContext
     }
 
     public DbSet<Product> Products { get; set; }
+
+    public DbSet<User> Users { get; set; }
+
+    public DbSet<Comment> Comments { get; set; }
+
+    public DbSet<Review> Reviews { get; set; }
 }

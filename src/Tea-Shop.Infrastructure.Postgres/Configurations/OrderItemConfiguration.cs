@@ -13,10 +13,22 @@ public class OrderItemConfiguration: IEntityTypeConfiguration<OrderItem>
         builder.HasKey(o => o.Id)
             .HasName("pk_order_items");
 
+        builder
+            .Property(oi => oi.Id)
+            .HasConversion(oi => oi.Value, id => new OrderItemId(id))
+            .HasColumnName("id");
+
         builder.Property(o => o.Id)
             .HasConversion(o => o.Value, id => new OrderItemId(id));
 
         builder.Property(o => o.Quantity)
             .HasColumnName("quantity");
+
+        builder.Property(o => o.OrderId)
+            .HasColumnName("order_id");
+
+        builder
+            .Property(oi => oi.ProductId)
+            .HasColumnName("product_id");
     }
 }

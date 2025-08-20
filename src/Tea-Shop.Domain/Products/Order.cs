@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
 using CSharpFunctionalExtensions;
+using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;
@@ -30,7 +31,7 @@ public class Order
     /// <param name="updatedAt">Дата обновления.</param>
     public Order(
         OrderId id,
-        Guid userId,
+        UserId userId,
         string deliveryAddress,
         PaymentWay paymentWay,
         DateTime expectedDeliveryTime,
@@ -58,7 +59,7 @@ public class Order
     /// <summary>
     /// Gets or sets идентификатор пользователя
     /// </summary>
-    public Guid UserId { get; set; }
+    public UserId UserId { get; set; }
 
     /// <summary>
     /// Gets or sets адрес доставки

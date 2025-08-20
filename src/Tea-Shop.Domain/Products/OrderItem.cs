@@ -27,6 +27,10 @@ public class OrderItem
         Quantity = quantity;
     }
 
+    public ProductId ProductId { get; set; }
+
+    public OrderId OrderId { get; set; }
+
     /// <summary>
     /// Gets or sets Идентификатор заказанного элемента
     /// </summary>

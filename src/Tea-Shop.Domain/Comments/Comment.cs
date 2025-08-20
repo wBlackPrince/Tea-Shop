@@ -1,4 +1,11 @@
-﻿namespace Tea_Shop.Domain.Comments;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Users;
+
+namespace Tea_Shop.Domain.Comments;
+
+
+public record CommentId(Guid Value);
 
 /// <summary>
 /// Domain-модель комментария
@@ -21,18 +28,18 @@ public class Comment
     /// <param name="createdAt">Дата создания.</param>
     /// <param name="updatedAt">Дата обновления.</param>
     public Comment(
-        Guid id,
-        Guid userId,
-        Guid reviewId,
+        CommentId id,
+        UserId userId,
+        ReviewId reviewId,
         string text,
         DateTime createdAt,
         DateTime updatedAt,
-        Guid? parentId = null)
+        CommentId? parentId = null)
     {
         Id = id;
         ParentId = parentId;
         UserId = userId;
-        reviewId = reviewId;
+        ReviewId = reviewId;
         Text = text;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
@@ -41,12 +48,12 @@ public class Comment
     /// <summary>
     /// Gets or sets идентификатор комментария
     /// </summary>
-    public Guid Id { get; set; }
+    public CommentId Id { get; set; }
 
     /// <summary>
     /// Gets or sets идентификатор пользователя
     /// </summary>
-    public Guid UserId { get; set; }
+    public UserId UserId { get; set; }
 
     /// <summary>
     /// Gets or sets заголовок комментария
@@ -66,17 +73,19 @@ public class Comment
     /// <summary>
     /// Get or sets идентификатор обзора
     /// </summary>
-    public Guid reviewId { get; set; }
+    public ReviewId ReviewId { get; set; }
 
     /// <summary>
     /// Get or sets идентификатор родительского комментария
     /// </summary>
-    public Guid? ParentId { get; set; } = null;
+    [NotMapped]
+    public CommentId? ParentId { get; set; } = null;
 
     /// <summary>
     /// Get or sets список идентификаторов дочерних комменатриев
     /// </summary>
-    public Guid[] childrenIds { get; set; } = new Guid[0];
+    [NotMapped]
+    public CommentId[] childrenIds { get; set; }
 
     /// <summary>
     /// Get or sets время создания
