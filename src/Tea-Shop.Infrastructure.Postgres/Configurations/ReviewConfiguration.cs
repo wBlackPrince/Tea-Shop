@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
@@ -43,19 +44,18 @@ public class ReviewConfiguration: IEntityTypeConfiguration<Review>
 
         builder
             .Property(r => r.ProductId)
+            .HasConversion(r => r.Value, id => new ProductId(id))
             .HasColumnName("product_id");
+
+        builder
+            .Property(r => r.UserId)
+            .HasConversion(r => r.Value, id => new UserId(id))
+            .HasColumnName("user_id");
 
         builder
             .HasOne<Product>()
             .WithMany()
             .HasForeignKey(p => p.ProductId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasMany<Comment>()
-            .WithOne()
-            .HasForeignKey(c => c.ReviewId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

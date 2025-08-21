@@ -20,10 +20,10 @@ public class OrderItem
     /// <param name="id">Идентификатор заказанного элемента.</param>
     /// <param name="product">Продукт.</param>
     /// <param name="quantity">Количество продукта.</param>
-    private OrderItem(OrderItemId id, Product product, int quantity)
+    private OrderItem(OrderItemId id, ProductId productId, int quantity)
     {
         Id = id;
-        Product = product;
+        ProductId = productId;
         Quantity = quantity;
     }
 
@@ -46,7 +46,7 @@ public class OrderItem
     /// </summary>
     public int Quantity { get; set; }
 
-    public static Result<OrderItem, Error> Create(OrderItemId id, Product product, int quantity)
+    public static Result<OrderItem, Error> Create(OrderItemId id, ProductId productId, int quantity)
     {
         if (quantity <= 0)
         {
@@ -55,6 +55,6 @@ public class OrderItem
                 "Order item's quantity must be greater than zero");
         }
 
-        return new OrderItem(id, product, quantity);
+        return new OrderItem(id, productId, quantity);
     }
 }

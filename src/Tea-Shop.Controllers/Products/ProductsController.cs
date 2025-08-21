@@ -33,7 +33,7 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateProduct(
-        CreateProductRequestDto request,
+        [FromBody]CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
         return Ok(await _productService.CreateProduct(request, cancellationToken));
@@ -42,7 +42,7 @@ public class ProductsController : ControllerBase
     [HttpPatch("{productId:guid}/price")]
     public async Task<IActionResult> UpdateProductPrice(
         [FromRoute] Guid productId,
-        UpdateProductPriceRequestDto request,
+        [FromBody]UpdateProductPriceRequestDto request,
         CancellationToken cancellationToken)
     {
         return Ok(await _productService.UpdateProductPrice(productId, request, cancellationToken));
@@ -50,7 +50,7 @@ public class ProductsController : ControllerBase
 
     [HttpPatch("{productId:guid}/amount")]
     public async Task<IActionResult> UpdateProductAmount(
-        UpdateProductAmountRequestDto request,
+        [FromBody]UpdateProductAmountRequestDto request,
         CancellationToken cancellationToken)
     {
         return Ok("Updated product's amount by id");
@@ -84,15 +84,16 @@ public class ProductsController : ControllerBase
 
     [HttpPost("orders")]
     public async Task<IActionResult> CreateOrder(
-        CreateOrderRequestDto request,
+        [FromBody]CreateOrderRequestDto request,
         CancellationToken cancellationToken)
     {
-        return Ok("Created product");
+        var orderId = await _productService.CreateOrder(request, cancellationToken);
+        return Ok($"Created order with id {orderId}");
     }
 
     [HttpPatch("orders/{productId:guid}/price")]
     public async Task<IActionResult> UpdateOrderItems(
-        UpdateOrderItemsRequestDto request,
+        [FromBody]UpdateOrderItemsRequestDto request,
         CancellationToken cancellationToken)
     {
         return Ok("Updated order's items by id");
@@ -100,7 +101,7 @@ public class ProductsController : ControllerBase
 
     [HttpPatch("orders/{productId:guid}/price")]
     public async Task<IActionResult> UpdateOrderStatus(
-        UpdateOrderStatusRequestDto request,
+        [FromBody]UpdateOrderStatusRequestDto request,
         CancellationToken cancellationToken)
     {
         return Ok("Updated order's status by id");

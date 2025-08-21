@@ -52,6 +52,14 @@ public class ProductsEfCoreRepository: IProductsRepository
         return productId;
     }
 
+    public async Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken)
+    {
+        await _dbContext.Orders.AddAsync(order, cancellationToken);
+
+        return order.Id.Value;
+    }
+
+
     public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         await _dbContext.SaveChangesAsync(cancellationToken);

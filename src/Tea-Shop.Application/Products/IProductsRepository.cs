@@ -13,4 +13,6 @@ public interface IProductsRepository
     Task<Guid> DeleteProduct(Guid productId, CancellationToken cancellationToken);
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
+
+    Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken);
 }

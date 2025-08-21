@@ -1,3 +1,3 @@
 ﻿namespace Tea_Shop.Contract.Products;
 
-public record CreateOrderItemRequestDto(CreateProductRequestDto Product, int Quantity);
+public record CreateOrderItemRequestDto(Guid ProductId, int Quantity);

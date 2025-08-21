@@ -20,4 +20,8 @@ public interface IProductsService
     Task<Guid> DeleteProduct(
         Guid productId,
         CancellationToken cancellationToken);
+
+    Task<Guid> CreateOrder(
+        CreateOrderRequestDto request,
+        CancellationToken cancellationToken);
 }
