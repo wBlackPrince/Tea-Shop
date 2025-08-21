@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250820185139_Initial")]
+    [Migration("20250821141039_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -63,8 +63,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_comments");
-
-                    b.HasIndex("ReviewId");
 
                     b.HasIndex("UserId");
 
@@ -241,7 +239,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("updated_at");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_reviews");
@@ -331,12 +330,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
                 {
-                    b.HasOne("Tea_Shop.Domain.Reviews.Review", null)
-                        .WithMany()
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Tea_Shop.Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")

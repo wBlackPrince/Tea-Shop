@@ -1,4 +1,6 @@
-﻿using Tea_Shop.Domain.Tags;
+﻿using CSharpFunctionalExtensions;
+using Tea_Shop.Domain.Tags;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;
 
@@ -117,5 +119,5 @@ public class Product
     /// <summary>
     /// Gets or sets список идентификаторов фото продукта
     /// </summary>
-    public Guid[] PhotosIds { get; set; } = new Guid[0];
+    public Guid[] PhotosIds { get; set; }
 }

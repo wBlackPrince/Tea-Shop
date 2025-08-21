@@ -61,4 +61,9 @@ public class ProductsSqlRepository: IProductsRepository
     {
         throw new System.NotImplementedException();
     }
+
+    public async Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken)
+    {
+        throw new System.NotImplementedException();
+    }
 }
