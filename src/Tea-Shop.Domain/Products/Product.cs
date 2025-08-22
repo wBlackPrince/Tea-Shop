@@ -61,7 +61,7 @@ public class Product
         _tags = productsTags;
 
         var productIngredients = ingredients
-            .Select(i => new Ingrendient(i.Amount, i.Name, i.IsAllergen))
+            .Select(i => new Ingrendient(i.Amount, i.Name, i.Description, i.IsAllergen))
             .ToList();
 
         PreparationMethod = PreparationMethod.Create(

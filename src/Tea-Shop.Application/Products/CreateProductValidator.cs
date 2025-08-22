@@ -61,7 +61,7 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
         this.RuleFor(p => p.PreparationDescription)
             .NotEmpty().WithMessage("PreparationmMethod is required")
             .NotNull().WithMessage("PreparationmMethod is required")
-            .MaximumLength(Constants.Limit100).WithMessage("PreparationmMethod must not exceed 100 characters")
+            .MaximumLength(Constants.Limit400).WithMessage("PreparationmMethod must not exceed 400 characters")
             .MinimumLength(Constants.Limit2).WithMessage("PreparationmMethod must contain at least 2 character");
 
         this.RuleFor(p => p.PreparationTime)

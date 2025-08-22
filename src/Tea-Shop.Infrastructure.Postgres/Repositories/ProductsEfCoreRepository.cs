@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Products;
+using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Tags;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
@@ -13,12 +15,40 @@ public class ProductsEfCoreRepository: IProductsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Guid> GetProduct(Guid productId, CancellationToken cancellationToken)
+    public async Task<GetProductResponseDto> GetProduct(
+        ProductId productId,
+        CancellationToken cancellationToken)
     {
-        var result = _dbContext.Products
-            .FirstOrDefault(p => p.Id.Value == productId);
+        var result = await _dbContext.Products
+            .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
 
-        return result.Id.Value;
+        var ingredientaResponse = result.PreparationMethod.Ingredients
+            .Select(i => new GetIngrendientsResponseDto(
+                i.Name,
+                i.Amount,
+                i.Description,
+                i.IsAllergen)).ToArray();
+
+
+        var tagsIds = await _dbContext.ProductsTags
+            .Where(pt => pt.Product == productId)
+            .Select(pt => pt.TagId)
+            .Where(pt => pt == productId)
+            .ToArrayAsync(cancellationToken);
+
+        var response = new GetProductResponseDto(
+            result.Title,
+            result.Price,
+            result.Amount,
+            result.Description,
+            result.Season.ToString(),
+            ingredientaResponse,
+            result.PreparationMethod.Description,
+            result.PreparationMethod.PreparationTime,
+            tagsIds,
+            result.PhotosIds);
+
+        return response;
     }
 
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)

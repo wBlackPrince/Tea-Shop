@@ -1,10 +1,11 @@
-﻿using Tea_Shop.Domain.Products;
+﻿using Tea_Shop.Contract.Products;
+using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Application.Products;
 
 public interface IProductsRepository
 {
-    Task<Guid> GetProduct(Guid productId, CancellationToken cancellationToken);
+    Task<GetProductResponseDto> GetProduct(ProductId productId, CancellationToken cancellationToken);
 
     Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken);
 

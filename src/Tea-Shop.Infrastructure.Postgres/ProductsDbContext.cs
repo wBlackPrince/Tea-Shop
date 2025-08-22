@@ -37,4 +37,6 @@ public class ProductsDbContext: DbContext
     public DbSet<Order> Orders { get; set; }
 
     public DbSet<Tag> Tags { get; set; }
+
+    public DbSet<ProductsTags> ProductsTags { get; set; }
 }

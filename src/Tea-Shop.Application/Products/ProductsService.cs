@@ -28,15 +28,17 @@ public class ProductsService : IProductsService
         _createOrderValidator = createOrderValidator;
     }
 
-    public async Task<Guid> GetProduct(
+    public async Task<GetProductResponseDto> GetProduct(
         Guid productId,
         CancellationToken cancellationToken)
     {
-        var product = await _productsRepository.GetProduct(productId, cancellationToken);
+        var product = await _productsRepository.GetProduct(
+            new ProductId(productId),
+            cancellationToken);
 
         _logger.LogInformation("Get product {productId}", productId);
 
-        return productId;
+        return product;
     }
 
     public async Task<Guid> CreateProduct(
@@ -56,6 +58,7 @@ public class ProductsService : IProductsService
             .Select(ingrRequest => new Ingrendient(
                 ingrRequest.Amount,
                 ingrRequest.Name,
+                ingrRequest.Description,
                 ingrRequest.IsAllergen)).ToArray();
 
         Product product = new Product(

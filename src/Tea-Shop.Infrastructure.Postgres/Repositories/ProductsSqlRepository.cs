@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Tea_Shop.Application.Products;
+using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
@@ -13,7 +14,7 @@ public class ProductsSqlRepository: IProductsRepository
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
-    public async Task<Guid> GetProduct(Guid productId, CancellationToken cancellationToken)
+    public async Task<GetProductResponseDto> GetProduct(ProductId productId, CancellationToken cancellationToken)
     {
         const string sql = "SELECT * FROM products WHERE id = @Id";
 
@@ -23,7 +24,11 @@ public class ProductsSqlRepository: IProductsRepository
 
         await connection.ExecuteAsync(sql, getProductParams);
 
-        return productId;
+        throw new NotImplementedException();
+
+        // доделать
+
+        //return productId.Value;
     }
 
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)

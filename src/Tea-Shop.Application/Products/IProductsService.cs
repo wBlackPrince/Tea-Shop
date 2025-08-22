@@ -4,7 +4,7 @@ namespace Tea_Shop.Application.Products;
 
 public interface IProductsService
 {
-    Task<Guid> GetProduct(
+    Task<GetProductResponseDto> GetProduct(
         Guid productId,
         CancellationToken cancellationToken);
 

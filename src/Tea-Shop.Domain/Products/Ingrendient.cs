@@ -6,7 +6,9 @@
 /// </summary>
 public record Ingrendient
 {
-
+    // ef core
+    private Ingrendient(){}
+    
     /// <summary>
     /// Initializes a new instance of the "Ingridient" class.
     /// </summary>
@@ -16,10 +18,12 @@ public record Ingrendient
     public Ingrendient(
         float amount,
         string name,
+        string description,
         bool isAllergen)
     {
         Amount = amount;
         Name = name;
+        Description = description;
         IsAllergen = isAllergen;
     }
 
@@ -32,6 +36,11 @@ public record Ingrendient
     /// Gets or sets Название ингриндиента
     /// </summary>
     public string Name { get; }
+
+    /// <summary>
+    /// Gets or sets Название ингриндиента
+    /// </summary>
+    public string Description { get; }
 
     /// <summary>
     /// Gets or sets Аллергенен ли ингриндиент

@@ -16,11 +16,15 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId:guid}")]
-    public async Task<IActionResult> GetProduct(
+    public async Task<ActionResult<GetProductResponseDto>> GetProduct(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-         return Ok(await _productService.GetProduct(productId, cancellationToken));
+        GetProductResponseDto product = await _productService.GetProduct(
+            productId,
+            cancellationToken);
+
+        return Ok(product);
     }
 
     [HttpGet("{productId:guid}/ingrindients")]
@@ -36,7 +40,8 @@ public class ProductsController : ControllerBase
         [FromBody]CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
-        return Ok(await _productService.CreateProduct(request, cancellationToken));
+        var productId = await _productService.CreateProduct(request, cancellationToken);
+        return Ok(productId);
     }
 
     [HttpPatch("{productId:guid}/price")]
@@ -71,7 +76,9 @@ public class ProductsController : ControllerBase
         [FromRoute] Guid orderId,
         CancellationToken cancellationToken)
     {
-        return Ok("Get order");
+        var productIdResult = await _productService.GetProduct(orderId, cancellationToken);
+
+        return Ok(productIdResult);
     }
 
     [HttpGet("orders/{orderId:guid}")]
