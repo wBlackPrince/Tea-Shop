@@ -56,11 +56,6 @@ public class Comment
     public UserId UserId { get; set; }
 
     /// <summary>
-    /// Gets or sets заголовок комментария
-    /// </summary>
-    public string Title { get; set; }
-
-    /// <summary>
     /// Gets or sets текст комментария
     /// </summary>
     public string Text { get; set; }

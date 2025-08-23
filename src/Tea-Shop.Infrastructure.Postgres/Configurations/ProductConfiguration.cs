@@ -29,7 +29,7 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
         builder
             .Property(p => p.Description)
             .HasColumnName("description")
-            .HasMaxLength(Constants.Limit1000);
+            .HasMaxLength(Constants.Limit2000);
 
         builder.Property(p => p.Season)
             .HasConversion(
@@ -66,6 +66,10 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
 
                     ib.Property(i => i.Amount)
                         .HasColumnName("ingredient_amount");
+
+                    ib.Property(i => i.Description)
+                        .HasMaxLength(Constants.Limit2000)
+                        .HasColumnName("ingredient_description");
 
                     ib.Property(i => i.IsAllergen)
                         .HasColumnName("ingredient_is_allergen");

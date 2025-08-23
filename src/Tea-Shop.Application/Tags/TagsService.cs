@@ -1,8 +1,10 @@
-﻿using FluentValidation;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Tags;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Tags;
 
@@ -45,5 +47,21 @@ public class TagsService : ITagsService
         _logger.LogInformation($"Created tag {tag.Id}");
 
         return tag.Id.Value;
+    }
+
+    public async Task<Result<Guid, Error>> Delete(
+        Guid tagId,
+        CancellationToken cancellationToken)
+    {
+        var deletedResult = await _tagsRepository.DeleteTag(new TagId(tagId), cancellationToken);
+
+        if (deletedResult.IsFailure)
+        {
+            return deletedResult.Error;
+        }
+
+        _logger.LogInformation("Deleted tag {tagId}", tagId);
+
+        return tagId;
     }
 }

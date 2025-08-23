@@ -110,7 +110,7 @@ public class ProductsService : IProductsService
     {
         // проверка валидности
 
-        await _productsRepository.DeleteProduct(productId, cancellationToken);
+        await _productsRepository.DeleteProduct(new ProductId(productId), cancellationToken);
 
         // Логгирование об успешном или не успешном изменении
 

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
@@ -22,11 +23,8 @@ public class CommentConfiguration: IEntityTypeConfiguration<Comment>
             .HasColumnName("id");
 
         builder
-            .Property(r => r.Title)
-            .HasColumnName("title");
-
-        builder
             .Property(r => r.Text)
+            .HasMaxLength(Constants.Limit2000)
             .HasColumnName("text");
 
         builder

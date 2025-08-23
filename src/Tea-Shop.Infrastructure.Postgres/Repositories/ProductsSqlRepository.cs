@@ -49,7 +49,7 @@ public class ProductsSqlRepository: IProductsRepository
         return productId;
     }
 
-    public async Task<Guid> DeleteProduct(Guid productId, CancellationToken cancellationToken)
+    public async Task<Guid> DeleteProduct(ProductId productId, CancellationToken cancellationToken)
     {
         const string sql = "DELETE FROM products WHERE id = @Id";
 
@@ -59,7 +59,7 @@ public class ProductsSqlRepository: IProductsRepository
 
         await connection.ExecuteAsync(sql, deleteProductParams);
 
-        return productId;
+        return productId.Value;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

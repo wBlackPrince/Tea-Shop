@@ -1,5 +1,9 @@
-﻿using Tea_Shop.Application.Tags;
+﻿using CSharpFunctionalExtensions;
+using LinqToDB;
+using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Tags;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
@@ -25,9 +29,13 @@ public class TagsEfCoreRepository: ITagsRepository
         return tag.Id.Value;
     }
 
-    public async Task<Guid> DeleteTag(Guid tagId, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> DeleteTag(TagId tagId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var tag = await _dbContext.Tags
+            .Where(t => t.Id == tagId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return tagId.Value;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

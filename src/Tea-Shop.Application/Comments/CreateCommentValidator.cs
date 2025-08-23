@@ -11,6 +11,6 @@ public class CreateCommentValidator: AbstractValidator<CreateCommentRequestDto>
         this.RuleFor(x => x.Text)
             .NotEmpty().WithMessage("Text cannot be empty")
             .NotNull().WithMessage("Text cannot be null")
-            .MaximumLength(Constants.Limit1000).WithMessage("Text cannot be longer than 100 characters");
+            .MaximumLength(Constants.Limit2000).WithMessage("Text cannot be longer than 2000 characters");
     }
 }

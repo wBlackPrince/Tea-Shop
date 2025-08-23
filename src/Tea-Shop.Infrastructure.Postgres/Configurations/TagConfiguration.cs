@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
@@ -22,10 +22,12 @@ public class TagConfiguration: IEntityTypeConfiguration<Tag>
 
         builder
             .Property(t => t.Name)
+            .HasMaxLength(Constants.Limit50)
             .HasColumnName("name");
 
         builder
             .Property(t => t.Description)
+            .HasMaxLength(Constants.Limit500)
             .HasColumnName("description");
     }
 }

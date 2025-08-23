@@ -18,7 +18,7 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
         this.RuleFor(p => p.Description)
             .NotEmpty().WithMessage("Description is required")
             .NotNull().WithMessage("Description is required")
-            .MaximumLength(Constants.Limit1000).WithMessage("Description must not exceed 1000 characters")
+            .MaximumLength(Constants.Limit2000).WithMessage("Description must not exceed 2000 characters")
             .MinimumLength(Constants.Limit2).WithMessage("Description must contain at least 2 character");
 
         this.RuleFor(p => p.Season)
@@ -46,7 +46,9 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
             {
                 ingrindients.RuleFor(i => i.Name)
                     .NotEmpty().WithMessage("Name is required")
-                    .NotNull().WithMessage("Name is required");
+                    .NotNull().WithMessage("Name is required")
+                    .MaximumLength(Constants.Limit50).WithMessage("Name must not exceed 50 characters")
+                    .MinimumLength(Constants.Limit2).WithMessage("Name must contain at least 2 character");
                 ingrindients.RuleFor(i => i.Amount)
                     .NotEmpty().WithMessage("Amount is required")
                     .GreaterThan(0).WithMessage("Amount must be greater than zero");
@@ -61,7 +63,7 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
         this.RuleFor(p => p.PreparationDescription)
             .NotEmpty().WithMessage("PreparationmMethod is required")
             .NotNull().WithMessage("PreparationmMethod is required")
-            .MaximumLength(Constants.Limit400).WithMessage("PreparationmMethod must not exceed 400 characters")
+            .MaximumLength(Constants.Limit1000).WithMessage("PreparationmMethod must not exceed 1000 characters")
             .MinimumLength(Constants.Limit2).WithMessage("PreparationmMethod must contain at least 2 character");
 
         this.RuleFor(p => p.PreparationTime)

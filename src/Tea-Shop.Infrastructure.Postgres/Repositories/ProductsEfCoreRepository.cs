@@ -31,10 +31,10 @@ public class ProductsEfCoreRepository: IProductsRepository
 
 
         var tagsIds = await _dbContext.ProductsTags
-            .Where(pt => pt.Product == productId)
-            .Select(pt => pt.TagId)
-            .Where(pt => pt == productId)
-            .ToArrayAsync(cancellationToken);
+            .Where(pt => pt.Product.Id == productId)
+            .Select(pt => pt.TagId.Value)
+            .ToArrayAsync();
+
 
         var response = new GetProductResponseDto(
             result.Title,
@@ -72,14 +72,14 @@ public class ProductsEfCoreRepository: IProductsRepository
     }
 
     public async Task<Guid> DeleteProduct(
-        Guid productId,
+        ProductId productId,
         CancellationToken cancellationToken)
     {
         await _dbContext.Products
-            .Where(p => p.Id.Value == productId)
-            .ExecuteDeleteAsync();
+            .Where(p => p.Id == productId)
+            .ExecuteDeleteAsync(cancellationToken);
 
-        return productId;
+        return productId.Value;
     }
 
     public async Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken)
