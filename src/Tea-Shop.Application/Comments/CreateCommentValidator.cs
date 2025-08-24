@@ -2,7 +2,7 @@
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Shared;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Comments;
 
 public class CreateCommentValidator: AbstractValidator<CreateCommentRequestDto>
 {

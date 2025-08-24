@@ -5,7 +5,7 @@ using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Comments;
 
 public class CommentsService : ICommentsService
 {

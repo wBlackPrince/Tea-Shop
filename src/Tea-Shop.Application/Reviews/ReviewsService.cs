@@ -5,7 +5,6 @@ using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
 
 namespace Tea_Shop.Application.Reviews;
 

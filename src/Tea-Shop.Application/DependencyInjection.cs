@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Tags;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
+using Tea_Shop.Application.Users;
 
 namespace Tea_Shop.Application;
 

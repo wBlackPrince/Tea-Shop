@@ -1,9 +1,11 @@
-﻿using FluentValidation;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Users;
 
 public class UsersService : IUsersService
 {
@@ -51,5 +53,16 @@ public class UsersService : IUsersService
 
         return user.Id.Value;
     }
-    
+
+    public async Task<Result<GetUserResponseDto, Error>> Get(Guid userId, CancellationToken cancellationToken)
+    {
+        var getResult = await _usersRepository.GetUser(new UserId(userId), cancellationToken);
+
+        if (getResult.IsFailure)
+        {
+            return getResult.Error;
+        }
+
+        return getResult.Value;
+    }
 }

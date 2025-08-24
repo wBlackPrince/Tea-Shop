@@ -1,6 +1,6 @@
 ﻿using Tea_Shop.Domain.Comments;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Comments;
 
 public interface ICommentsRepository
 {

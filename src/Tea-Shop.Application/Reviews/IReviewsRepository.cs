@@ -1,6 +1,6 @@
 ﻿using Tea_Shop.Domain.Reviews;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Reviews;
 
 public interface IReviewsRepository
 {

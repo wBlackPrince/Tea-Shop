@@ -1,11 +1,19 @@
-﻿using Tea_Shop.Domain.Users;
+﻿using CSharpFunctionalExtensions;
+using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Users;
 
 public interface IUsersRepository
 {
-    Task<Guid> GetUser(Guid userId, CancellationToken cancellationToken);
+    Task<Result<GetUserResponseDto, Error>> GetUser(
+        UserId userId,
+        CancellationToken cancellationToken);
+
     Task<Guid> CreateUser(User user, CancellationToken cancellationToken);
+
     Task<Guid> DeleteUser(Guid tagId, CancellationToken cancellationToken);
+
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

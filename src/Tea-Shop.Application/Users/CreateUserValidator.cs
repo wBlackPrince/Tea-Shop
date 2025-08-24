@@ -2,7 +2,7 @@
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 
-namespace Tea_Shop.Infrastructure.Postgres.Repositories;
+namespace Tea_Shop.Application.Users;
 
 public class CreateUserValidator: AbstractValidator<CreateUserRequestDto>
 {

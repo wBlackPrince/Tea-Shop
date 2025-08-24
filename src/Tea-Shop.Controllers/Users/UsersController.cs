@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Users;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Users;
 
@@ -13,6 +15,21 @@ public class UsersController: ControllerBase
     public UsersController(IUsersService usersService)
     {
         _usersService = usersService;
+    }
+
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUsers(
+        [FromRoute]Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var getResult = await _usersService.Get(userId, cancellationToken);
+
+        if (getResult.IsFailure)
+        {
+            return BadRequest(getResult.Error);
+        }
+
+        return Ok(getResult.Value);
     }
 
     [HttpPost]

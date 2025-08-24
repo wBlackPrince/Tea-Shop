@@ -1,4 +1,9 @@
-﻿using Tea_Shop.Domain.Users;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Users;
+using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
@@ -12,9 +17,30 @@ public class UsersEfCoreRepository : IUsersRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Guid> GetUser(Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<GetUserResponseDto, Error>> GetUser(
+        UserId userId,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(
+            u => u.Id == userId,
+            cancellationToken);
+
+        if (user is null)
+        {
+            return Error.Failure("Get.User", "User not found");
+        }
+
+        var response = new GetUserResponseDto(
+            user.Password,
+            user.FirstName,
+            user.LastName,
+            user.Email,
+            user.PhoneNumber,
+            user.Role.ToString(),
+            user.AvatarId,
+            user.MiddleName);
+
+        return response;
     }
 
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Contract.Reviews;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
 
 namespace Tea_Shop.Comments;
 
