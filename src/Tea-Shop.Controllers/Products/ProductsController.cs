@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Products;
+using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Products;
 
@@ -16,15 +18,20 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId:guid}")]
-    public async Task<ActionResult<GetProductResponseDto>> GetProduct(
+    public async Task<ActionResult<GetProductResponseDto>> GetById(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        GetProductResponseDto product = await _productService.GetProduct(
+        var getResult = await _productService.GetProductById(
             productId,
             cancellationToken);
 
-        return Ok(product);
+        if (getResult.IsFailure)
+        {
+            return NotFound(getResult.Error);
+        }
+
+        return Ok(getResult.Value);
     }
 
     [HttpGet("{productId:guid}/ingrindients")]
@@ -36,7 +43,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct(
+    public async Task<IActionResult> Create(
         [FromBody]CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -44,21 +51,20 @@ public class ProductsController : ControllerBase
         return Ok(productId);
     }
 
-    [HttpPatch("{productId:guid}/price")]
-    public async Task<IActionResult> UpdateProductPrice(
+    [HttpPatch("{productId:guid}")]
+    public async Task<IActionResult> Update(
         [FromRoute] Guid productId,
-        [FromBody]UpdateProductPriceRequestDto request,
+        [FromBody] JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        return Ok(await _productService.UpdateProductPrice(productId, request, cancellationToken));
-    }
+        var updateResult = await _productService.UpdateProduct(productId, productUpdates, cancellationToken);
 
-    [HttpPatch("{productId:guid}/amount")]
-    public async Task<IActionResult> UpdateProductAmount(
-        [FromBody]UpdateProductAmountRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Updated product's amount by id");
+        if (updateResult.IsFailure)
+        {
+            return NotFound(updateResult.Error);
+        }
+
+        return Ok(updateResult.Value);
     }
 
     [HttpDelete("{productId:guid}")]
@@ -70,15 +76,12 @@ public class ProductsController : ControllerBase
     }
 
 
-
     [HttpGet("orders/{orderId:guid}")]
     public async Task<IActionResult> GetOrder(
         [FromRoute] Guid orderId,
         CancellationToken cancellationToken)
     {
-        var productIdResult = await _productService.GetProduct(orderId, cancellationToken);
-
-        return Ok(productIdResult);
+        throw new NotImplementedException();
     }
 
     [HttpGet("orders/{orderId:guid}")]

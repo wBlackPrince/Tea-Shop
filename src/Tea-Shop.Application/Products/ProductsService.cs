@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
+using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.JsonPatch;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products;
 
@@ -28,17 +31,45 @@ public class ProductsService : IProductsService
         _createOrderValidator = createOrderValidator;
     }
 
-    public async Task<GetProductResponseDto> GetProduct(
+    public async Task<Result<GetProductResponseDto, Error>> GetProductById(
         Guid productId,
         CancellationToken cancellationToken)
     {
-        var product = await _productsRepository.GetProduct(
+        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
             new ProductId(productId),
             cancellationToken);
 
+        if (isFailure)
+        {
+            return error;
+        }
+
+        var ingrindientsGetDto = product.PreparationMethod.Ingredients
+            .Select(i => new GetIngrendientsResponseDto(
+                i.Name,
+                i.Amount,
+                i.Description,
+                i.IsAllergen)).ToArray();
+
+        var tagsIds = product.TagsIds
+            .Select(i => i.Id.Value)
+            .ToArray();
+
+        var productGetDto = new GetProductResponseDto(
+            product.Title,
+            product.Price,
+            product.Amount,
+            product.Description,
+            product.Season.ToString(),
+            ingrindientsGetDto,
+            product.PreparationMethod.Description,
+            product.PreparationMethod.PreparationTime,
+            tagsIds,
+            product.PhotosIds);
+
         _logger.LogInformation("Get product {productId}", productId);
 
-        return product;
+        return productGetDto;
     }
 
     public async Task<Guid> CreateProduct(
@@ -83,25 +114,24 @@ public class ProductsService : IProductsService
         return productId.Value;
     }
 
-    public async Task<Guid> UpdateProductPrice(
+    public async Task<Result<Guid, Error>> UpdateProduct(
         Guid productId,
-        UpdateProductPriceRequestDto request,
+        JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        var validationResult = await _updateProductPriceValidator.ValidateAsync(request, cancellationToken);
+        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
+            new ProductId(productId),
+            cancellationToken);
 
-        if (!validationResult.IsValid)
+        if (isFailure)
         {
-            throw new ValidationException(validationResult.Errors);
+            return error;
         }
 
-        await _productsRepository.UpdateProductPrice(productId, request.Price, cancellationToken);
+        productUpdates.ApplyTo(product);
+        await _productsRepository.SaveChangesAsync(cancellationToken);
 
-        // Сохранение изменений сущности Product в базе данных
-
-        _logger.LogInformation("Update product price {productId}", productId);
-
-        return productId;
+        return product.Id.Value;
     }
 
     public async Task<Guid> DeleteProduct(

@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 public record Error
 {
     public static Error None = new Error(string.Empty, string.Empty, ErrorType.None, null);
+
     public string Code { get; }
 
     public string Message { get; }

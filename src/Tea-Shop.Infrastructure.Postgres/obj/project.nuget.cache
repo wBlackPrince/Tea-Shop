@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "++q2YXQ7ETc=",
+  "dgSpecHash": "v6ITi9EeCNw=",
   "success": true,
   "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,8 @@
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\linq2db\\6.0.0-rc.3\\linq2db.6.0.0-rc.3.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\9.0.8\\microsoft.aspnetcore.jsonpatch.9.0.8.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.1\\microsoft.entityframeworkcore.9.0.1.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.1\\microsoft.entityframeworkcore.abstractions.9.0.1.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.1\\microsoft.entityframeworkcore.analyzers.9.0.1.nupkg.sha512",
@@ -23,6 +25,7 @@
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0-preview.7.25380.108\\microsoft.extensions.logging.abstractions.10.0.0-preview.7.25380.108.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.options\\10.0.0-preview.7.25380.108\\microsoft.extensions.options.10.0.0-preview.7.25380.108.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.0-preview.7.25380.108\\microsoft.extensions.primitives.10.0.0-preview.7.25380.108.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.4\\npgsql.entityframeworkcore.postgresql.9.0.4.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\scrutor\\6.1.0\\scrutor.6.1.0.nupkg.sha512",

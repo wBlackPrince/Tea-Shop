@@ -114,7 +114,17 @@ public class Product
     /// <summary>
     /// Gets or sets список идентификаторов тегов продукта
     /// </summary>
-    public IReadOnlyList<ProductsTags> TagsIds => _tags;
+    public List<ProductsTags> TagsIds
+    {
+        get
+        {
+            return _tags;
+        }
+        private set
+        {
+            _tags = value;
+        }
+    }
 
     /// <summary>
     /// Gets or sets список идентификаторов фото продукта

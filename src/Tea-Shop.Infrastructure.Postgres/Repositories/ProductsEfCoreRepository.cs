@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
@@ -15,40 +17,20 @@ public class ProductsEfCoreRepository: IProductsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<GetProductResponseDto> GetProduct(
+    public async Task<Result<Product, Error>> GetProductById(
         ProductId productId,
         CancellationToken cancellationToken)
     {
-        var result = await _dbContext.Products
+        var product = await _dbContext.Products
+            .Include(p => p.TagsIds)
             .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
 
-        var ingredientaResponse = result.PreparationMethod.Ingredients
-            .Select(i => new GetIngrendientsResponseDto(
-                i.Name,
-                i.Amount,
-                i.Description,
-                i.IsAllergen)).ToArray();
+        if (product is null)
+        {
+            return Error.NotFound("product.get", "Product not found");
+        }
 
-
-        var tagsIds = await _dbContext.ProductsTags
-            .Where(pt => pt.Product.Id == productId)
-            .Select(pt => pt.TagId.Value)
-            .ToArrayAsync();
-
-
-        var response = new GetProductResponseDto(
-            result.Title,
-            result.Price,
-            result.Amount,
-            result.Description,
-            result.Season.ToString(),
-            ingredientaResponse,
-            result.PreparationMethod.Description,
-            result.PreparationMethod.PreparationTime,
-            tagsIds,
-            result.PhotosIds);
-
-        return response;
+        return product;
     }
 
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)

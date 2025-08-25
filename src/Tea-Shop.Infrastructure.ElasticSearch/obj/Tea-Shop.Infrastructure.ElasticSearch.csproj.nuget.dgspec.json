@@ -66,6 +66,10 @@
               "target": "Package",
               "version": "[12.0.0, )"
             },
+            "Microsoft.AspNetCore.JsonPatch": {
+              "target": "Package",
+              "version": "[9.0.8, )"
+            },
             "Microsoft.Extensions.Logging": {
               "target": "Package",
               "version": "[10.0.0-preview.7.25380.108, )"
