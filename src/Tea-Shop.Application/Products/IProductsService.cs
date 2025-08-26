@@ -21,7 +21,7 @@ public interface IProductsService
         JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken);
 
-    Task<Guid> DeleteProduct(
+    Task<Result<Guid, Error>> DeleteProduct(
         Guid productId,
         CancellationToken cancellationToken);
 

@@ -114,41 +114,6 @@ public class ProductsService : IProductsService
         return productId.Value;
     }
 
-    public async Task<Result<Guid, Error>> UpdateProduct(
-        Guid productId,
-        JsonPatchDocument<Product> productUpdates,
-        CancellationToken cancellationToken)
-    {
-        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
-            new ProductId(productId),
-            cancellationToken);
-
-        if (isFailure)
-        {
-            return error;
-        }
-
-        productUpdates.ApplyTo(product);
-        await _productsRepository.SaveChangesAsync(cancellationToken);
-
-        _logger.LogInformation("Update product {productId}", productId);
-
-        return product.Id.Value;
-    }
-
-    public async Task<Guid> DeleteProduct(
-        Guid productId,
-        CancellationToken cancellationToken)
-    {
-        // проверка валидности
-
-        await _productsRepository.DeleteProduct(new ProductId(productId), cancellationToken);
-
-        // Логгирование об успешном или не успешном изменении
-
-        return productId;
-    }
-
 
     public async Task<Guid> CreateOrder(
         CreateOrderRequestDto request,
@@ -185,5 +150,48 @@ public class ProductsService : IProductsService
         _logger.LogInformation("Create order {orderId}", order.Id);
 
         return order.Id.Value;
+    }
+
+
+    public async Task<Result<Guid, Error>> UpdateProduct(
+        Guid productId,
+        JsonPatchDocument<Product> productUpdates,
+        CancellationToken cancellationToken)
+    {
+        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
+            new ProductId(productId),
+            cancellationToken);
+
+        if (isFailure)
+        {
+            return error;
+        }
+
+        productUpdates.ApplyTo(product);
+        await _productsRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Update product {productId}", productId);
+
+        return product.Id.Value;
+    }
+
+    public async Task<Result<Guid, Error>> DeleteProduct(
+        Guid productId,
+        CancellationToken cancellationToken)
+    {
+        var deleteResult = await _productsRepository.DeleteProduct(
+            new ProductId(productId),
+            cancellationToken);
+
+        if (deleteResult.IsFailure)
+        {
+            _logger.LogInformation("Failed to delete product {productId}", productId);
+
+            return deleteResult.Error;
+        }
+
+        _logger.LogError("Delete product {productId}", productId);
+
+        return productId;
     }
 }

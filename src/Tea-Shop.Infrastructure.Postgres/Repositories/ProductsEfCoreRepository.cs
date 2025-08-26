@@ -40,10 +40,18 @@ public class ProductsEfCoreRepository: IProductsRepository
         return product.Id.Value;
     }
 
-    public async Task<Guid> DeleteProduct(
+    public async Task<Result<Guid, Error>> DeleteProduct(
         ProductId productId,
         CancellationToken cancellationToken)
     {
+        var foundResult = await _dbContext.Products
+            .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+
+        if (foundResult is null)
+        {
+            return Error.NotFound("product.get", "Product not found");
+        }
+
         await _dbContext.Products
             .Where(p => p.Id == productId)
             .ExecuteDeleteAsync(cancellationToken);

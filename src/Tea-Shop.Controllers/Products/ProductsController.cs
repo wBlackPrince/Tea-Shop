@@ -72,7 +72,14 @@ public class ProductsController : ControllerBase
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        return Ok(await _productService.DeleteProduct(productId, cancellationToken));
+        var deleteResult = await _productService.DeleteProduct(productId, cancellationToken);
+
+        if (deleteResult.IsFailure)
+        {
+            return NotFound(deleteResult.Error);
+        }
+
+        return Ok(productId);
     }
 
 

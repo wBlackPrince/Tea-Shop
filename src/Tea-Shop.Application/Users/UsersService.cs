@@ -112,6 +112,8 @@ public class UsersService : IUsersService
 
         if (deleteResult.IsFailure)
         {
+            _logger.LogInformation("Failed to delete user {productId}", userId);
+
             return deleteResult.Error;
         }
 
