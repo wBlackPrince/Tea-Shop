@@ -131,6 +131,8 @@ public class ProductsService : IProductsService
         productUpdates.ApplyTo(product);
         await _productsRepository.SaveChangesAsync(cancellationToken);
 
+        _logger.LogInformation("Update product {productId}", productId);
+
         return product.Id.Value;
     }
 

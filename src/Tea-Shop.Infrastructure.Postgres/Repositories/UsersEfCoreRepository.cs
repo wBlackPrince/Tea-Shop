@@ -17,7 +17,7 @@ public class UsersEfCoreRepository : IUsersRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<GetUserResponseDto, Error>> GetUser(
+    public async Task<Result<User, Error>> GetUser(
         UserId userId,
         CancellationToken cancellationToken)
     {
@@ -30,17 +30,7 @@ public class UsersEfCoreRepository : IUsersRepository
             return Error.Failure("Get.User", "User not found");
         }
 
-        var response = new GetUserResponseDto(
-            user.Password,
-            user.FirstName,
-            user.LastName,
-            user.Email,
-            user.PhoneNumber,
-            user.Role.ToString(),
-            user.AvatarId,
-            user.MiddleName);
-
-        return response;
+        return user;
     }
 
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)
@@ -50,9 +40,21 @@ public class UsersEfCoreRepository : IUsersRepository
         return user.Id.Value;
     }
 
-    public async Task<Guid> DeleteUser(Guid tagId, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> DeleteUser(UserId userId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var id = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (id is null)
+        {
+            return Error.Failure("DeleteUser", "User not found");
+        }
+
+        await _dbContext.Users
+            .Where(u => u.Id == userId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return userId.Value;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

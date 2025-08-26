@@ -1,7 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -22,6 +24,32 @@ public class UsersService : IUsersService
         _validator = validator;
         _logger = logger;
     }
+
+
+    public async Task<Result<GetUserResponseDto, Error>> GetById(Guid userId, CancellationToken cancellationToken)
+    {
+        var getResult = await _usersRepository.GetUser(new UserId(userId), cancellationToken);
+
+        if (getResult.IsFailure)
+        {
+            return getResult.Error;
+        }
+
+        User user = getResult.Value;
+
+        var response = new GetUserResponseDto(
+            user.Password,
+            user.FirstName,
+            user.LastName,
+            user.Email,
+            user.PhoneNumber,
+            user.Role.ToString(),
+            user.AvatarId,
+            user.MiddleName);
+
+        return response;
+    }
+
 
     public async Task<Guid> CreateUser(
         CreateUserRequestDto request,
@@ -54,15 +82,41 @@ public class UsersService : IUsersService
         return user.Id.Value;
     }
 
-    public async Task<Result<GetUserResponseDto, Error>> Get(Guid userId, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> UpdateUser(
+        Guid userId,
+        JsonPatchDocument<User> userUpdates,
+        CancellationToken cancellationToken)
     {
-        var getResult = await _usersRepository.GetUser(new UserId(userId), cancellationToken);
+        var (_, isFailure, user, error) = await _usersRepository.GetUser(
+            new UserId(userId),
+            cancellationToken);
 
-        if (getResult.IsFailure)
+        if (isFailure)
         {
-            return getResult.Error;
+            return error;
         }
 
-        return getResult.Value;
+        userUpdates.ApplyTo(user);
+        await _usersRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Update user with id {UserId}", userId);
+
+        return user.Id.Value;
+    }
+
+    public async Task<Result<Guid, Error>> DeleteUser(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var deleteResult = await _usersRepository.DeleteUser(new UserId(userId), cancellationToken);
+
+        if (deleteResult.IsFailure)
+        {
+            return deleteResult.Error;
+        }
+
+        _logger.LogInformation("User with id {UserId} deleted.", userId);
+
+        return userId;
     }
 }

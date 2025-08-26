@@ -40,19 +40,6 @@ public class ProductsEfCoreRepository: IProductsRepository
         return product.Id.Value;
     }
 
-    public async Task<Guid> UpdateProductPrice(
-        Guid productId,
-        float price,
-        CancellationToken cancellationToken)
-    {
-        await _dbContext.Products
-            .Where(p => p.Id.Value == productId)
-            .ExecuteUpdateAsync(setter
-                => setter.SetProperty(p => p.Price, price));
-
-        return productId;
-    }
-
     public async Task<Guid> DeleteProduct(
         ProductId productId,
         CancellationToken cancellationToken)
