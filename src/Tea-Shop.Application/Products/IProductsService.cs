@@ -20,7 +20,7 @@ public interface IProductsService
         Guid productId,
         CancellationToken cancellationToken);
 
-    Task<Guid> CreateProduct(
+    Task<CreateProductResponseDto> CreateProduct(
         CreateProductRequestDto request,
         CancellationToken cancellationToken);
 
@@ -31,9 +31,5 @@ public interface IProductsService
 
     Task<Result<Guid, Error>> DeleteProduct(
         Guid productId,
-        CancellationToken cancellationToken);
-
-    Task<Guid> CreateOrder(
-        CreateOrderRequestDto request,
         CancellationToken cancellationToken);
 }

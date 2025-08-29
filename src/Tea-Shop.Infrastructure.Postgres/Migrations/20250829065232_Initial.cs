@@ -22,8 +22,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     price = table.Column<float>(type: "real", nullable: false),
                     amount = table.Column<float>(type: "real", nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PhotosIds = table.Column<Guid[]>(type: "uuid[]", nullable: false),
-                    ingredients = table.Column<string>(type: "jsonb", nullable: true)
+                    ingredients = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {

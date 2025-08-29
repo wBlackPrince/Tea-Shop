@@ -46,6 +46,12 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
         builder.Property(p => p.Rating)
             .HasColumnName("rating");
 
+        builder.Property(p => p.CreatedAt)
+            .HasColumnName("created_at");
+
+        builder.Property(p => p.UpdatedAt)
+            .HasColumnName("updated_at");
+
         builder.OwnsOne(
             p => p.PreparationMethod,
             pb =>
@@ -79,7 +85,7 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
 
         builder
             .HasMany<OrderItem>()
-            .WithOne(oi => oi.Product)
+            .WithOne()
             .HasForeignKey(oi => oi.ProductId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);

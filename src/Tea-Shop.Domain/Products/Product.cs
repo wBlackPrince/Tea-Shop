@@ -50,6 +50,8 @@ public class Product
         Season = season;
         Price = price;
         Amount = amount;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
 
         var productsTags = tagsIds
             .Select(tId => new ProductsTags(
@@ -105,6 +107,16 @@ public class Product
     /// Gets or sets рейтинг продукта
     /// </summary>
     public int Rating { get; set; } = 0;
+
+    /// <summary>
+    /// Gets or sets время создания продукта
+    /// </summary>
+    public DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// Gets or sets время последнего обновления продукта
+    /// </summary>
+    public DateTime UpdatedAt { get; set; }
 
     /// <summary>
     /// Gets or sets метод приготовления

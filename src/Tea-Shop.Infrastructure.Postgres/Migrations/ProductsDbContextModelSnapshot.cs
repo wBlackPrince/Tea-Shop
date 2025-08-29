@@ -141,6 +141,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("real")
                         .HasColumnName("amount");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -169,6 +173,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("pk_products");
@@ -351,13 +359,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tea_Shop.Domain.Products.Product", "Product")
+                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.Product", b =>
@@ -425,7 +431,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                             b1.Navigation("Ingredients");
                         });
 
-                    b.Navigation("PreparationMethod");
+                    b.Navigation("PreparationMethod")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.ProductsTags", b =>

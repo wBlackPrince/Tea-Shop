@@ -37,11 +37,6 @@ public class OrderItem
     public OrderItemId Id { get; set; }
 
     /// <summary>
-    /// Gets or sets Продукта заказанного элемента
-    /// </summary>
-    public Product Product { get; set; }
-
-    /// <summary>
     /// Gets or sets Количество заказанного элемента
     /// </summary>
     public int Quantity { get; set; }

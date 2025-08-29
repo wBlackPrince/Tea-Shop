@@ -67,12 +67,12 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(
+    public async Task<ActionResult<CreateProductResponseDto>> Create(
         [FromBody]CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
-        var productId = await _productService.CreateProduct(request, cancellationToken);
-        return Ok(productId);
+        var response = await _productService.CreateProduct(request, cancellationToken);
+        return Ok(response);
     }
 
     [HttpPatch("{productId:guid}")]
@@ -104,55 +104,5 @@ public class ProductsController : ControllerBase
         }
 
         return Ok(productId);
-    }
-
-
-    [HttpGet("orders/{orderId:guid}")]
-    public async Task<IActionResult> GetOrder(
-        [FromRoute] Guid orderId,
-        CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    [HttpGet("orders/{orderId:guid}")]
-    public async Task<IActionResult> GetOrderItems(
-        [FromRoute] Guid orderId,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Get order's items");
-    }
-
-    [HttpPost("orders")]
-    public async Task<IActionResult> CreateOrder(
-        [FromBody]CreateOrderRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        var orderId = await _productService.CreateOrder(request, cancellationToken);
-        return Ok($"Created order with id {orderId}");
-    }
-
-    [HttpPatch("orders/{productId:guid}/price")]
-    public async Task<IActionResult> UpdateOrderItems(
-        [FromBody]UpdateOrderItemsRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Updated order's items by id");
-    }
-
-    [HttpPatch("orders/{productId:guid}/price")]
-    public async Task<IActionResult> UpdateOrderStatus(
-        [FromBody]UpdateOrderStatusRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Updated order's status by id");
-    }
-
-    [HttpDelete("orders/{orderId:guid}")]
-    public async Task<IActionResult> DeleteOrder(
-        [FromRoute] Guid orderId,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Deleted order");
     }
 }

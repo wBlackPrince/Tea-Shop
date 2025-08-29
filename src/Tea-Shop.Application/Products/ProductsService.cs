@@ -16,20 +16,17 @@ public class ProductsService : IProductsService
     private readonly ILogger<ProductsService> _logger;
     private readonly IValidator<CreateProductRequestDto> _createProductValidator;
     private readonly IValidator<UpdateProductPriceRequestDto> _updateProductPriceValidator;
-    private readonly IValidator<CreateOrderRequestDto> _createOrderValidator;
 
     public ProductsService(
         IProductsRepository productsRepository,
         ILogger<ProductsService> logger,
         IValidator<CreateProductRequestDto> createProductValidator,
-        IValidator<UpdateProductPriceRequestDto> updateProductPriceValidator,
-        IValidator<CreateOrderRequestDto> createOrderValidator)
+        IValidator<UpdateProductPriceRequestDto> updateProductPriceValidator)
     {
         _productsRepository = productsRepository;
         _logger = logger;
         _createProductValidator = createProductValidator;
         _updateProductPriceValidator = updateProductPriceValidator;
-        _createOrderValidator = createOrderValidator;
     }
 
     public async Task<Result<GetProductResponseDto, Error>> GetProductById(
@@ -57,6 +54,7 @@ public class ProductsService : IProductsService
             .ToArray();
 
         var productGetDto = new GetProductResponseDto(
+            product.Id.Value,
             product.Title,
             product.Price,
             product.Amount,
@@ -65,6 +63,8 @@ public class ProductsService : IProductsService
             ingrindientsGetDto,
             product.PreparationMethod.Description,
             product.PreparationMethod.PreparationTime,
+            product.CreatedAt,
+            product.UpdatedAt,
             tagsIds,
             product.PhotosIds);
 
@@ -92,6 +92,7 @@ public class ProductsService : IProductsService
         for (int i = 0; i < products.Length; i++)
         {
             response[i] = new GetProductResponseDto(
+                products[i].Id.Value,
                 products[i].Title,
                 products[i].Price,
                 products[i].Amount,
@@ -103,6 +104,8 @@ public class ProductsService : IProductsService
                     .ToArray(),
                 products[i].PreparationMethod.Description,
                 products[i].PreparationMethod.PreparationTime,
+                products[i].CreatedAt,
+                products[i].UpdatedAt,
                 products[i].TagsIds.Select(ti => ti.TagId.Value).ToArray(),
                 products[i].PhotosIds);
         }
@@ -136,7 +139,7 @@ public class ProductsService : IProductsService
     }
 
 
-    public async Task<Guid> CreateProduct(
+    public async Task<CreateProductResponseDto> CreateProduct(
         CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -175,45 +178,27 @@ public class ProductsService : IProductsService
 
         _logger.LogInformation("Create product {productId}", productId);
 
-        return productId.Value;
-    }
+        var productDto = new CreateProductResponseDto(
+            product.Id.Value,
+            product.Title,
+            product.Price,
+            product.Amount,
+            product.Description,
+            product.Season.ToString(),
+            product.PreparationMethod.Ingredients.Select(ingr =>
+                new GetIngrendientsResponseDto(
+                    ingr.Name,
+                    ingr.Amount,
+                    ingr.Description,
+                    ingr.IsAllergen)).ToArray(),
+            product.PreparationMethod.Description,
+            product.PreparationMethod.PreparationTime,
+            product.CreatedAt,
+            product.UpdatedAt,
+            product.TagsIds.Select(t => t.TagId.Value).ToArray(),
+            product.PhotosIds);
 
-
-    public async Task<Guid> CreateOrder(
-        CreateOrderRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        var validationResult = await _createOrderValidator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-
-        var orderItems = request.Items.Select(i =>
-                OrderItem.Create(
-                    new OrderItemId(Guid.NewGuid()),
-                    new ProductId(i.ProductId),
-                    i.Quantity).Value)
-            .ToList();
-
-        var order = new Order(
-            new OrderId(Guid.NewGuid()),
-            new UserId(request.UserId),
-            request.DeliveryAddress,
-            (PaymentWay)Enum.Parse(typeof(PaymentWay), request.PaymentMethod),
-            request.ExpectedTimeDelivery,
-            (OrderStatus)Enum.Parse(typeof(OrderStatus), request.Status),
-            orderItems,
-            DateTime.UtcNow,
-            DateTime.UtcNow);
-
-        await _productsRepository.CreateOrder(order, cancellationToken);
-
-        await _productsRepository.SaveChangesAsync(cancellationToken);
-
-        _logger.LogInformation("Create order {orderId}", order.Id);
-
-        return order.Id.Value;
+        return productDto;
     }
 
 

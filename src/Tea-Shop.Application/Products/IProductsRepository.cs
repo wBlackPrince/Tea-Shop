@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
@@ -25,6 +24,4 @@ public interface IProductsRepository
     Task<Result<Guid, Error>> DeleteProduct(ProductId productId, CancellationToken cancellationToken);
 
     Task SaveChangesAsync(CancellationToken cancellationToken);
-
-    Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken);
 }
