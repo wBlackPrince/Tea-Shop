@@ -6,6 +6,7 @@ using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Infrastructure.Postgres.Repositories;
+using Tea_Shop.Infrastructure.Postgres.Seeders;
 
 namespace Tea_Shop.Infrastructure.Postgres;
 
@@ -22,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IUsersRepository, UsersEfCoreRepository>();
         services.AddScoped<IReviewsRepository, ReviewsEfCoreRepository>();
         services.AddScoped<ICommentsRepository, CommentsEfCoreRepository>();
+        services.AddScoped<ISeeder, ProductsSeeders>();
 
         return services;
     }
