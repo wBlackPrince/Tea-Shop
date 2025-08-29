@@ -5,6 +5,7 @@ using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
+using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products;
@@ -71,6 +72,69 @@ public class ProductsService : IProductsService
 
         return productGetDto;
     }
+
+
+    public async Task<Result<GetProductResponseDto[], Error>> GetProductsByTag(
+        Guid tagId,
+        CancellationToken cancellationToken)
+    {
+        var (_, isFailure, products, error) = await _productsRepository.GetProductsByTag(
+            new TagId(tagId),
+            cancellationToken);
+
+        if (isFailure)
+        {
+            return error;
+        }
+
+        GetProductResponseDto[] response = new GetProductResponseDto[products.Length];
+
+        for (int i = 0; i < products.Length; i++)
+        {
+            response[i] = new GetProductResponseDto(
+                products[i].Title,
+                products[i].Price,
+                products[i].Amount,
+                products[i].Description,
+                products[i].Season.ToString(),
+                products[i].PreparationMethod.Ingredients
+                    .Select(ing =>
+                        new GetIngrendientsResponseDto(ing.Name, ing.Amount, ing.Description, ing.IsAllergen))
+                    .ToArray(),
+                products[i].PreparationMethod.Description,
+                products[i].PreparationMethod.PreparationTime,
+                products[i].TagsIds.Select(ti => ti.TagId.Value).ToArray(),
+                products[i].PhotosIds);
+        }
+
+        return response;
+    }
+
+
+    public async Task<Result<GetIngrendientsResponseDto[], Error>> GetProductIngredients(
+        Guid productId,
+        CancellationToken cancellationToken)
+    {
+        var ingredientsResult = await _productsRepository.GetProductIngredients(
+            new ProductId(productId),
+            cancellationToken);
+
+        if (ingredientsResult.IsFailure)
+        {
+            return ingredientsResult.Error;
+        }
+
+        var ingredientsResponse = ingredientsResult.Value
+            .Select(i => new GetIngrendientsResponseDto(
+                i.Name,
+                i.Amount,
+                i.Description,
+                i.IsAllergen))
+            .ToArray();
+
+        return ingredientsResponse;
+    }
+
 
     public async Task<Guid> CreateProduct(
         CreateProductRequestDto request,

@@ -33,6 +33,42 @@ public class ProductsEfCoreRepository: IProductsRepository
         return product;
     }
 
+
+    public async Task<Result<Ingrendient[], Error>> GetProductIngredients(
+        ProductId productId,
+        CancellationToken cancellationToken)
+    {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(
+            p => p.Id == productId,
+            cancellationToken);
+
+        if (product is null)
+        {
+            return Error.NotFound(
+                "product.get_product_ingredients",
+                "Product not found");
+        }
+
+        return product.PreparationMethod.Ingredients.ToArray();
+    }
+
+    public async Task<Result<Product[], Error>> GetProductsByTag(
+        TagId tagId,
+        CancellationToken cancellationToken)
+    {
+        var products = await _dbContext.Products
+            .Where(p => p.TagsIds.Any(t => t.TagId == tagId))
+            .Include(p => p.TagsIds)
+            .ToArrayAsync(cancellationToken);
+
+        if (products.Length == 0)
+        {
+            return Error.NotFound("product.get_by_tag", "Product not found");
+        }
+
+        return products;
+    }
+
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)
     {
         await _dbContext.Products.AddAsync(product, cancellationToken);

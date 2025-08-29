@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tea-Shop.Infrastructure.ElasticSearch")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f668b1c236755d8ea92b9c305eac7b00d9f05b93")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca4e1a4017cd5d34f7aba8d0772857ce1d745b24")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tea-Shop.Infrastructure.ElasticSearch")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tea-Shop.Infrastructure.ElasticSearch")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

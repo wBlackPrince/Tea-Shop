@@ -109,7 +109,7 @@ public class Product
     /// <summary>
     /// Gets or sets метод приготовления
     /// </summary>
-    public PreparationMethod? PreparationMethod { get; set; }
+    public PreparationMethod PreparationMethod { get; set; }
 
     /// <summary>
     /// Gets or sets список идентификаторов тегов продукта

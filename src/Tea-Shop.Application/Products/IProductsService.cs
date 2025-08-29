@@ -12,6 +12,14 @@ public interface IProductsService
         Guid productId,
         CancellationToken cancellationToken);
 
+    Task<Result<GetProductResponseDto[], Error>> GetProductsByTag(
+        Guid tagId,
+        CancellationToken cancellationToken);
+
+    Task<Result<GetIngrendientsResponseDto[], Error>> GetProductIngredients(
+        Guid productId,
+        CancellationToken cancellationToken);
+
     Task<Guid> CreateProduct(
         CreateProductRequestDto request,
         CancellationToken cancellationToken);

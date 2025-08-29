@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products;
@@ -8,6 +9,14 @@ namespace Tea_Shop.Application.Products;
 public interface IProductsRepository
 {
     Task<Result<Product, Error>> GetProductById(
+        ProductId productId,
+        CancellationToken cancellationToken);
+
+    Task<Result<Product[], Error>> GetProductsByTag(
+        TagId tagId,
+        CancellationToken cancellationToken);
+
+    Task<Result<Ingrendient[], Error>> GetProductIngredients(
         ProductId productId,
         CancellationToken cancellationToken);
 

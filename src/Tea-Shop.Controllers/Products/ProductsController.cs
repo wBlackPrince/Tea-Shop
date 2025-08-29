@@ -18,7 +18,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId:guid}")]
-    public async Task<ActionResult<GetProductResponseDto>> GetById(
+    public async Task<ActionResult<GetProductResponseDto>> GetProductById(
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
@@ -34,12 +34,36 @@ public class ProductsController : ControllerBase
         return Ok(getResult.Value);
     }
 
-    [HttpGet("{productId:guid}/ingrindients")]
-    public async Task<IActionResult> GetProductIngrindients(
-        [FromRoute] Guid productId,
+    [HttpGet]
+    public async Task<ActionResult<GetProductResponseDto[]>> GetProductsByTag(
+        [FromQuery]Guid tagId,
         CancellationToken cancellationToken)
     {
-        return Ok("Get product's ingredients");
+        var productsResult = await _productService.GetProductsByTag(tagId, cancellationToken);
+
+        if (productsResult.IsFailure)
+        {
+            return NotFound(productsResult.Error);
+        }
+
+        return Ok(productsResult.Value);
+    }
+
+    [HttpGet("{productId:guid}/ingridients")]
+    public async Task<ActionResult<GetIngrendientsResponseDto[]>> GetProductsIngredients(
+        [FromRoute]Guid productId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _productService.GetProductIngredients(
+            productId,
+            cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost]
