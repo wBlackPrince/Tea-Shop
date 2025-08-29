@@ -1,9 +1,10 @@
-﻿using Tea_Shop.Domain.Products;
+﻿using Tea_Shop.Application.Orders;
+using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
 
-public class OrdersRepository
+public class OrdersRepository: IOrdersRepository
 {
     private readonly ProductsDbContext _dbContext;
 

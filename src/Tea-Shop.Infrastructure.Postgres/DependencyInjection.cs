@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Tags;
@@ -20,6 +21,7 @@ public static class DependencyInjection
         //services.AddScoped<IProductsRepository, ProductsSqlRepository>();
 
         services.AddScoped<ITagsRepository, TagsEfCoreRepository>();
+        services.AddScoped<IOrdersRepository, OrdersRepository>();
         services.AddScoped<IUsersRepository, UsersEfCoreRepository>();
         services.AddScoped<IReviewsRepository, ReviewsEfCoreRepository>();
         services.AddScoped<ICommentsRepository, CommentsEfCoreRepository>();

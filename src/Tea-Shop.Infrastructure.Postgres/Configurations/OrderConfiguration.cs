@@ -35,6 +35,19 @@ public class OrderConfiguration: IEntityTypeConfiguration<Order>
                 pay_way => (OrderStatus)Enum.Parse(typeof(OrderStatus), pay_way))
             .HasColumnName("order_status");
 
+        builder.Property(o => o.UserId)
+            .HasConversion(o => o.Value, id => new UserId(id))
+            .HasColumnName("user_id");
+
+        builder.Property(o => o.CreatedAt)
+            .HasColumnName("created_at");
+
+        builder.Property(o => o.UpdatedAt)
+            .HasColumnName("updated_at");
+
+        builder.Property(o => o.ExpectedDeliveryTime)
+            .HasColumnName("expected_delivery_time");
+
         builder
             .HasMany(o => o.OrderItems)
             .WithOne()

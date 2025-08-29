@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -101,7 +100,7 @@ public class Order
 
     public UnitResult<Error> AddOrderItem(OrderItem orderItem)
     {
-        if (OrderItemsCount > (int)ProductConstants.ORDER_ITEMS_LIMIT)
+        if (OrderItemsCount > (int)OrdersConstants.ORDER_ITEMS_LIMIT)
         {
             return Error.Conflict("orders.orders_items.LIMIT", "Too many order items");
         }

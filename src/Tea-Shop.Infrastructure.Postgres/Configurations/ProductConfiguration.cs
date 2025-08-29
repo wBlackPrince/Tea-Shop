@@ -83,6 +83,9 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
 
             });
 
+        builder.Property(p => p.PhotosIds)
+            .HasColumnName("photos_ids");
+
         builder
             .HasMany<OrderItem>()
             .WithOne()

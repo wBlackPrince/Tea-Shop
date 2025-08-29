@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250829065232_Initial")]
+    [Migration("20250829131115_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -72,7 +72,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("DeliveryAddress")
                         .IsRequired()
@@ -80,7 +81,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("delivery_address");
 
                     b.Property<DateTime>("ExpectedDeliveryTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expected_delivery_time");
 
                     b.Property<string>("OrderStatus")
                         .IsRequired()
@@ -93,10 +95,12 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("payment_way");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("ipk_orders");
@@ -156,7 +160,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.PrimitiveCollection<Guid[]>("PhotosIds")
                         .IsRequired()
-                        .HasColumnType("uuid[]");
+                        .HasColumnType("uuid[]")
+                        .HasColumnName("photos_ids");
 
                     b.Property<float>("Price")
                         .HasColumnType("real")
@@ -328,7 +333,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("role");
 
                     b.HasKey("Id")
                         .HasName("pk_users");

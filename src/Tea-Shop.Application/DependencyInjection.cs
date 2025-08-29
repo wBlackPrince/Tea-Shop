@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Comments;
+using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Tags;
@@ -16,6 +17,7 @@ public static class DependencyInjection
 
         services.AddScoped<IProductsService, ProductsService>();
         services.AddScoped<ITagsService, TagsService>();
+        services.AddScoped<IOrdersService, OrderService>();
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IReviewsService, ReviewsService>();
         services.AddScoped<ICommentsService, CommentsService>();

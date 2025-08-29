@@ -24,7 +24,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     rating = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PhotosIds = table.Column<Guid[]>(type: "uuid[]", nullable: false),
+                    photos_ids = table.Column<Guid[]>(type: "uuid[]", nullable: false),
                     ingredients = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -57,7 +57,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     email = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     avatar_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    Role = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -118,20 +118,20 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     delivery_address = table.Column<string>(type: "text", nullable: false),
                     payment_way = table.Column<string>(type: "text", nullable: false),
-                    ExpectedDeliveryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    expected_delivery_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     order_status = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("ipk_orders", x => x.id);
                     table.ForeignKey(
-                        name: "FK_orders_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_orders_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -209,9 +209,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_orders_UserId",
+                name: "IX_orders_user_id",
                 table: "orders",
-                column: "UserId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_tags_product_id",
