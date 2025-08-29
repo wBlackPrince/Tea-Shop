@@ -38,16 +38,59 @@ public class UsersService : IUsersService
         User user = getResult.Value;
 
         var response = new GetUserResponseDto(
-            user.Password,
+            user.Id.Value,
             user.FirstName,
             user.LastName,
-            user.Email,
-            user.PhoneNumber,
             user.Role.ToString(),
             user.AvatarId,
             user.MiddleName);
 
         return response;
+    }
+
+
+    public async Task<Result<IReadOnlyList<GetUserResponseDto>, Error>> GetActiveUsers(
+        CancellationToken cancellationToken)
+    {
+        var (_, isFailure, users, error) = await _usersRepository.GetActiveUsers(cancellationToken);
+
+        if (isFailure)
+        {
+            return error;
+        }
+
+        var usersResponseDto = users.Select(u =>
+            new GetUserResponseDto(
+                u.Id.Value,
+                u.FirstName,
+                u.LastName,
+                u.Role.ToString(),
+                u.AvatarId,
+                u.MiddleName)).ToArray();
+
+        return usersResponseDto;
+    }
+
+    public async Task<Result<IReadOnlyList<GetUserResponseDto>, Error>> GetBannedUsers(
+        CancellationToken cancellationToken)
+    {
+        var (_, isFailure, users, error) = await _usersRepository.GetBannedUsers(cancellationToken);
+
+        if (isFailure)
+        {
+            return error;
+        }
+
+        var usersResponseDto = users.Select(u =>
+            new GetUserResponseDto(
+                u.Id.Value,
+                u.FirstName,
+                u.LastName,
+                u.Role.ToString(),
+                u.AvatarId,
+                u.MiddleName)).ToArray();
+
+        return usersResponseDto;
     }
 
 

@@ -33,6 +33,36 @@ public class UsersEfCoreRepository : IUsersRepository
         return user;
     }
 
+
+    public async Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken)
+    {
+        var users = await _dbContext.Users
+            .Where(u => u.IsActive)
+            .ToListAsync(cancellationToken);
+
+        if (users.Count == 0)
+        {
+            return Error.Failure("get.active_users", "users not found");
+        }
+
+        return users;
+    }
+
+    public async Task<Result<IReadOnlyList<User>, Error>> GetBannedUsers(CancellationToken cancellationToken)
+    {
+        var users = await _dbContext.Users
+            .Where(u => !u.IsActive)
+            .ToListAsync(cancellationToken);
+
+        if (users.Count == 0)
+        {
+            return Error.Failure("get.banned_users", "users not found");
+        }
+
+        return users;
+    }
+
+
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)
     {
         await _dbContext.Users.AddAsync(user, cancellationToken);

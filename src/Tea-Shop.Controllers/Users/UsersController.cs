@@ -1,11 +1,8 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
-using Tea_Shop.Shared;
 
 namespace Tea_Shop.Users;
 
@@ -21,18 +18,44 @@ public class UsersController: ControllerBase
     }
 
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUsers(
+    public async Task<IActionResult> GetUserById(
         [FromRoute]Guid userId,
         CancellationToken cancellationToken)
     {
-        var getResult = await _usersService.GetById(userId, cancellationToken);
+        var result = await _usersService.GetById(userId, cancellationToken);
 
-        if (getResult.IsFailure)
+        if (result.IsFailure)
         {
-            return BadRequest(getResult.Error);
+            return NotFound(result.Error);
         }
 
-        return Ok(getResult.Value);
+        return Ok(result.Value);
+    }
+
+    [HttpGet("active")]
+    public async Task<IActionResult> GetActiveUsers(CancellationToken cancellationToken)
+    {
+        var result = await _usersService.GetActiveUsers(cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("banned")]
+    public async Task<IActionResult> GetBannedUsers(CancellationToken cancellationToken)
+    {
+        var result = await _usersService.GetBannedUsers(cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost]

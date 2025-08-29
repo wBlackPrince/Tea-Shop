@@ -8,12 +8,18 @@ namespace Tea_Shop.Application.Users;
 
 public interface IUsersService
 {
-    Task<Guid> CreateUser(
-        CreateUserRequestDto request,
-        CancellationToken cancellationToken);
-
     Task<Result<GetUserResponseDto, Error>> GetById(
         Guid userId,
+        CancellationToken cancellationToken);
+
+    Task<Result<IReadOnlyList<GetUserResponseDto>, Error>> GetActiveUsers(
+        CancellationToken cancellationToken);
+
+    Task<Result<IReadOnlyList<GetUserResponseDto>, Error>> GetBannedUsers(
+        CancellationToken cancellationToken);
+
+    Task<Guid> CreateUser(
+        CreateUserRequestDto request,
         CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> UpdateUser(

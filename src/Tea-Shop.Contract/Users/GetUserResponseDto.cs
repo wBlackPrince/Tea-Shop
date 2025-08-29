@@ -1,11 +1,9 @@
 ﻿namespace Tea_Shop.Contract.Users;
 
 public record GetUserResponseDto(
-    string Password,
+    Guid Id,
     string FirstName,
     string LastName,
-    string Email,
-    string PhoneNumber,
     string Role,
     Guid? AvatarId,
     string MiddleName);

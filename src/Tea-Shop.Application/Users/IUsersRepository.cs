@@ -11,6 +11,10 @@ public interface IUsersRepository
         UserId userId,
         CancellationToken cancellationToken);
 
+    Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken);
+
+    Task<Result<IReadOnlyList<User>, Error>> GetBannedUsers(CancellationToken cancellationToken);
+
     Task<Guid> CreateUser(User user, CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> DeleteUser(UserId useId, CancellationToken cancellationToken);
