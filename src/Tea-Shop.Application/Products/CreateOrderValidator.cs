@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using FluentValidation;
+using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Products;
+using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Application.Products;

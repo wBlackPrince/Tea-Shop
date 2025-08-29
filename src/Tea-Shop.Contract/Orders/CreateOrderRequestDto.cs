@@ -1,4 +1,4 @@
-﻿namespace Tea_Shop.Contract.Products;
+﻿namespace Tea_Shop.Contract.Orders;
 
 public record CreateOrderRequestDto(
     Guid UserId,
@@ -6,4 +6,4 @@ public record CreateOrderRequestDto(
     string PaymentMethod,
     string Status,
     DateTime ExpectedTimeDelivery,
-    CreateOrderItemRequestDto[] Items);
+    OrderItemDto[] Items);

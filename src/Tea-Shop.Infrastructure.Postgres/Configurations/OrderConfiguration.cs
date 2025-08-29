@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 

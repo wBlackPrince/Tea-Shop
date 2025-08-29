@@ -1,7 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
 
-namespace Tea_Shop.Domain.Products;
+namespace Tea_Shop.Domain.Orders;
 
 
 public record OrderItemId(Guid Value);

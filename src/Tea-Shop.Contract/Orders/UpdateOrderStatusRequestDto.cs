@@ -1,3 +1,3 @@
-﻿namespace Tea_Shop.Contract.Products;
+﻿namespace Tea_Shop.Contract.Orders;
 
 public record UpdateOrderStatusRequestDto(string Status);

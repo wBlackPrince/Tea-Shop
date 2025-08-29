@@ -2,7 +2,7 @@
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
-namespace Tea_Shop.Domain.Products;
+namespace Tea_Shop.Domain.Orders;
 
 public record OrderId(Guid Value);
 

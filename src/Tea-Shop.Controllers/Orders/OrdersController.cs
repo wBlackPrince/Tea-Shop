@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Orders;
-using Tea_Shop.Contract.Products;
+using Tea_Shop.Contract.Orders;
 
-namespace Tea_Shop.OrdersController;
+namespace Tea_Shop.Orders;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,11 +16,18 @@ public class OrdersController: ControllerBase
     }
 
     [HttpGet("orders/{orderId:guid}")]
-    public async Task<IActionResult> GetOrder(
+    public async Task<ActionResult<GetOrderResponseDto>> GetOrderById(
         [FromRoute] Guid orderId,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _ordersService.GetOrderById(orderId, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpGet("orders/{orderId:guid}")]
@@ -61,6 +68,13 @@ public class OrdersController: ControllerBase
         [FromRoute] Guid orderId,
         CancellationToken cancellationToken)
     {
-        return Ok("Deleted order");
+        var result = await _ordersService.DeleteOrder(orderId, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(orderId);
     }
 }

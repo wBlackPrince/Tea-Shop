@@ -1,4 +1,4 @@
-﻿namespace Tea_Shop.Domain.Products;
+﻿namespace Tea_Shop.Domain.Orders;
 
 /// <summary>
 /// Статус заказа в минимальном рабочем процессе
