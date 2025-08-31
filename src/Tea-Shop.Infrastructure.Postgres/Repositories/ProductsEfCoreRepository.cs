@@ -17,7 +17,7 @@ public class ProductsEfCoreRepository: IProductsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Product, Error>> GetProductById(
+    public async Task<Product?> GetProductById(
         ProductId productId,
         CancellationToken cancellationToken)
     {
@@ -25,34 +25,27 @@ public class ProductsEfCoreRepository: IProductsRepository
             .Include(p => p.TagsIds)
             .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
 
-        if (product is null)
-        {
-            return Error.NotFound("product.get", "Product not found");
-        }
-
         return product;
     }
 
 
-    public async Task<Result<Ingrendient[], Error>> GetProductIngredients(
+    public async Task<Ingrendient[]> GetProductIngredients(
         ProductId productId,
         CancellationToken cancellationToken)
     {
-        var product = await _dbContext.Products.FirstOrDefaultAsync(
+        var products = await _dbContext.Products.FirstOrDefaultAsync(
             p => p.Id == productId,
             cancellationToken);
 
-        if (product is null)
+        if (products is null)
         {
-            return Error.NotFound(
-                "product.get_product_ingredients",
-                "Product not found");
+            return [];
         }
 
-        return product.PreparationMethod.Ingredients.ToArray();
+        return products.PreparationMethod.Ingredients.ToArray();
     }
 
-    public async Task<Result<Product[], Error>> GetProductsByTag(
+    public async Task<Product[]> GetProductsByTag(
         TagId tagId,
         CancellationToken cancellationToken)
     {
@@ -60,11 +53,6 @@ public class ProductsEfCoreRepository: IProductsRepository
             .Where(p => p.TagsIds.Any(t => t.TagId == tagId))
             .Include(p => p.TagsIds)
             .ToArrayAsync(cancellationToken);
-
-        if (products.Length == 0)
-        {
-            return Error.NotFound("product.get_by_tag", "Product not found");
-        }
 
         return products;
     }

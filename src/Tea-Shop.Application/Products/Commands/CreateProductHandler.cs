@@ -24,7 +24,7 @@ public class CreateProductHandler
         _logger = logger;
     }
 
-    public async Task<Result<CreateProductResponseDto, Error>> Handler(
+    public async Task<Result<CreateProductResponseDto, Error>> Handle(
         CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -50,6 +50,7 @@ public class CreateProductHandler
             request.Description,
             request.Price,
             request.Amount,
+            request.StockQuantity,
             (Season)Enum.Parse(typeof(Season), request.Season),
             ingrindients,
             request.TagsIds,
@@ -68,6 +69,7 @@ public class CreateProductHandler
             product.Title,
             product.Price,
             product.Amount,
+            product.StockQuantity,
             product.Description,
             product.Season.ToString(),
             product.PreparationMethod.Ingredients.Select(ingr =>

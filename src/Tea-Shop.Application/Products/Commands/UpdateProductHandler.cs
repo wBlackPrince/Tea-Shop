@@ -19,18 +19,18 @@ public class UpdateProductHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handler(
+    public async Task<Result<Guid, Error>> Handle(
         Guid productId,
         JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
+        Product? product = await _productsRepository.GetProductById(
             new ProductId(productId),
             cancellationToken);
 
-        if (isFailure)
+        if (product is null)
         {
-            return error;
+            return Error.NotFound("update product", "product not found");
         }
 
         productUpdates.ApplyTo(product);

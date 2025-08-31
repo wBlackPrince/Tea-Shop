@@ -19,7 +19,7 @@ public class GetProductIngredientsHandler
         _logger = logger;
     }
 
-    public async Task<Result<GetIngrendientsResponseDto[], Error>> Handler(
+    public async Task<GetIngrendientsResponseDto[]> Handle(
         Guid productId,
         CancellationToken cancellationToken)
     {
@@ -27,12 +27,12 @@ public class GetProductIngredientsHandler
             new ProductId(productId),
             cancellationToken);
 
-        if (ingredientsResult.IsFailure)
+        if (ingredientsResult.Length == 0)
         {
-            return ingredientsResult.Error;
+            return [];
         }
 
-        var ingredientsResponse = ingredientsResult.Value
+        var ingredientsResponse = ingredientsResult
             .Select(i => new GetIngrendientsResponseDto(
                 i.Name,
                 i.Amount,

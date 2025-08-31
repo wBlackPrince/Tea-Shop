@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Products;
+using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
@@ -19,17 +20,17 @@ public class GetProductsByTagHandler
         _logger = logger;
     }
 
-    public async Task<Result<GetProductResponseDto[], Error>> Handle(
+    public async Task<GetProductResponseDto[]> Handle(
         Guid tagId,
         CancellationToken cancellationToken)
     {
-        var (_, isFailure, products, error) = await _productsRepository.GetProductsByTag(
+        Product[] products = await _productsRepository.GetProductsByTag(
             new TagId(tagId),
             cancellationToken);
 
-        if (isFailure)
+        if (products.Length == 0)
         {
-            return error;
+            return [];
         }
 
         GetProductResponseDto[] response = new GetProductResponseDto[products.Length];
@@ -41,6 +42,7 @@ public class GetProductsByTagHandler
                 products[i].Title,
                 products[i].Price,
                 products[i].Amount,
+                products[i].StockQuantity,
                 products[i].Description,
                 products[i].Season.ToString(),
                 products[i].PreparationMethod.Ingredients

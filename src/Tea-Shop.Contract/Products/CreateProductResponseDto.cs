@@ -5,6 +5,7 @@ public record CreateProductResponseDto(
     string Title,
     float Price,
     float Amount,
+    int StockQuantity,
     string Description,
     string Season,
     GetIngrendientsResponseDto[] Ingredients,

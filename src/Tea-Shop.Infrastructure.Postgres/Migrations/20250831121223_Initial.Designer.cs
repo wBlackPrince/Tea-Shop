@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250829131115_Initial")]
+    [Migration("20250831121223_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("comments", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -110,7 +110,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("orders", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Products.OrderItem", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Orders.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -175,6 +175,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("season");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("stock_quantity");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -351,7 +355,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Users.User", null)
                         .WithMany()
@@ -360,9 +364,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Products.OrderItem", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Orders.OrderItem", b =>
                 {
-                    b.HasOne("Tea_Shop.Domain.Products.Order", null)
+                    b.HasOne("Tea_Shop.Domain.Orders.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -476,7 +480,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Products.Order", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });

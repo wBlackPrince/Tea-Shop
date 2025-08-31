@@ -19,17 +19,17 @@ public class GetProductByIdHandler
         _logger = logger;
     }
 
-    public async Task<Result<GetProductResponseDto, Error>> Handler(
+    public async Task<GetProductResponseDto?> Handle(
         Guid productId,
         CancellationToken cancellationToken)
     {
-        var (_, isFailure, product, error) = await _productsRepository.GetProductById(
+        Product? product = await _productsRepository.GetProductById(
             new ProductId(productId),
             cancellationToken);
 
-        if (isFailure)
+        if (product is null)
         {
-            return error;
+            return null;
         }
 
         var ingrindientsGetDto = product.PreparationMethod.Ingredients
@@ -48,6 +48,7 @@ public class GetProductByIdHandler
             product.Title,
             product.Price,
             product.Amount,
+            product.StockQuantity,
             product.Description,
             product.Season.ToString(),
             ingrindientsGetDto,

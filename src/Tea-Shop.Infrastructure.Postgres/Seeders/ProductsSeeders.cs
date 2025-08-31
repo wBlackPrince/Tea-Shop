@@ -17,6 +17,7 @@ public class ProductsSeeders: ISeeder
     private const int USERS_COUNT = 10000;
     private const int PRODUCTS_COUNT = 30;
     private const int TAGS_COUNT = 20;
+    private const int ORDERS_COUNT = 70000;
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
     private static Season[] seasons = { Season.SPRING , Season.SUMMER, Season.AUTUMN, Season.WINTER };
@@ -336,7 +337,7 @@ public class ProductsSeeders: ISeeder
         0.6f, // Cocoa nibs
         0.2f  // Tea oil
     };
-    
+
 
     public ProductsSeeders(
         ProductsDbContext dbContext,
@@ -351,6 +352,15 @@ public class ProductsSeeders: ISeeder
         await SeedUsersBatched();
         await SeedTagsBatched();
         await SeedProductsBatched();
+    }
+
+    private async Task SeedOrdersBatched()
+    {
+        // string tagName = tagNames[_random.Next(tagNames.Length)];
+        _logger.LogInformation("Seeding orders in batching...");
+        _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        
+        
     }
 
     private async Task SeedTagsBatched()
@@ -460,6 +470,7 @@ public class ProductsSeeders: ISeeder
             var description = productDescriptions[_random.Next(productDescriptions.Length)];
             var price = productPrices[_random.Next(productPrices.Length)];
             var amount = productAmounts[_random.Next(productAmounts.Length)];
+            var stockQuantity = _random.Next(100, 1000);
             var season = seasons[_random.Next(seasons.Length)];
 
             Ingrendient[] ingrendients = new Ingrendient[_random.Next(2, 5)];
@@ -496,6 +507,7 @@ public class ProductsSeeders: ISeeder
                 description,
                 price,
                 amount,
+                stockQuantity,
                 season,
                 ingrendients,
                 tagsIds,
@@ -509,6 +521,7 @@ public class ProductsSeeders: ISeeder
 
             _dbContext.Set<Product>().AddRange(products);
             await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             products.Clear();
         }
 
@@ -521,8 +534,6 @@ public class ProductsSeeders: ISeeder
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
         _logger.LogInformation("Seeded {ProductCount} product.", PRODUCTS_COUNT);
     }
-
-
 
     private async Task SeedUsersBatched()
     {
@@ -602,5 +613,4 @@ public class ProductsSeeders: ISeeder
 
         return $"+7{new string(digits)}";
     }
-
 }

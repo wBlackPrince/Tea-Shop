@@ -44,6 +44,9 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
         builder.Property(p => p.Amount)
             .HasColumnName("amount");
 
+        builder.Property(p => p.StockQuantity)
+            .HasColumnName("stock_quantity");
+
         builder.Property(p => p.Rating)
             .HasColumnName("rating");
 

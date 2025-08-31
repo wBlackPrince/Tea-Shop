@@ -26,7 +26,8 @@ public class Product
     /// <param name="description">Описание.</param>
     /// <param name="season">Сезон.</param>
     /// /// <param name="price">Цена.</param>
-    /// <param name="amount">Количество.</param>
+    /// <param name="amount">Количество в граммах.</param>
+    /// /// <param name="stockQuantity">Количество товара на складе.</param>
     /// <param name="tagsIds">Список идентификаторов. тегов.</param>
     /// <param name="preparationDescription">Метод приготовления в виде текста.</param>
     /// /// <param name="preparationTime">Время приготовления.</param>
@@ -37,6 +38,7 @@ public class Product
         string description,
         float price,
         float amount,
+        int stockQuantity,
         Season season,
         IEnumerable<Ingrendient> ingredients,
         IEnumerable<Guid> tagsIds,
@@ -50,6 +52,7 @@ public class Product
         Season = season;
         Price = price;
         Amount = amount;
+        StockQuantity = stockQuantity;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
 
@@ -99,9 +102,14 @@ public class Product
     public float Price { get; set; }
 
     /// <summary>
-    /// Gets or sets количество продукта
+    /// Gets or sets количество продукта в граммах
     /// </summary>
     public float Amount { get; set; }
+
+    /// <summary>
+    /// Gets or sets количество продукта на складе
+    /// </summary>
+    public int StockQuantity { get; set; }
 
     /// <summary>
     /// Gets or sets рейтинг продукта

@@ -18,7 +18,7 @@ public class DeleteProductHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> DeleteProduct(
+    public async Task<Result<Guid, Error>> Handle(
         Guid productId,
         CancellationToken cancellationToken)
     {

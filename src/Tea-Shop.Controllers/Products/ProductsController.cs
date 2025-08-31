@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Products;
+using Tea_Shop.Application.Products.Commands;
+using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
@@ -10,78 +12,61 @@ namespace Tea_Shop.Products;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly IProductsService _productService;
-
-    public ProductsController(IProductsService productService)
-    {
-        _productService = productService;
-    }
-
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult<GetProductResponseDto>> GetProductById(
+        [FromServices] GetProductByIdHandler handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var getResult = await _productService.GetProductById(
+        var getResult = await handler.Handle(
             productId,
             cancellationToken);
 
-        if (getResult.IsFailure)
-        {
-            return NotFound(getResult.Error);
-        }
-
-        return Ok(getResult.Value);
+        return Ok(getResult);
     }
 
     [HttpGet]
     public async Task<ActionResult<GetProductResponseDto[]>> GetProductsByTag(
-        [FromQuery]Guid tagId,
+        [FromServices] GetProductsByTagHandler handler,
+        [FromQuery] Guid tagId,
         CancellationToken cancellationToken)
     {
-        var productsResult = await _productService.GetProductsByTag(tagId, cancellationToken);
+        var productsResult = await handler.Handle(tagId, cancellationToken);
 
-        if (productsResult.IsFailure)
-        {
-            return NotFound(productsResult.Error);
-        }
-
-        return Ok(productsResult.Value);
+        return Ok(productsResult);
     }
 
     [HttpGet("{productId:guid}/ingridients")]
     public async Task<ActionResult<GetIngrendientsResponseDto[]>> GetProductsIngredients(
-        [FromRoute]Guid productId,
+        [FromServices] GetProductIngredientsHandler handler,
+        [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var result = await _productService.GetProductIngredients(
+        var result = await handler.Handle(
             productId,
             cancellationToken);
 
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+        return Ok(result);
     }
 
     [HttpPost]
     public async Task<ActionResult<CreateProductResponseDto>> Create(
-        [FromBody]CreateProductRequestDto request,
+        [FromServices] CreateProductHandler handler,
+        [FromBody] CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
-        var response = await _productService.CreateProduct(request, cancellationToken);
+        var response = await handler.Handle(request, cancellationToken);
         return Ok(response);
     }
 
     [HttpPatch("{productId:guid}")]
     public async Task<IActionResult> Update(
+        [FromServices] UpdateProductHandler handler,
         [FromRoute] Guid productId,
         [FromBody] JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        var updateResult = await _productService.UpdateProduct(productId, productUpdates, cancellationToken);
+        var updateResult = await handler.Handle(productId, productUpdates, cancellationToken);
 
         if (updateResult.IsFailure)
         {
@@ -93,10 +78,11 @@ public class ProductsController : ControllerBase
 
     [HttpDelete("{productId:guid}")]
     public async Task<IActionResult> DeleteProduct(
+        [FromServices] DeleteProductHandler handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var deleteResult = await _productService.DeleteProduct(productId, cancellationToken);
+        var deleteResult = await handler.Handle(productId, cancellationToken);
 
         if (deleteResult.IsFailure)
         {
