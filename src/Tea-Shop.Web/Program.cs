@@ -12,13 +12,12 @@ builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsD
 
 var app = builder.Build();
 
+app.MapOpenApi();
+app.UseSwaggerUI(
+    options => options.SwaggerEndpoint("/openapi/v1.json", "Tea-Shop v1"));
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.UseSwaggerUI(
-        options => options.SwaggerEndpoint("/openapi/v1.json", "Tea-Shop v1"));
-
     // для сидирования базы данных
     // if (args.Contains("--seeding"))
     // {
