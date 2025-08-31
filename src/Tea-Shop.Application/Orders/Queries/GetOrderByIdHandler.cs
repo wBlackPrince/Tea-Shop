@@ -1,30 +1,38 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
+using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Orders.Queries;
 
 public class GetOrderByIdHandler
 {
-    private readonly IOrdersRepository _ordersRepository;
+    private readonly IReadDbContext _readDbContext;
 
-    public GetOrderByIdHandler(IOrdersRepository ordersRepository)
+    public GetOrderByIdHandler(IReadDbContext readDbContext)
     {
-        _ordersRepository = ordersRepository;
+        _readDbContext = readDbContext;
     }
 
-    public async Task<Result<GetOrderResponseDto, Error>> GetOrderById(
+    public async Task<GetOrderResponseDto?> Handle(
         Guid orderId,
         CancellationToken cancellationToken)
     {
-        var (_, isFailure, order, error) = await _ordersRepository.GetOrderById(
-            new OrderId(orderId),
-            cancellationToken);
+        // var (_, isFailure, order, error) = await _ordersRepository.GetOrderById(
+        //     new OrderId(orderId),
+        //     cancellationToken);
 
-        if (isFailure)
+        Order? order = await _readDbContext.OrdersRead
+            .Include(o => o.OrderItems)
+            .FirstOrDefaultAsync(
+                o => o.Id == new OrderId(orderId),
+                cancellationToken);
+
+        if (order is null)
         {
-            return error;
+            return null;
         }
 
         OrderItemDto[] order_items = order.OrderItems

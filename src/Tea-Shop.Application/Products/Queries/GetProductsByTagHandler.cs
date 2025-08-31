@@ -1,43 +1,48 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Queries;
 
 public class GetProductsByTagHandler
 {
-    private readonly IProductsRepository _productsRepository;
+    private readonly IReadDbContext _readDbContext;
     private readonly ILogger<GetProductsByTagHandler> _logger;
 
     public GetProductsByTagHandler(
-        IProductsRepository productsRepository,
+        IReadDbContext readDbContext,
         ILogger<GetProductsByTagHandler> logger)
     {
-        _productsRepository = productsRepository;
+        _readDbContext = readDbContext;
         _logger = logger;
     }
 
-    public async Task<GetProductResponseDto[]> Handle(
-        Guid tagId,
+    public async Task<GetProductByIdResponseDto[]> Handle(
+        GetProductsByTagRequestDto query,
         CancellationToken cancellationToken)
     {
-        Product[] products = await _productsRepository.GetProductsByTag(
-            new TagId(tagId),
-            cancellationToken);
+        var tagId = new TagId(query.TagId);
+
+        var products = await _readDbContext.ProductsRead
+            .Where(p => p.TagsIds.Any(t => t.TagId == tagId))
+            .Include(p => p.TagsIds)
+            .ToArrayAsync(cancellationToken);
 
         if (products.Length == 0)
         {
             return [];
         }
 
-        GetProductResponseDto[] response = new GetProductResponseDto[products.Length];
+        GetProductByIdResponseDto[] response = new GetProductByIdResponseDto[products.Length];
 
         for (int i = 0; i < products.Length; i++)
         {
-            response[i] = new GetProductResponseDto(
+            response[i] = new GetProductByIdResponseDto(
                 products[i].Id.Value,
                 products[i].Title,
                 products[i].Price,

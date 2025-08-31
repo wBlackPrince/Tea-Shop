@@ -17,46 +17,6 @@ public class ProductsEfCoreRepository: IProductsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Product?> GetProductById(
-        ProductId productId,
-        CancellationToken cancellationToken)
-    {
-        var product = await _dbContext.Products
-            .Include(p => p.TagsIds)
-            .FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
-
-        return product;
-    }
-
-
-    public async Task<Ingrendient[]> GetProductIngredients(
-        ProductId productId,
-        CancellationToken cancellationToken)
-    {
-        var products = await _dbContext.Products.FirstOrDefaultAsync(
-            p => p.Id == productId,
-            cancellationToken);
-
-        if (products is null)
-        {
-            return [];
-        }
-
-        return products.PreparationMethod.Ingredients.ToArray();
-    }
-
-    public async Task<Product[]> GetProductsByTag(
-        TagId tagId,
-        CancellationToken cancellationToken)
-    {
-        var products = await _dbContext.Products
-            .Where(p => p.TagsIds.Any(t => t.TagId == tagId))
-            .Include(p => p.TagsIds)
-            .ToArrayAsync(cancellationToken);
-
-        return products;
-    }
-
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)
     {
         await _dbContext.Products.AddAsync(product, cancellationToken);

@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddProgramDependencies();
 builder.Services.AddScoped<ProductsDbContext>(_ => new ProductsDbContext(
     builder.Configuration.GetConnectionString("TeaShopDb")!));
+builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsDbContext(
+    builder.Configuration.GetConnectionString("TeaShopDb")!));
 
 var app = builder.Build();
 

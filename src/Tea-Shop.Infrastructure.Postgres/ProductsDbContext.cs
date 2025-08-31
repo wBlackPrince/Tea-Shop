@@ -8,7 +8,7 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres;
 
-public class ProductsDbContext: DbContext
+public class ProductsDbContext: DbContext, IReadDbContext
 {
     private readonly string _connectionString;
 
@@ -40,4 +40,9 @@ public class ProductsDbContext: DbContext
     public DbSet<Tag> Tags { get; set; }
 
     public DbSet<ProductsTags> ProductsTags { get; set; }
+
+
+    public IQueryable<Product> ProductsRead => Set<Product>().AsNoTracking();
+
+    public IQueryable<Order> OrdersRead => Set<Order>().AsNoTracking();
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QmLkV2uRpIA=",
+  "dgSpecHash": "mHPZ1Zte7oM=",
   "success": true,
   "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Controllers\\Tea-Shop.Controllers.csproj",
   "expectedPackageFiles": [
@@ -26,7 +26,12 @@
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.aspnetcore.routing.abstractions\\2.3.0\\microsoft.aspnetcore.routing.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.3.0\\microsoft.aspnetcore.webutilities.2.3.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.8\\microsoft.entityframeworkcore.9.0.8.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\9.0.8\\microsoft.entityframeworkcore.abstractions.9.0.8.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\9.0.8\\microsoft.entityframeworkcore.analyzers.9.0.8.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.apidescription.server\\9.0.0\\microsoft.extensions.apidescription.server.9.0.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.8\\microsoft.extensions.caching.abstractions.9.0.8.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.8\\microsoft.extensions.caching.memory.9.0.8.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\8.0.0\\microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.0-preview.7.25380.108\\microsoft.extensions.dependencyinjection.10.0.0-preview.7.25380.108.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0-preview.7.25380.108\\microsoft.extensions.dependencyinjection.abstractions.10.0.0-preview.7.25380.108.nupkg.sha512",

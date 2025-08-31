@@ -1,11 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Orders.Commands;
@@ -13,23 +15,23 @@ namespace Tea_Shop.Application.Orders.Commands;
 public class CreateOrderHandler
 {
     private readonly IOrdersRepository _ordersRepository;
-    private readonly IProductsRepository _productsRepository;
+    private readonly IReadDbContext _readDbContext;
     private readonly ILogger<CreateOrderHandler> _logger;
     private readonly IValidator<CreateOrderRequestDto> _validator;
 
     public CreateOrderHandler(
         IOrdersRepository ordersRepository,
-        IProductsRepository productsRepository,
+        IReadDbContext readDbContext,
         ILogger<CreateOrderHandler> logger,
         IValidator<CreateOrderRequestDto> validator)
     {
         _ordersRepository = ordersRepository;
-        _productsRepository = productsRepository;
+        _readDbContext = readDbContext;
         _logger = logger;
         _validator = validator;
     }
 
-    public async Task<Result<Guid, Error>> CreateOrder(
+    public async Task<Result<Guid, Error>> Handle(
         CreateOrderRequestDto request,
         CancellationToken cancellationToken)
     {
@@ -46,9 +48,10 @@ public class CreateOrderHandler
 
         for (int i = 0; i < request.Items.Length; i++)
         {
-            product = await _productsRepository.GetProductById(
-                new ProductId(request.Items[i].ProductId),
-                cancellationToken);
+            product = await _readDbContext.ProductsRead
+                .FirstOrDefaultAsync(
+                    p => p.Id == new ProductId(request.Items[i].ProductId),
+                    cancellationToken);
 
             if (product is null)
             {

@@ -1,31 +1,35 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Queries;
 
 public class GetProductByIdHandler
 {
-    private readonly IProductsRepository _productsRepository;
+    private readonly IReadDbContext _readDbContext;
     private readonly ILogger<GetProductByIdHandler> _logger;
 
     public GetProductByIdHandler(
-        IProductsRepository productsRepository,
+        IReadDbContext readDbContext,
         ILogger<GetProductByIdHandler> logger)
     {
-        _productsRepository = productsRepository;
+        _readDbContext = readDbContext;
         _logger = logger;
     }
 
-    public async Task<GetProductResponseDto?> Handle(
-        Guid productId,
+    public async Task<GetProductByIdResponseDto?> Handle(
+        GetProductByIdRequestDto query,
         CancellationToken cancellationToken)
     {
-        Product? product = await _productsRepository.GetProductById(
-            new ProductId(productId),
-            cancellationToken);
+        Product? product = await _readDbContext.ProductsRead
+            .Include(p => p.TagsIds)
+            .FirstOrDefaultAsync(
+                p => p.Id == new ProductId(query.ProductId),
+                cancellationToken);
 
         if (product is null)
         {
@@ -43,7 +47,7 @@ public class GetProductByIdHandler
             .Select(i => i.Id.Value)
             .ToArray();
 
-        var productGetDto = new GetProductResponseDto(
+        var productGetDto = new GetProductByIdResponseDto(
             product.Id.Value,
             product.Title,
             product.Price,
@@ -59,7 +63,7 @@ public class GetProductByIdHandler
             tagsIds,
             product.PhotosIds);
 
-        _logger.LogInformation("Get product {productId}", productId);
+        _logger.LogInformation("Get product {productId}", query.ProductId);
 
         return productGetDto;
     }

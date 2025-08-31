@@ -13,25 +13,27 @@ namespace Tea_Shop.Products;
 public class ProductsController : ControllerBase
 {
     [HttpGet("{productId:guid}")]
-    public async Task<ActionResult<GetProductResponseDto>> GetProductById(
+    public async Task<ActionResult<GetProductByIdResponseDto>> GetProductById(
         [FromServices] GetProductByIdHandler handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
         var getResult = await handler.Handle(
-            productId,
+            new GetProductByIdRequestDto(productId),
             cancellationToken);
 
         return Ok(getResult);
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetProductResponseDto[]>> GetProductsByTag(
+    public async Task<ActionResult<GetProductByIdResponseDto[]>> GetProductsByTag(
         [FromServices] GetProductsByTagHandler handler,
         [FromQuery] Guid tagId,
         CancellationToken cancellationToken)
     {
-        var productsResult = await handler.Handle(tagId, cancellationToken);
+        var productsResult = await handler.Handle(
+            new GetProductsByTagRequestDto(tagId),
+            cancellationToken);
 
         return Ok(productsResult);
     }
@@ -43,7 +45,7 @@ public class ProductsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(
-            productId,
+            new GetProductIngridientsRequestDto(productId),
             cancellationToken);
 
         return Ok(result);

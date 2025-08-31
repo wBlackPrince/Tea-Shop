@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Orders.Commands;
+using Tea_Shop.Application.Orders.Queries;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands;
 using Tea_Shop.Application.Products.Queries;
@@ -19,7 +20,6 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         services.AddScoped<ITagsService, TagsService>();
-        services.AddScoped<IOrdersService, OrderService>();
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IReviewsService, ReviewsService>();
         services.AddScoped<ICommentsService, CommentsService>();
@@ -34,7 +34,8 @@ public static class DependencyInjection
 
         // handlers для заказов
         services.AddScoped<CreateOrderHandler>();
-        services.AddScoped<GetProductByIdHandler>();
+        services.AddScoped<DeleteOrderHandler>();
+        services.AddScoped<GetOrderByIdHandler>();
 
         return services;
     }

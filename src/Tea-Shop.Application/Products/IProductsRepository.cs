@@ -7,18 +7,6 @@ namespace Tea_Shop.Application.Products;
 
 public interface IProductsRepository
 {
-    Task<Product?> GetProductById(
-        ProductId productId,
-        CancellationToken cancellationToken);
-
-    Task<Product[]> GetProductsByTag(
-        TagId tagId,
-        CancellationToken cancellationToken);
-
-    Task<Ingrendient[]> GetProductIngredients(
-        ProductId productId,
-        CancellationToken cancellationToken);
-
     Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> DeleteProduct(ProductId productId, CancellationToken cancellationToken);
