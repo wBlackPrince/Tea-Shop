@@ -1,3 +1,5 @@
+## Инструкция по установке
+
 1. Склонируй репозиторий
 2. Перейти в терминале в папку с docker-compose-файлом
 3. Запусти команду
@@ -9,3 +11,16 @@ docker compose up -d --build
 ![](images/pg_1.png)
 
 ![](images/pg_2.png)
+
+5. Для того чтобы заработало сидирование базы данных, в Program.cs вынеси код с вызовом метода сидирования из условия и раскомментируй
+
+```
+if (app.Environment.IsDevelopment())
+{
+    // для сидирования базы данных
+    // if (args.Contains("--seeding"))
+    // {
+    //     await app.Services.RunSeeding();
+    // }
+}
+```
