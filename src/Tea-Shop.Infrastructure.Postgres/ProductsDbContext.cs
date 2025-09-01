@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -45,4 +46,8 @@ public class ProductsDbContext: DbContext, IReadDbContext
     public IQueryable<Product> ProductsRead => Set<Product>().AsNoTracking();
 
     public IQueryable<Order> OrdersRead => Set<Order>().AsNoTracking();
+
+    public IQueryable<Comment> CommentsRead => Set<Comment>().AsNoTracking();
+
+    public IQueryable<Review> ReviewsRead => Set<Review>().AsNoTracking();
 }

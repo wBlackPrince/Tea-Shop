@@ -30,6 +30,7 @@ public class DeleteOrderHandler
             return deleteResult.Error;
         }
 
+        await _ordersRepository.SaveChangesAsync(cancellationToken);
         _logger.LogInformation("Deleted order {orderId}", orderId);
 
         return orderId;

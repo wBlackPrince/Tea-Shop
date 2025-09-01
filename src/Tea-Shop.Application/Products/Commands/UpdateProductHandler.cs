@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands;
@@ -29,8 +29,9 @@ public class UpdateProductHandler
         JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        Product? product = await _readDbContext.ProductsRead
-            .FirstOrDefaultAsync(p => p.Id == new ProductId(productId), cancellationToken);
+        Product? product = await _productsRepository.GetProductById(
+            productId,
+            cancellationToken);
 
         if (product is null)
         {
@@ -38,6 +39,7 @@ public class UpdateProductHandler
         }
 
         productUpdates.ApplyTo(product);
+
         await _productsRepository.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Update product {productId}", productId);

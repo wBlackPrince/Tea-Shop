@@ -1,21 +1,17 @@
-﻿using Tea_Shop.Application.Reviews;
+﻿using LinqToDB;
+using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Reviews;
 using Tea_Shop.Domain.Reviews;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
-public class ReviewsEfCoreRepository : IReviewsRepository
+public class ReviewsRepository : IReviewsRepository
 {
     private readonly ProductsDbContext _dbContext;
 
-    public ReviewsEfCoreRepository(ProductsDbContext dbContext)
+    public ReviewsRepository(ProductsDbContext dbContext)
     {
         _dbContext = dbContext;
-    }
-
-
-    public async Task<Guid> GetReview(Guid tagId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Guid> CreateReview(Review review, CancellationToken cancellationToken)
@@ -25,9 +21,15 @@ public class ReviewsEfCoreRepository : IReviewsRepository
         return review.Id.Value;
     }
 
-    public async Task<Guid> DeleteReview(Guid reviewId, CancellationToken cancellationToken)
+    public async Task<Guid> DeleteReview(
+        ReviewId reviewId, 
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _dbContext.Reviews
+            .Where(r => r.Id == reviewId)
+            .ExecuteDeleteAsync(cancellationToken);
+ 
+        return reviewId.Value;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

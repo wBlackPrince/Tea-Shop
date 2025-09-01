@@ -16,15 +16,15 @@ public static class DependencyInjection
     public static IServiceCollection AddPostgresDependencies(this IServiceCollection services)
     {
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
-        services.AddScoped<IProductsRepository, ProductsEfCoreRepository>();
+        services.AddScoped<IProductsRepository, ProductsRepository>();
         // выбираем для DI либо ef core либо postgres
         //services.AddScoped<IProductsRepository, ProductsSqlRepository>();
 
-        services.AddScoped<ITagsRepository, TagsEfCoreRepository>();
+        services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<IOrdersRepository, OrdersRepository>();
-        services.AddScoped<IUsersRepository, UsersEfCoreRepository>();
-        services.AddScoped<IReviewsRepository, ReviewsEfCoreRepository>();
-        services.AddScoped<ICommentsRepository, CommentsEfCoreRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IReviewsRepository, ReviewsRepository>();
+        services.AddScoped<ICommentsRepository, CommentsRepository>();
         services.AddScoped<ISeeder, ProductsSeeders>();
 
         return services;

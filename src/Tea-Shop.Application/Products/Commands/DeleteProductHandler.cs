@@ -33,6 +33,7 @@ public class DeleteProductHandler
             return deleteResult.Error;
         }
 
+        await _productsRepository.SaveChangesAsync(cancellationToken);
         _logger.LogError("Delete product {productId}", productId);
 
         return productId;

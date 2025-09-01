@@ -23,24 +23,30 @@ public class CommentConfiguration: IEntityTypeConfiguration<Comment>
             .HasColumnName("id");
 
         builder
-            .Property(r => r.Text)
+            .Property(c => c.Text)
             .HasMaxLength(Constants.Limit2000)
             .HasColumnName("text");
 
         builder
-            .Property(r => r.Rating)
+            .Property(c => c.Rating)
             .HasColumnName("rating");
 
         builder
-            .Property(r => r.CreatedAt)
+            .Property(c => c.CreatedAt)
             .HasColumnName("created_at");
 
         builder
-            .Property(r => r.UpdatedAt)
+            .Property(c => c.UpdatedAt)
             .HasColumnName("updated_at");
 
         builder
-            .Property(r => r.ReviewId)
+            .Property(c => c.ParentId)
+            .HasConversion(p => p.Value, id => new CommentId(id))
+            .HasDefaultValue(null)
+            .HasColumnName("parent_id");
+
+        builder
+            .Property(c => c.ReviewId)
             .HasConversion(r => r.Value, id => new ReviewId(id))
             .HasColumnName("review_id");
 

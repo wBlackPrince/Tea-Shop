@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
-using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Orders.Queries;

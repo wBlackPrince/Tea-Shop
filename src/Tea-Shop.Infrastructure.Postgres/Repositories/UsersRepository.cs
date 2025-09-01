@@ -8,11 +8,11 @@ using Tea_Shop.Shared;
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
 
-public class UsersEfCoreRepository : IUsersRepository
+public class UsersRepository : IUsersRepository
 {
     private readonly ProductsDbContext _dbContext;
 
-    public UsersEfCoreRepository(ProductsDbContext dbContext)
+    public UsersRepository(ProductsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Comments;
+using Tea_Shop.Application.Comments.Commands;
+using Tea_Shop.Application.Comments.Queries;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Orders.Commands;
 using Tea_Shop.Application.Orders.Queries;
@@ -8,6 +10,8 @@ using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands;
 using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Application.Reviews;
+using Tea_Shop.Application.Reviews.Commands;
+using Tea_Shop.Application.Reviews.Queries;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users;
 
@@ -21,8 +25,6 @@ public static class DependencyInjection
 
         services.AddScoped<ITagsService, TagsService>();
         services.AddScoped<IUsersService, UsersService>();
-        services.AddScoped<IReviewsService, ReviewsService>();
-        services.AddScoped<ICommentsService, CommentsService>();
 
         // handlers для продуктов
         services.AddScoped<CreateProductHandler>();
@@ -36,6 +38,17 @@ public static class DependencyInjection
         services.AddScoped<CreateOrderHandler>();
         services.AddScoped<DeleteOrderHandler>();
         services.AddScoped<GetOrderByIdHandler>();
+
+        // handlers для комментов
+        services.AddScoped<GetCommentByIdHandler>();
+        services.AddScoped<CreateCommentHandler>();
+        services.AddScoped<UpdateCommentHandler>();
+        services.AddScoped<DeleteCommentHandler>();
+
+        // handlers для обзоров
+        services.AddScoped<GetReviewByIdHandler>();
+        services.AddScoped<CreateReviewHandler>();
+        services.AddScoped<DeleteReviewHandler>();
 
         return services;
     }

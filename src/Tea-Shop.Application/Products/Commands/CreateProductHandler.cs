@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;

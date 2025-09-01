@@ -1,45 +1,47 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
-namespace Tea_Shop.Application.Comments;
+namespace Tea_Shop.Application.Comments.Commands;
 
-public class CommentsService : ICommentsService
+public class CreateCommentHandler
 {
     private readonly ICommentsRepository _commentsRepository;
-    private readonly ILogger<CommentsService> _logger;
-    private readonly IValidator<CreateCommentRequestDto> _createCommentValidator;
+    private readonly IValidator<CreateCommentRequestDto> _validator;
 
-    public CommentsService(
+    public CreateCommentHandler(
         ICommentsRepository commentsRepository,
-        ILogger<CommentsService> logger,
-        IValidator<CreateCommentRequestDto> createCommentValidator)
+        IValidator<CreateCommentRequestDto> validator)
     {
         _commentsRepository = commentsRepository;
-        _logger = logger;
-        _createCommentValidator = createCommentValidator;
+        _validator = validator;
     }
 
-    public async Task<Guid> CreateComment(
+    public async Task<Result<Guid?, Error>> Handle(
         CreateCommentRequestDto request,
         CancellationToken cancellationToken)
     {
-        var validationResult = await _createCommentValidator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            return Error.Validation(
+                "create.comment",
+                "dto request for create comment is not valid");
         }
 
-        Comment comment = new Comment(
+        var comment = new Comment(
             new CommentId(Guid.NewGuid()),
             new UserId(request.UserId),
             new ReviewId(request.ReviewId),
             request.Text,
             DateTime.UtcNow,
-            DateTime.UtcNow);
+            DateTime.UtcNow,
+            new CommentId(request.ParentId));
 
         await _commentsRepository.CreateComment(comment, cancellationToken);
 

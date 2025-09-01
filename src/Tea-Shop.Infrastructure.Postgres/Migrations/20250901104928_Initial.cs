@@ -100,6 +100,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     text = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
                     review_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250831121223_Initial")]
+    [Migration("20250901104928_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,6 +34,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("parent_id");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer")

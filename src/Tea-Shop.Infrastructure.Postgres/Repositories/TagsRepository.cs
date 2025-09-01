@@ -7,11 +7,11 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
-public class TagsEfCoreRepository: ITagsRepository
+public class TagsRepository: ITagsRepository
 {
     private readonly ProductsDbContext _dbContext;
 
-    public TagsEfCoreRepository(ProductsDbContext dbContext)
+    public TagsRepository(ProductsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
@@ -359,8 +360,11 @@ public class ProductsSeeders: ISeeder
         // string tagName = tagNames[_random.Next(tagNames.Length)];
         _logger.LogInformation("Seeding orders in batching...");
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
-        
-        
+
+        // for (int i = 0; i < ORDERS_COUNT; i++)
+        // {
+        //     var user = _dbContext.Users.Select().
+        // }
     }
 
     private async Task SeedTagsBatched()

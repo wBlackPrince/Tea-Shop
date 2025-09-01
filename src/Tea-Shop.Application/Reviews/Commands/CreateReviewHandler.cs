@@ -1,40 +1,39 @@
-﻿using FluentValidation;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
-namespace Tea_Shop.Application.Reviews;
+namespace Tea_Shop.Application.Reviews.Commands;
 
-public class ReviewsService : IReviewsService
+public class CreateReviewHandler
 {
     private readonly IReviewsRepository _reviewsRepository;
-    private readonly IValidator<CreateReviewRequestDto> _createReviewValidator;
-    private readonly ILogger<ReviewsService> _logger;
+    private readonly IValidator<CreateReviewRequestDto> _validator;
+    private readonly ILogger<CreateReviewHandler> _logger;
 
-
-    public ReviewsService(
+    public CreateReviewHandler(
         IReviewsRepository reviewsRepository,
-        IValidator<CreateReviewRequestDto> createReviewValidator,
-        ILogger<ReviewsService> logger)
+        IValidator<CreateReviewRequestDto> validator,
+        ILogger<CreateReviewHandler> logger)
     {
         _reviewsRepository = reviewsRepository;
-        _createReviewValidator = createReviewValidator;
+        _validator = validator;
         _logger = logger;
     }
 
-
-    public async Task<Guid> CreateReview(
+    public async Task<Result<Guid, Error>> Handle(
         CreateReviewRequestDto request,
         CancellationToken cancellationToken)
     {
-        var validationResult = await _createReviewValidator.ValidateAsync(request, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            return Error.Validation("create.review", "Validation Failed");
         }
 
         Review review = new Review(
@@ -44,8 +43,7 @@ public class ReviewsService : IReviewsService
             request.Title,
             request.Text,
             DateTime.UtcNow,
-            DateTime.UtcNow
-        );
+            DateTime.UtcNow);
 
         await _reviewsRepository.CreateReview(review, cancellationToken);
 

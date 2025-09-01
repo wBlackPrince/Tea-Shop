@@ -8,13 +8,22 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
-public class ProductsEfCoreRepository: IProductsRepository
+public class ProductsRepository: IProductsRepository
 {
     private readonly ProductsDbContext _dbContext;
 
-    public ProductsEfCoreRepository(ProductsDbContext dbContext)
+    public ProductsRepository(ProductsDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<Product?> GetProductById(Guid productId, CancellationToken cancellationToken)
+    {
+        var product = await _dbContext.Products.FirstOrDefaultAsync(
+            p => p.Id == new ProductId(productId),
+            cancellationToken);
+
+        return product;
     }
 
     public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)
