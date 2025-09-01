@@ -1,5 +1,4 @@
-﻿using LinqToDB;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Domain.Reviews;
 
@@ -14,6 +13,18 @@ public class ReviewsRepository : IReviewsRepository
         _dbContext = dbContext;
     }
 
+
+    public async Task<Review?> GetReviewById(
+        ReviewId orderId,
+        CancellationToken cancellationToken)
+    {
+        Review? review = await _dbContext.Reviews.FirstOrDefaultAsync(
+            o => o.Id == orderId,
+            cancellationToken);
+
+        return review;
+    }
+
     public async Task<Guid> CreateReview(Review review, CancellationToken cancellationToken)
     {
         await _dbContext.Reviews.AddAsync(review, cancellationToken);
@@ -22,7 +33,7 @@ public class ReviewsRepository : IReviewsRepository
     }
 
     public async Task<Guid> DeleteReview(
-        ReviewId reviewId, 
+        ReviewId reviewId,
         CancellationToken cancellationToken)
     {
         await _dbContext.Reviews

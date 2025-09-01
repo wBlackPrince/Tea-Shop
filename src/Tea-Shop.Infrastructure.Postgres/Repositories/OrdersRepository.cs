@@ -17,25 +17,21 @@ public class OrdersRepository: IOrdersRepository
         _dbContext = dbContext;
     }
 
+
+    public async Task<Order?> GetOrderById(OrderId orderId, CancellationToken cancellationToken)
+    {
+        Order? order = await _dbContext.Orders.FirstOrDefaultAsync(
+            o => o.Id == orderId,
+            cancellationToken);
+
+        return order;
+    }
+
     public async Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken)
     {
         await _dbContext.Orders.AddAsync(order, cancellationToken);
 
         return order.Id.Value;
-    }
-
-    public async Task<Result<Order, Error>> GetOrderById(OrderId orderId, CancellationToken cancellationToken)
-    {
-        var getOrder = await _dbContext.Orders.FirstOrDefaultAsync(
-            o => o.Id == orderId,
-            cancellationToken);
-
-        if (getOrder is null)
-        {
-            return Error.NotFound("get.order_by_id", "Order not found");
-        }
-
-        return getOrder;
     }
 
     public async Task<Result<Guid, Error>> DeleteOrder(OrderId orderId, CancellationToken cancellationToken)

@@ -35,9 +35,10 @@ public static class DependencyInjection
         services.AddScoped<GetProductsByTagHandler>();
 
         // handlers для заказов
-        services.AddScoped<CreateOrderHandler>();
-        services.AddScoped<DeleteOrderHandler>();
         services.AddScoped<GetOrderByIdHandler>();
+        services.AddScoped<CreateOrderHandler>();
+        services.AddScoped<UpdateOrderHandler>();
+        services.AddScoped<DeleteOrderHandler>();
 
         // handlers для комментов
         services.AddScoped<GetCommentByIdHandler>();
@@ -48,6 +49,7 @@ public static class DependencyInjection
         // handlers для обзоров
         services.AddScoped<GetReviewByIdHandler>();
         services.AddScoped<CreateReviewHandler>();
+        services.AddScoped<UpdateReviewHandler>();
         services.AddScoped<DeleteReviewHandler>();
 
         return services;

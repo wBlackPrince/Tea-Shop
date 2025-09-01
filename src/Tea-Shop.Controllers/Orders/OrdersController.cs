@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Orders.Commands;
 using Tea_Shop.Application.Orders.Queries;
@@ -36,25 +37,33 @@ public class OrdersController: ControllerBase
         [FromServices] CreateOrderHandler handler,
         CancellationToken cancellationToken)
     {
-        var orderId = await handler.Handle(request, cancellationToken);
-        return Ok($"Created order with id {orderId}");
+        var result = await handler.Handle(request, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok($"Created order with id {result.Value}");
     }
 
-    [HttpPatch("orders/{productId:guid}/price")]
-    public async Task<IActionResult> UpdateOrderItems(
-        [FromBody]UpdateOrderItemsRequestDto request,
+    [HttpPatch("orders/{orderId:guid}")]
+    public async Task<IActionResult> UpdateOrder(
+        [FromRoute] Guid orderId,
+        [FromBody] JsonPatchDocument<Order> orderUpdates,
+        [FromServices] UpdateOrderHandler handler,
         CancellationToken cancellationToken)
     {
-        return Ok("Updated order's items by id");
+        var result = await handler.Handle(orderId, orderUpdates, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok($"Updated order by id {result.Value}");
     }
 
-    [HttpPatch("orders/{productId:guid}/price")]
-    public async Task<IActionResult> UpdateOrderStatus(
-        [FromBody]UpdateOrderStatusRequestDto request,
-        CancellationToken cancellationToken)
-    {
-        return Ok("Updated order's status by id");
-    }
 
     [HttpDelete("orders/{orderId:guid}")]
     public async Task<IActionResult> DeleteOrder(
