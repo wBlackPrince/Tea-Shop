@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Tea_Shop.Application.Orders;
-using Tea_Shop.Application.Orders.Commands;
+using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
+using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
+using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 using Tea_Shop.Application.Orders.Queries;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
@@ -32,19 +34,21 @@ public class OrdersController: ControllerBase
     }
 
     [HttpPost("orders")]
-    public async Task<IActionResult> CreateOrder(
+    public async Task<ActionResult<CreateOrderResponseDto>> CreateOrder(
         [FromBody] CreateOrderRequestDto request,
-        [FromServices] CreateOrderHandler handler,
+        [FromServices] ICommandHandler<CreateOrderResponseDto, CreateOrderCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(request, cancellationToken);
+        var command = new CreateOrderCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
 
-        return Ok($"Created order with id {result.Value}");
+        return Ok(result.Value);
     }
 
     [HttpPatch("orders/{orderId:guid}")]

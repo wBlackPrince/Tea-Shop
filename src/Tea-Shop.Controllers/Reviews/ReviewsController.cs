@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Orders.Commands;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Reviews.Commands;
+using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
+using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
+using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Orders;
@@ -30,7 +33,9 @@ public class ReviewsController: ControllerBase
         [FromServices] CreateReviewHandler handler,
         CancellationToken cancellationToken)
     {
-        await handler.Handle(request, cancellationToken);
+        await handler.Handle(
+            new CreateReviewCommand(request),
+            cancellationToken);
         return Ok();
     }
 
