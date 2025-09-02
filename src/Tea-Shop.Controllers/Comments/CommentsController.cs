@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Comments.Commands;
+using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
+using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
+using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
@@ -23,19 +27,21 @@ public class CommentsController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateComment(
+    public async Task<ActionResult<CreateCommentResponseDto>> CreateComment(
         [FromBody] CreateCommentRequestDto request,
-        [FromServices] CreateCommentHandler handler,
+        [FromServices] ICommandHandler<CreateCommentResponseDto, CreateCommentCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(request, cancellationToken);
+        var command = new CreateCommentCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
 
-        return Ok();
+        return Ok(result.Value);
     }
 
     [HttpPatch("{commentId:guid}")]

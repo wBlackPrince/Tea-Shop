@@ -1,19 +1,37 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Tea_Shop.Application.Comments;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Comments.Commands;
+using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
+using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
+using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries;
-using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Orders.Commands;
+using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
+using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
+using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 using Tea_Shop.Application.Orders.Queries;
-using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands;
+using Tea_Shop.Application.Products.Commands.CreateProductCommand;
+using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Queries;
-using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Reviews.Commands;
+using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
+using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
+using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users;
+using Tea_Shop.Application.Users.Commands.CreateUserCommand;
+using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
+using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
+using Tea_Shop.Application.Users.Queries;
+using Tea_Shop.Contract.Comments;
+using Tea_Shop.Contract.Orders;
+using Tea_Shop.Contract.Products;
+using Tea_Shop.Contract.Reviews;
+using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application;
 
@@ -24,10 +42,11 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         services.AddScoped<ITagsService, TagsService>();
-        services.AddScoped<IUsersService, UsersService>();
 
         // handlers для продуктов
-        services.AddScoped<CreateProductHandler>();
+        services.AddScoped<
+            ICommandHandler<CreateProductResponseDto, CreateProductCommand>,
+            CreateProductHandler>();
         services.AddScoped<DeleteProductHandler>();
         services.AddScoped<UpdateProductHandler>();
         services.AddScoped<GetProductByIdHandler>();
@@ -36,21 +55,37 @@ public static class DependencyInjection
 
         // handlers для заказов
         services.AddScoped<GetOrderByIdHandler>();
-        services.AddScoped<CreateOrderHandler>();
+        services.AddScoped<
+            ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>,
+            CreateOrderHandler>();
         services.AddScoped<UpdateOrderHandler>();
         services.AddScoped<DeleteOrderHandler>();
 
         // handlers для комментов
         services.AddScoped<GetCommentByIdHandler>();
-        services.AddScoped<CreateCommentHandler>();
+        services.AddScoped<
+            ICommandHandler<CreateCommentResponseDto, CreateCommentCommand>,
+            CreateCommentHandler>();
         services.AddScoped<UpdateCommentHandler>();
         services.AddScoped<DeleteCommentHandler>();
 
         // handlers для обзоров
         services.AddScoped<GetReviewByIdHandler>();
-        services.AddScoped<CreateReviewHandler>();
+        services.AddScoped<
+            ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>,
+            CreateReviewHandler>();
         services.AddScoped<UpdateReviewHandler>();
         services.AddScoped<DeleteReviewHandler>();
+
+        // handlers для пользователей
+        services.AddScoped<
+            ICommandHandler<CreateUserResponseDto, CreateUserCommand>,
+            CreateUserHandler>();
+        services.AddScoped<DeleteUserHandler>();
+        services.AddScoped<UpdateUserHandler>();
+        services.AddScoped<GetUserByIdHandler>();
+        services.AddScoped<GetActiveUsersHandler>();
+        services.AddScoped<GetBannedUsersHandler>();
 
         return services;
     }

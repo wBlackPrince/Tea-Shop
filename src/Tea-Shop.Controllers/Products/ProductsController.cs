@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands;
+using Tea_Shop.Application.Products.Commands.CreateProductCommand;
+using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
@@ -53,12 +57,20 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<CreateProductResponseDto>> Create(
-        [FromServices] CreateProductHandler handler,
+        [FromServices] ICommandHandler<CreateProductResponseDto, CreateProductCommand> handler,
         [FromBody] CreateProductRequestDto request,
         CancellationToken cancellationToken)
     {
-        var response = await handler.Handle(request, cancellationToken);
-        return Ok(response);
+        var command = new CreateProductCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result);
     }
 
     [HttpPatch("{productId:guid}")]

@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Users;
+using Tea_Shop.Application.Users.Commands.CreateUserCommand;
+using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
+using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
+using Tea_Shop.Application.Users.Queries;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 
@@ -10,19 +15,13 @@ namespace Tea_Shop.Users;
 [Route("[controller]")]
 public class UsersController: ControllerBase
 {
-    private readonly IUsersService _usersService;
-
-    public UsersController(IUsersService usersService)
-    {
-        _usersService = usersService;
-    }
-
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserById(
-        [FromRoute]Guid userId,
+        [FromRoute] Guid userId,
+        [FromServices] GetUserByIdHandler handler,
         CancellationToken cancellationToken)
     {
-        var result = await _usersService.GetById(userId, cancellationToken);
+        var result = await handler.Handle(userId, cancellationToken);
 
         if (result.IsFailure)
         {
@@ -33,9 +32,11 @@ public class UsersController: ControllerBase
     }
 
     [HttpGet("active")]
-    public async Task<IActionResult> GetActiveUsers(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetActiveUsers(
+        [FromServices] GetActiveUsersHandler handler,
+        CancellationToken cancellationToken)
     {
-        var result = await _usersService.GetActiveUsers(cancellationToken);
+        var result = await handler.Handle(cancellationToken);
 
         if (result.IsFailure)
         {
@@ -46,9 +47,11 @@ public class UsersController: ControllerBase
     }
 
     [HttpGet("banned")]
-    public async Task<IActionResult> GetBannedUsers(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetBannedUsers(
+        [FromServices] GetBannedUsersHandler handler,
+        CancellationToken cancellationToken)
     {
-        var result = await _usersService.GetBannedUsers(cancellationToken);
+        var result = await handler.Handle(cancellationToken);
 
         if (result.IsFailure)
         {
@@ -59,22 +62,31 @@ public class UsersController: ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(
-        [FromBody]CreateUserRequestDto request,
+    public async Task<ActionResult<CreateUserResponseDto>> CreateUser(
+        [FromBody] CreateUserRequestDto request,
+        [FromServices] ICommandHandler<CreateUserResponseDto, CreateUserCommand> handler,
         CancellationToken cancellationToken)
     {
-        await _usersService.CreateUser(request, cancellationToken);
+        var command = new CreateUserCommand(request);
 
-        return Ok();
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
         [FromBody] JsonPatchDocument<User> userUpdates,
+        [FromServices] UpdateUserHandler handler,
         CancellationToken cancellationToken)
     {
-        var updateResult = await _usersService.UpdateUser(userId, userUpdates, cancellationToken);
+        var updateResult = await handler.Handle(userId, userUpdates, cancellationToken);
 
         if (updateResult.IsFailure)
         {
@@ -87,9 +99,10 @@ public class UsersController: ControllerBase
     [HttpDelete("{userId:guid}")]
     public async Task<IActionResult> DeleteUser(
         [FromRoute] Guid userId,
+        [FromServices] DeleteUserHandler handler,
         CancellationToken cancellationToken)
     {
-        var result = await _usersService.DeleteUser(userId, cancellationToken);
+        var result = await handler.Handle(userId, cancellationToken);
 
         if (result.IsFailure)
         {
