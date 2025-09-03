@@ -161,3 +161,8 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Newtonsoft.Json.
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Swashbuckle.AspNetCore.Newtonsoft.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Configuration.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Binder.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Logging.Configuration.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Logging.Console.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll

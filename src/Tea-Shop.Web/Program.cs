@@ -6,6 +6,7 @@ using Tea_Shop.Web;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddProgramDependencies();
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 builder.Services.AddScoped<ProductsDbContext>(_ => new ProductsDbContext(
     builder.Configuration.GetConnectionString("TeaShopDb")!));
 builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsDbContext(

@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Products;
-using Tea_Shop.Application.Products.Commands;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
-using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
+using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
 using Tea_Shop.Contract.Products;
+using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Products;
@@ -20,7 +19,7 @@ namespace Tea_Shop.Products;
 public class ProductsController : ControllerBase
 {
     [HttpGet("{productId:guid}")]
-    public async Task<ActionResult<GetProductDto>> GetProductById(
+    public async Task<ActionResult<GetProductDto?>> GetProductById(
         [FromServices] IQueryHandler<GetProductDto, GetProductByIdQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
@@ -52,6 +51,19 @@ public class ProductsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var query = new GetProductsIngredientsQuery(new GetProductIngridientsRequestDto(productId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{productId:guid}/reviews")]
+    public async Task<ActionResult<GetReviewDto[]>> GetProductREviews(
+        [FromServices] IQueryHandler<GetReviewDto[], GetProductReviewsQuery> handler,
+        [FromRoute] Guid productId,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetProductReviewsQuery(productId);
 
         var result = await handler.Handle(query, cancellationToken);
 
@@ -95,11 +107,13 @@ public class ProductsController : ControllerBase
 
     [HttpDelete("{productId:guid}")]
     public async Task<IActionResult> DeleteProduct(
-        [FromServices] DeleteProductHandler handler,
+        [FromServices] ICommandHandler<DeleteProductDto, DeleteProductQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var deleteResult = await handler.Handle(productId, cancellationToken);
+        var query = new DeleteProductQuery(new DeleteProductDto(productId));
+
+        var deleteResult = await handler.Handle(query, cancellationToken);
 
         if (deleteResult.IsFailure)
         {

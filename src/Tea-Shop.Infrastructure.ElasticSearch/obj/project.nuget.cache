@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ROh+S2Oa+wM=",
+  "dgSpecHash": "iMwpFN+lFnE=",
   "success": true,
   "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.ElasticSearch\\Tea-Shop.Infrastructure.ElasticSearch.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\maste\\.nuget\\packages\\csharpfunctionalextensions\\3.6.0\\csharpfunctionalextensions.3.6.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.0.0\\fluentvalidation.dependencyinjectionextensions.12.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\9.0.8\\microsoft.aspnetcore.jsonpatch.9.0.8.nupkg.sha512",

@@ -1,12 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
+using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 
-public class DeleteProductHandler
+public class DeleteProductHandler: ICommandHandler<
+    DeleteProductDto,
+    DeleteProductQuery>
 {
     private readonly IProductsRepository _productsRepository;
     private readonly ILogger<UpdateProductHandler> _logger;
@@ -19,24 +23,26 @@ public class DeleteProductHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        Guid productId,
+    public async Task<Result<DeleteProductDto, Error>> Handle(
+        DeleteProductQuery query,
         CancellationToken cancellationToken)
     {
         var deleteResult = await _productsRepository.DeleteProduct(
-            new ProductId(productId),
+            new ProductId(query.Request.ProductId),
             cancellationToken);
 
         if (deleteResult.IsFailure)
         {
-            _logger.LogInformation("Failed to delete product {productId}", productId);
+            _logger.LogInformation(
+                "Failed to delete product {productId}",
+                query.Request.ProductId);
 
             return deleteResult.Error;
         }
 
         await _productsRepository.SaveChangesAsync(cancellationToken);
-        _logger.LogError("Delete product {productId}", productId);
+        _logger.LogError("Delete product {productId}", query.Request.ProductId);
 
-        return productId;
+        return query.Request;
     }
 }
