@@ -7,6 +7,9 @@ using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Queries;
+using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
+using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
+using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
@@ -17,40 +20,40 @@ namespace Tea_Shop.Products;
 public class ProductsController : ControllerBase
 {
     [HttpGet("{productId:guid}")]
-    public async Task<ActionResult<GetProductByIdResponseDto>> GetProductById(
-        [FromServices] GetProductByIdHandler handler,
+    public async Task<ActionResult<GetProductDto>> GetProductById(
+        [FromServices] IQueryHandler<GetProductDto, GetProductByIdQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var getResult = await handler.Handle(
-            new GetProductByIdRequestDto(productId),
-            cancellationToken);
+        var query = new GetProductByIdQuery(new GetProductByIdRequestDto(productId));
+
+        var getResult = await handler.Handle(query, cancellationToken);
 
         return Ok(getResult);
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetProductByIdResponseDto[]>> GetProductsByTag(
-        [FromServices] GetProductsByTagHandler handler,
+    public async Task<ActionResult<GetProductDto[]>> GetProductsByTag(
+        [FromServices] IQueryHandler<GetProductDto[], GetProductsByTagQuery> handler,
         [FromQuery] Guid tagId,
         CancellationToken cancellationToken)
     {
-        var productsResult = await handler.Handle(
-            new GetProductsByTagRequestDto(tagId),
-            cancellationToken);
+        var query = new GetProductsByTagQuery(new GetProductsByTagRequestDto(tagId));
+
+        var productsResult = await handler.Handle(query, cancellationToken);
 
         return Ok(productsResult);
     }
 
     [HttpGet("{productId:guid}/ingridients")]
     public async Task<ActionResult<GetIngrendientsResponseDto[]>> GetProductsIngredients(
-        [FromServices] GetProductIngredientsHandler handler,
+        [FromServices] IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(
-            new GetProductIngridientsRequestDto(productId),
-            cancellationToken);
+        var query = new GetProductsIngredientsQuery(new GetProductIngridientsRequestDto(productId));
+
+        var result = await handler.Handle(query, cancellationToken);
 
         return Ok(result);
     }

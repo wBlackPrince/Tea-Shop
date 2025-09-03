@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Tags;
 
-namespace Tea_Shop.Application.Products.Queries;
+namespace Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
 
-public class GetProductsByTagHandler
+public class GetProductsByTagHandler: IQueryHandler<GetProductDto[], GetProductsByTagQuery>
 {
     private readonly IReadDbContext _readDbContext;
     private readonly ILogger<GetProductsByTagHandler> _logger;
@@ -19,11 +20,11 @@ public class GetProductsByTagHandler
         _logger = logger;
     }
 
-    public async Task<GetProductByIdResponseDto[]> Handle(
-        GetProductsByTagRequestDto query,
+    public async Task<GetProductDto[]> Handle(
+        GetProductsByTagQuery query,
         CancellationToken cancellationToken)
     {
-        var tagId = new TagId(query.TagId);
+        var tagId = new TagId(query.Request.TagId);
 
         var products = await _readDbContext.ProductsRead
             .Where(p => p.TagsIds.Any(t => t.TagId == tagId))
@@ -35,11 +36,11 @@ public class GetProductsByTagHandler
             return [];
         }
 
-        GetProductByIdResponseDto[] response = new GetProductByIdResponseDto[products.Length];
+        GetProductDto[] response = new GetProductDto[products.Length];
 
         for (int i = 0; i < products.Length; i++)
         {
-            response[i] = new GetProductByIdResponseDto(
+            response[i] = new GetProductDto(
                 products[i].Id.Value,
                 products[i].Title,
                 products[i].Price,
@@ -58,6 +59,8 @@ public class GetProductsByTagHandler
                 products[i].TagsIds.Select(ti => ti.TagId.Value).ToArray(),
                 products[i].PhotosIds);
         }
+
+        _logger.LogInformation($"Get products by tag: {query.Request.TagId}");
 
         return response;
     }

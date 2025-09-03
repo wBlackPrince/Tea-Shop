@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
+namespace Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 
-namespace Tea_Shop.Application.Products.Queries;
-
-public class GetProductIngredientsHandler
+public class GetProductIngredientsHandler: IQueryHandler<
+    GetIngrendientsResponseDto[],
+    GetProductsIngredientsQuery>
 {
     private readonly IReadDbContext _readDbContext;
     private readonly ILogger<GetProductIngredientsHandler> _logger;
@@ -21,11 +23,13 @@ public class GetProductIngredientsHandler
     }
 
     public async Task<GetIngrendientsResponseDto[]> Handle(
-        GetProductIngridientsRequestDto query,
+        GetProductsIngredientsQuery query,
         CancellationToken cancellationToken)
     {
         var product = await _readDbContext.ProductsRead
-            .FirstOrDefaultAsync(p => p.Id == new ProductId(query.ProductId), cancellationToken);
+            .FirstOrDefaultAsync(
+                p => p.Id == new ProductId(query.Request.ProductId),
+                cancellationToken);
 
         if (product is null)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Tea_Shop.Contract.Products;
 
-public record GetProductByIdResponseDto(
+public record GetProductDto(
     Guid Id,
     string Title,
     float Price,

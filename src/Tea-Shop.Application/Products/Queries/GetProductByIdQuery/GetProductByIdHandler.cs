@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Application.Products.Queries;
+namespace Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 
-public class GetProductByIdHandler
+public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductByIdQuery>
 {
     private readonly IReadDbContext _readDbContext;
     private readonly ILogger<GetProductByIdHandler> _logger;
@@ -19,14 +20,14 @@ public class GetProductByIdHandler
         _logger = logger;
     }
 
-    public async Task<GetProductByIdResponseDto?> Handle(
-        GetProductByIdRequestDto query,
+    public async Task<GetProductDto?> Handle(
+        GetProductByIdQuery query,
         CancellationToken cancellationToken)
     {
         Product? product = await _readDbContext.ProductsRead
             .Include(p => p.TagsIds)
             .FirstOrDefaultAsync(
-                p => p.Id == new ProductId(query.ProductId),
+                p => p.Id == new ProductId(query.Request.ProductId),
                 cancellationToken);
 
         if (product is null)
@@ -45,7 +46,7 @@ public class GetProductByIdHandler
             .Select(i => i.Id.Value)
             .ToArray();
 
-        var productGetDto = new GetProductByIdResponseDto(
+        var productGetDto = new GetProductDto(
             product.Id.Value,
             product.Title,
             product.Price,
@@ -61,7 +62,7 @@ public class GetProductByIdHandler
             tagsIds,
             product.PhotosIds);
 
-        _logger.LogInformation("Get product {productId}", query.ProductId);
+        _logger.LogInformation("Get product {productId}", query.Request.ProductId);
 
         return productGetDto;
     }
