@@ -1,35 +1,29 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Comments.Commands;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries;
-using Tea_Shop.Application.Orders.Commands;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
-using Tea_Shop.Application.Orders.Queries;
 using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
-using Tea_Shop.Application.Products.Commands;
+using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
-using Tea_Shop.Application.Products.Queries;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
 using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
-using Tea_Shop.Application.Reviews.Commands;
 using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries;
 using Tea_Shop.Application.Tags;
-using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
@@ -83,10 +77,15 @@ public static class DependencyInjection
             IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery>,
             GetOrderByIdHandler>();
         services.AddScoped<
+            IQueryHandler<OrderItemDto[], GetOrderItemQuery>,
+            GetOrderItemsHandler>();
+        services.AddScoped<
             ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>,
             CreateOrderHandler>();
         services.AddScoped<UpdateOrderHandler>();
-        services.AddScoped<DeleteOrderHandler>();
+        services.AddScoped<
+            ICommandHandler<DeleteOrderDto, DeleteOrderCommand>,
+            DeleteOrderHandler>();
 
         // handlers для комментов
         services.AddScoped<GetCommentByIdHandler>();

@@ -4,8 +4,8 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
-using Tea_Shop.Application.Orders.Queries;
 using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
+using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
 
@@ -29,11 +29,16 @@ public class OrdersController: ControllerBase
     }
 
     [HttpGet("orders/{orderId:guid}/items")]
-    public async Task<IActionResult> GetOrderItems(
+    public async Task<ActionResult<OrderItemDto[]>> GetOrderItems(
         [FromRoute] Guid orderId,
+        [FromServices] IQueryHandler<OrderItemDto[], GetOrderItemQuery> handler,
         CancellationToken cancellationToken)
     {
-        return Ok("Get order's items");
+        var query = new GetOrderItemQuery(new GetOrderItemsRequestDto(orderId));
+
+        var orderItems = await handler.Handle(query, cancellationToken);
+
+        return Ok(orderItems);
     }
 
     [HttpPost("orders")]
@@ -75,10 +80,12 @@ public class OrdersController: ControllerBase
     [HttpDelete("orders/{orderId:guid}")]
     public async Task<IActionResult> DeleteOrder(
         [FromRoute] Guid orderId,
-        [FromServices] DeleteOrderHandler handler,
+        [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(orderId, cancellationToken);
+        var command = new DeleteOrderCommand(new DeleteOrderDto(orderId));
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {

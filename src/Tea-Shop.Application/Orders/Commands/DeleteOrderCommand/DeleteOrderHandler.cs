@@ -1,11 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 
-public class DeleteOrderHandler
+public class DeleteOrderHandler: ICommandHandler<
+    DeleteOrderDto,
+    DeleteOrderCommand>
 {
     private readonly IOrdersRepository _ordersRepository;
     private readonly ILogger<DeleteOrderHandler> _logger;
@@ -18,12 +22,12 @@ public class DeleteOrderHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        Guid orderId,
+    public async Task<Result<DeleteOrderDto, Error>> Handle(
+        DeleteOrderCommand command,
         CancellationToken cancellationToken)
     {
         var deleteResult = await _ordersRepository
-            .DeleteOrder(new OrderId(orderId), cancellationToken);
+            .DeleteOrder(new OrderId(command.Dto.OrderId), cancellationToken);
 
         if (deleteResult.IsFailure)
         {
@@ -31,8 +35,10 @@ public class DeleteOrderHandler
         }
 
         await _ordersRepository.SaveChangesAsync(cancellationToken);
-        _logger.LogInformation("Deleted order {orderId}", orderId);
+        _logger.LogInformation("Deleted order {orderId}", command.Dto.OrderId);
 
-        return orderId;
+        var response = new DeleteOrderDto(command.Dto.OrderId);
+
+        return response;
     }
 }

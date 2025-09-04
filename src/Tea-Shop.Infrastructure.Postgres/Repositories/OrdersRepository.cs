@@ -45,8 +45,9 @@ public class OrdersRepository: IOrdersRepository
             return Error.NotFound("delete.order_by_id", "Order not found");
         }
 
-        await _dbContext.Orders.ExecuteDeleteAsync(
-            cancellationToken);
+        await _dbContext.Orders
+            .Where(o => o.Id == orderId)
+            .ExecuteDeleteAsync(cancellationToken);
 
         return orderId.Value;
     }
