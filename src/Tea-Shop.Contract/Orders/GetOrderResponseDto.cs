@@ -2,13 +2,23 @@
 
 namespace Tea_Shop.Contract.Orders;
 
-public record GetOrderResponseDto(
-    Guid Id,
-    Guid UserId,
-    string DeliveryAddress,
-    string PaymentWay,
-    DateTime ExpectedDeliveryTime,
-    string OrderStatus,
-    OrderItemDto[] OrderItems,
-    DateTime CreatedAt,
-    DateTime UpdatedAt);
+public record GetOrderResponseDto
+{
+    public Guid Id { get; init; }
+
+    public Guid UserId { get; init; }
+
+    public string DeliveryAddress { get; init; }
+
+    public string PaymentWay { get; init; }
+
+    public DateTime ExpectedDeliveryTime { get; init; }
+
+    public string OrderStatus { get; init; }
+
+    public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+
+    public DateTime CreatedAt { get; init; }
+
+    public DateTime UpdatedAt { get; init; }
+}

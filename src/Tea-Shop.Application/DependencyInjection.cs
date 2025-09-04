@@ -11,6 +11,7 @@ using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 using Tea_Shop.Application.Orders.Queries;
+using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 using Tea_Shop.Application.Products.Commands;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
@@ -78,7 +79,9 @@ public static class DependencyInjection
             GetSeasonalProductsHandler>();
 
         // handlers для заказов
-        services.AddScoped<GetOrderByIdHandler>();
+        services.AddScoped<
+            IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery>,
+            GetOrderByIdHandler>();
         services.AddScoped<
             ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>,
             CreateOrderHandler>();
@@ -94,7 +97,8 @@ public static class DependencyInjection
         services.AddScoped<DeleteCommentHandler>();
 
         // handlers для обзоров
-        services.AddScoped<GetReviewByIdHandler>();
+        services.AddScoped<
+            GetReviewByIdHandler>();
         services.AddScoped<
             ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>,
             CreateReviewHandler>();

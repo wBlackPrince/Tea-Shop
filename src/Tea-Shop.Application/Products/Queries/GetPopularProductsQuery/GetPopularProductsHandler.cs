@@ -20,7 +20,7 @@ public class GetPopularProductsHandler: IQueryHandler<
         GetPopularProductsQuery query,
         CancellationToken cancellationToken)
     {
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(
+        using var connection = await _dbConnectionFactory.CreateConnectionAsync(
             cancellationToken: cancellationToken);
 
         var popularProducts = await connection.QueryAsync<GetPopularProductsResponseDto>(

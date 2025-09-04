@@ -20,8 +20,7 @@ public class GetSeasonalProductsHandler: IQueryHandler<
         GetSeasonalProductsQuery query,
         CancellationToken cancellationToken)
     {
-        var connection = await _connectionFactory.CreateConnectionAsync(
-            cancellationToken: cancellationToken);
+        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
         var seasonalProducts = await connection.QueryAsync<GetSimpleProductResponseDto>(
             """

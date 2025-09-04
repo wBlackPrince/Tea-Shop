@@ -5,6 +5,7 @@ using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 using Tea_Shop.Application.Orders.Queries;
+using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
 
@@ -17,10 +18,12 @@ public class OrdersController: ControllerBase
     [HttpGet("orders/{orderId:guid}")]
     public async Task<ActionResult<GetOrderResponseDto>> GetOrderById(
         [FromRoute] Guid orderId,
-        [FromServices] GetOrderByIdHandler handler,
+        [FromServices] IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(orderId, cancellationToken);
+        var query = new GetOrderByIdQuery(new GetOrderRequestDto(orderId));
+
+        var result = await handler.Handle(query, cancellationToken);
 
         return Ok(result);
     }

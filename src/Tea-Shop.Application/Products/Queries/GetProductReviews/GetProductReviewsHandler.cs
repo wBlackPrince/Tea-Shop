@@ -19,7 +19,7 @@ public class GetProductReviewsHandler:
         GetProductReviewsQuery query,
         CancellationToken cancellationToken)
     {
-        var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
+        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
         var reviews = await connection.QueryAsync<GetReviewDto>(
             """
