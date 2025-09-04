@@ -9,6 +9,7 @@ using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
+using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
@@ -74,12 +75,27 @@ public class ProductsController : ControllerBase
     [HttpPost("popular")]
     public async Task<ActionResult<GetReviewDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
-            GetPopularProductResponseDto[],
+            GetPopularProductsResponseDto[],
             GetPopularProductsQuery> handler,
         [FromBody] GetPopularProductRequestDto request,
         CancellationToken cancellationToken)
     {
         var query = new GetPopularProductsQuery(request);
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("seasonal")]
+    public async Task<ActionResult<GetReviewDto[]>> GetPopularProducts(
+        [FromServices] IQueryHandler<
+            GetSimpleProductResponseDto[],
+            GetSeasonalProductsQuery> handler,
+        [FromBody] GetSeasonalProductsRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetSeasonalProductsQuery(request);
 
         var result = await handler.Handle(query, cancellationToken);
 

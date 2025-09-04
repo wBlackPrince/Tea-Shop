@@ -1,6 +1,6 @@
 ﻿namespace Tea_Shop.Contract.Products;
 
-public record GetPopularProductResponseDto
+public record GetPopularProductsResponseDto
 {
     public Guid ProductId { get; init; }
 

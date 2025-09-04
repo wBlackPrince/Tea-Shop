@@ -6,7 +6,7 @@ using Tea_Shop.Contract.Products;
 namespace Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 
 public class GetPopularProductsHandler: IQueryHandler<
-    GetPopularProductResponseDto[],
+    GetPopularProductsResponseDto[],
     GetPopularProductsQuery>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
@@ -16,14 +16,14 @@ public class GetPopularProductsHandler: IQueryHandler<
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task<GetPopularProductResponseDto[]> Handle(
+    public async Task<GetPopularProductsResponseDto[]> Handle(
         GetPopularProductsQuery query,
         CancellationToken cancellationToken)
     {
         var connection = await _dbConnectionFactory.CreateConnectionAsync(
             cancellationToken: cancellationToken);
 
-        var popularProducts = await connection.QueryAsync<GetPopularProductResponseDto>(
+        var popularProducts = await connection.QueryAsync<GetPopularProductsResponseDto>(
             """
             select
                 p.id as product_id,
