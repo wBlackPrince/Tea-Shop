@@ -4,6 +4,7 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
+using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
@@ -58,12 +59,27 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId:guid}/reviews")]
-    public async Task<ActionResult<GetReviewDto[]>> GetProductREviews(
+    public async Task<ActionResult<GetReviewDto[]>> GetProductReviews(
         [FromServices] IQueryHandler<GetReviewDto[], GetProductReviewsQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
         var query = new GetProductReviewsQuery(productId);
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("popular")]
+    public async Task<ActionResult<GetReviewDto[]>> GetPopularProducts(
+        [FromServices] IQueryHandler<
+            GetPopularProductResponseDto[],
+            GetPopularProductsQuery> handler,
+        [FromBody] GetPopularProductRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetPopularProductsQuery(request);
 
         var result = await handler.Handle(query, cancellationToken);
 

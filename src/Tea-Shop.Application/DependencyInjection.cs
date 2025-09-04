@@ -16,6 +16,7 @@ using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Queries;
+using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
@@ -68,6 +69,9 @@ public static class DependencyInjection
         services.AddScoped<
             IQueryHandler<GetReviewDto[], GetProductReviewsQuery>,
             GetProductReviewsHandler>();
+        services.AddScoped<
+            IQueryHandler<GetPopularProductResponseDto[], GetPopularProductsQuery>,
+            GetPopularProductsHandler>();
 
         // handlers для заказов
         services.AddScoped<GetOrderByIdHandler>();
