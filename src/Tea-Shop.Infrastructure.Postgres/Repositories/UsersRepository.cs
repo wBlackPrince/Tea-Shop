@@ -33,6 +33,17 @@ public class UsersRepository : IUsersRepository
         return user;
     }
 
+    public async Task<bool> IsEmailUnique(
+        string email,
+        CancellationToken cancellationToken)
+    {
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(
+            u => u.Email == email,
+            cancellationToken);
+
+        return user is null;
+    }
+
 
     public async Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken)
     {

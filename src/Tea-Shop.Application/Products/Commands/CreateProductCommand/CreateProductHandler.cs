@@ -32,7 +32,10 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
 
         if (!validationResult.IsValid)
         {
-            return Error.Validation("product.create", "validation errors");
+            return Error.Validation(
+                "product.create",
+                "validation errors",
+                validationResult.Errors.First().PropertyName);
         }
 
         ProductId productId = new ProductId(Guid.NewGuid());

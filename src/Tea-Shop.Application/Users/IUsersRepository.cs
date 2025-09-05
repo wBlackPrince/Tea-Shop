@@ -11,6 +11,10 @@ public interface IUsersRepository
         UserId userId,
         CancellationToken cancellationToken);
 
+    Task<bool> IsEmailUnique(
+        string email,
+        CancellationToken cancellationToken);
+
     Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken);
 
     Task<Result<IReadOnlyList<User>, Error>> GetBannedUsers(CancellationToken cancellationToken);

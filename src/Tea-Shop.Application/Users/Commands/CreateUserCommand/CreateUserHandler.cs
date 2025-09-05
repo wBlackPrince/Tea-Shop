@@ -32,7 +32,17 @@ public class CreateUserHandler: ICommandHandler<CreateUserResponseDto, CreateUse
 
         if (!validationResult.IsValid)
         {
-            return Error.Validation("create.user", "validation failed");
+            return Error.Validation(
+                "create.user",
+                "validation failed",
+                validationResult.Errors.First().PropertyName);
+        }
+
+        bool isEmailUnique = await _usersRepository.IsEmailUnique(command.Request.Email, cancellationToken);
+
+        if (!isEmailUnique)
+        {
+            return Error.Failure("create.user", "email is already taken");
         }
 
         User user = new User(
