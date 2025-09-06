@@ -4,7 +4,8 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
-using Tea_Shop.Application.Comments.Queries;
+using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
+using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
@@ -22,7 +23,6 @@ using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
-using Tea_Shop.Application.Reviews.Queries;
 using Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Tags;
@@ -90,7 +90,12 @@ public static class DependencyInjection
             DeleteOrderHandler>();
 
         // handlers для комментов
-        services.AddScoped<GetCommentByIdHandler>();
+        services.AddScoped<
+            IQueryHandler<CommentDto, GetCommentByIdQuery>,
+            GetCommentByIdHandler>();
+        services.AddScoped<
+            IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery>,
+            GetCommentChildCommentsHandler>();
         services.AddScoped<
             ICommandHandler<CreateCommentResponseDto, CreateCommentCommand>,
             CreateCommentHandler>();

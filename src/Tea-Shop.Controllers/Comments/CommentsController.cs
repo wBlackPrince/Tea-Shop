@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Comments.Commands;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
-using Tea_Shop.Application.Comments.Queries;
+using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
+using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
 
@@ -16,14 +16,29 @@ namespace Tea_Shop.Comments;
 public class CommentsController: ControllerBase
 {
     [HttpGet("{commentId:guid}")]
-    public async Task<IActionResult> GetCommentById(
+    public async Task<ActionResult<CommentDto>> GetCommentById(
         [FromRoute] Guid commentId,
-        [FromServices] GetCommentByIdHandler handler,
+        [FromServices]IQueryHandler<CommentDto, GetCommentByIdQuery> handler,
         CancellationToken cancellationToken)
     {
-        await handler.Handle(commentId, cancellationToken);
+        var query = new GetCommentByIdQuery(new GetCommentRequestDto(commentId));
 
-        return Ok(commentId);
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{commentId:guid}/comments")]
+    public async Task<ActionResult<CommentDto>> GetChildCommentById(
+        [FromRoute] Guid commentId,
+        [FromServices]IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetCommentChildCommentsQuery(new GetCommentRequestDto(commentId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
     }
 
     [HttpPost]
