@@ -96,14 +96,17 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("seasonal")]
-    public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
+    [HttpGet("seasonal")]
+    public async Task<ActionResult<GetReviewResponseDto[]>> GetSeasonalProducts(
         [FromServices] IQueryHandler<
             GetSimpleProductResponseDto[],
             GetSeasonalProductsQuery> handler,
-        [FromBody] GetSeasonalProductsRequestDto request,
+        [FromQuery] string season,
+        [FromQuery] int productsLimit,
         CancellationToken cancellationToken)
     {
+        var request = new GetSeasonalProductsRequestDto(season, productsLimit);
+
         var query = new GetSeasonalProductsQuery(request);
 
         var result = await handler.Handle(query, cancellationToken);
