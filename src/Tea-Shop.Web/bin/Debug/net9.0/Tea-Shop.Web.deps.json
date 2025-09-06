@@ -17,12 +17,20 @@
           "Tea-Shop.Controllers": "1.0.0",
           "Tea-Shop.Domain": "1.0.0",
           "Tea-Shop.Infrastructure.ElasticSearch": "1.0.0",
+          "Tea-Shop.Infrastructure.Minio": "1.0.0",
           "Tea-Shop.Infrastructure.Postgres": "1.0.0",
-          "Tea-Shop.Infrastructure.S3": "1.0.0",
           "Tea-Shop.Shared": "1.0.0"
         },
         "runtime": {
           "Tea-Shop.Web.dll": {}
+        }
+      },
+      "CommunityToolkit.HighPerformance/8.4.0": {
+        "runtime": {
+          "lib/net8.0/CommunityToolkit.HighPerformance.dll": {
+            "assemblyVersion": "8.4.0.0",
+            "fileVersion": "8.4.0.1"
+          }
         }
       },
       "CSharpFunctionalExtensions/3.6.0": {
@@ -802,6 +810,34 @@
           }
         }
       },
+      "Minio/6.0.5": {
+        "dependencies": {
+          "CommunityToolkit.HighPerformance": "8.4.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0-preview.7.25380.108",
+          "Microsoft.Extensions.Logging": "10.0.0-preview.7.25380.108",
+          "System.IO.Hashing": "9.0.4",
+          "System.Reactive": "6.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/Minio.dll": {
+            "assemblyVersion": "6.0.5.0",
+            "fileVersion": "6.0.5.0"
+          }
+        }
+      },
+      "Minio.AspNetCore/6.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0-preview.7.25380.108",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.8",
+          "Minio": "6.0.5"
+        },
+        "runtime": {
+          "lib/net7.0/Minio.AspNetCore.dll": {
+            "assemblyVersion": "6.0.1.0",
+            "fileVersion": "6.0.1.0"
+          }
+        }
+      },
       "Mono.TextTemplating/3.0.0": {
         "dependencies": {
           "System.CodeDom": "6.0.0"
@@ -1002,7 +1038,23 @@
           }
         }
       },
+      "System.IO.Hashing/9.0.4": {
+        "runtime": {
+          "lib/net9.0/System.IO.Hashing.dll": {
+            "assemblyVersion": "9.0.0.4",
+            "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
       "System.IO.Pipelines/7.0.0": {},
+      "System.Reactive/6.0.1": {
+        "runtime": {
+          "lib/net6.0/System.Reactive.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.1.7420"
+          }
+        }
+      },
       "System.Reflection.Metadata/7.0.0": {
         "dependencies": {
           "System.Collections.Immutable": "7.0.0"
@@ -1090,6 +1142,19 @@
           }
         }
       },
+      "Tea-Shop.Infrastructure.Minio/1.0.0": {
+        "dependencies": {
+          "Minio": "6.0.5",
+          "Minio.AspNetCore": "6.0.1",
+          "Tea-Shop.Application": "1.0.0"
+        },
+        "runtime": {
+          "Tea-Shop.Infrastructure.Minio.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Tea-Shop.Infrastructure.Postgres/1.0.0": {
         "dependencies": {
           "Dapper": "2.1.66",
@@ -1101,17 +1166,6 @@
         },
         "runtime": {
           "Tea-Shop.Infrastructure.Postgres.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Tea-Shop.Infrastructure.S3/1.0.0": {
-        "dependencies": {
-          "Tea-Shop.Application": "1.0.0"
-        },
-        "runtime": {
-          "Tea-Shop.Infrastructure.S3.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1132,6 +1186,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "CommunityToolkit.HighPerformance/8.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-flxspiBs0G/0GMp7IK2J2ijV9bTG6hEwFc/z6ekHqB6nwRJ4Ry2yLdx+TkbCUYFCl4XhABkAwomeKbT6zM2Zlg==",
+      "path": "communitytoolkit.highperformance/8.4.0",
+      "hashPath": "communitytoolkit.highperformance.8.4.0.nupkg.sha512"
     },
     "CSharpFunctionalExtensions/3.6.0": {
       "type": "package",
@@ -1567,6 +1628,20 @@
       "path": "microsoft.openapi/1.6.23",
       "hashPath": "microsoft.openapi.1.6.23.nupkg.sha512"
     },
+    "Minio/6.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AK3JIDZnFZg2Hpkqo6vlzyiEC4OifG+jQbuqpAtXePnIo49G4pNn27THh3DI8s4o84b/MMBQF+n1DEwBNenxsg==",
+      "path": "minio/6.0.5",
+      "hashPath": "minio.6.0.5.nupkg.sha512"
+    },
+    "Minio.AspNetCore/6.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bE1kkIsV6lWs6H7CkjIooz1Bah5emhTWSCRSCpCyLEjU7dRkFeTusOunlIA/jtcwS3w6ZguF4JKDf3JX/uOJ7A==",
+      "path": "minio.aspnetcore/6.0.1",
+      "hashPath": "minio.aspnetcore.6.0.1.nupkg.sha512"
+    },
     "Mono.TextTemplating/3.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1728,12 +1803,26 @@
       "path": "system.diagnostics.diagnosticsource/10.0.0-preview.7.25380.108",
       "hashPath": "system.diagnostics.diagnosticsource.10.0.0-preview.7.25380.108.nupkg.sha512"
     },
+    "System.IO.Hashing/9.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WogPvgAFqQORFD8Iyha6RZ+/1QB3dsWRWxbwi8/HHVgiGQ8z0oMWpwe8Kk3Ti+Roe+P6a3sBg+WwBfEsyziZKg==",
+      "path": "system.io.hashing/9.0.4",
+      "hashPath": "system.io.hashing.9.0.4.nupkg.sha512"
+    },
     "System.IO.Pipelines/7.0.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-jRn6JYnNPW6xgQazROBLSfpdoczRw694vO5kKvMcNnpXuolEixUyw6IBuBs2Y2mlSX/LdLvyyWmfXhaI3ND1Yg==",
       "path": "system.io.pipelines/7.0.0",
       "hashPath": "system.io.pipelines.7.0.0.nupkg.sha512"
+    },
+    "System.Reactive/6.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rHaWtKDwCi9qJ3ObKo8LHPMuuwv33YbmQi7TcUK1C264V3MFnOr5Im7QgCTdLniztP3GJyeiSg5x8NqYJFqRmg==",
+      "path": "system.reactive/6.0.1",
+      "hashPath": "system.reactive.6.0.1.nupkg.sha512"
     },
     "System.Reflection.Metadata/7.0.0": {
       "type": "package",
@@ -1802,12 +1891,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Tea-Shop.Infrastructure.Postgres/1.0.0": {
+    "Tea-Shop.Infrastructure.Minio/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Tea-Shop.Infrastructure.S3/1.0.0": {
+    "Tea-Shop.Infrastructure.Postgres/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

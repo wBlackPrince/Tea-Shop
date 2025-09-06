@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.Pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.ElasticSearch", "src\Tea-Shop.Infrastructure.ElasticSearch\Tea-Shop.Infrastructure.ElasticSearch.csproj", "{23D87472-E5D6-4EE2-9750-E089FB07AB22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.S3", "src\Tea-Shop.Infrastructure.S3\Tea-Shop.Infrastructure.S3.csproj", "{93E19F9A-8BC8-451F-A778-5D54F489DDDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.Minio", "src\Tea-Shop.Infrastructure.Minio\Tea-Shop.Infrastructure.Minio.csproj", "{93E19F9A-8BC8-451F-A778-5D54F489DDDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Shared", "src\Tea-Shop.Shared\Tea-Shop.Shared.csproj", "{19B88430-2146-46D7-BCDF-9CB8FC9643F6}"
 EndProject

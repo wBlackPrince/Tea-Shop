@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Orders.Commands;
 using Tea_Shop.Application.Reviews;
 using Tea_Shop.Application.Reviews.Commands;
@@ -7,6 +8,8 @@ using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries;
+using Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
+using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Reviews;
@@ -17,14 +20,30 @@ namespace Tea_Shop.Reviews;
 [Route("[controller]")]
 public class ReviewsController: ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetReviewById(
+    [HttpGet("{reviewId:guid}")]
+    public async Task<ActionResult<GetReviewResponseDto>> GetReviewById(
         [FromRoute] Guid reviewId,
-        [FromServices] GetReviewByIdHandler handler,
+        [FromServices] IQueryHandler<GetReviewResponseDto?, GetReviewByIdQuery> handler,
         CancellationToken cancellationToken)
     {
-        await handler.Handle(reviewId, cancellationToken);
-        return Ok();
+        var query = new GetReviewByIdQuery(new GetReviewRequestDto(reviewId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{reviewId:guid}/comments")]
+    public async Task<ActionResult<GetReviewCommentsResponseDto>> GetReviewComments(
+        [FromRoute] Guid reviewId,
+        [FromServices] IQueryHandler<GetReviewCommentsResponseDto, GetReviewCommentsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetReviewCommentsQuery(new GetReviewRequestDto(reviewId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
     }
 
     [HttpPost]
@@ -59,10 +78,12 @@ public class ReviewsController: ControllerBase
     [HttpDelete("{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(
         [FromRoute] Guid reviewId,
-        [FromServices] DeleteReviewHandler handler,
+        [FromServices] ICommandHandler<DeleteReviewDto, DeleteReviewCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(reviewId, cancellationToken);
+        var command = new DeleteReviewCommand(new DeleteReviewDto(reviewId));
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {

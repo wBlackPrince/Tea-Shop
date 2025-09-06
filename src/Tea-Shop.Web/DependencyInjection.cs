@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Tea_Shop.Application;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Infrastructure.Postgres;
+using Tea_Shop.Infrastructure.S3;
 
 namespace Tea_Shop.Web;
 

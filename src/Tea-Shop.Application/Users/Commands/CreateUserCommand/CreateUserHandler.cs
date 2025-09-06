@@ -1,7 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.IO.IsolatedStorage;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;

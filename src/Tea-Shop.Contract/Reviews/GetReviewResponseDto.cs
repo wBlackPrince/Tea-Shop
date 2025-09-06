@@ -1,6 +1,6 @@
 ﻿namespace Tea_Shop.Contract.Reviews;
 
-public record GetReviewDto
+public record GetReviewResponseDto
 {
     public Guid Id { get; init; }
 

@@ -63,10 +63,8 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\System.Diagnosti
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Application.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.ElasticSearch.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.Postgres.dll
-D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.S3.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.ElasticSearch.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.Postgres.pdb
-D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.S3.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Application.pdb
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\CSharpFunctionalExtensions.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Humanizer.dll
@@ -166,3 +164,10 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extens
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Logging.Configuration.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Logging.Console.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\CommunityToolkit.HighPerformance.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Minio.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Minio.AspNetCore.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\System.IO.Hashing.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\System.Reactive.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.Minio.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Tea-Shop.Infrastructure.Minio.pdb

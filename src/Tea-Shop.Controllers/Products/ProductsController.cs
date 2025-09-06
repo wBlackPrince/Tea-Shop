@@ -60,8 +60,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId:guid}/reviews")]
-    public async Task<ActionResult<GetReviewDto[]>> GetProductReviews(
-        [FromServices] IQueryHandler<GetReviewDto[], GetProductReviewsQuery> handler,
+    public async Task<ActionResult<GetReviewResponseDto[]>> GetProductReviews(
+        [FromServices] IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery> handler,
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
@@ -73,7 +73,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost("popular")]
-    public async Task<ActionResult<GetReviewDto[]>> GetPopularProducts(
+    public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
             GetPopularProductsResponseDto[],
             GetPopularProductsQuery> handler,
@@ -88,7 +88,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost("seasonal")]
-    public async Task<ActionResult<GetReviewDto[]>> GetPopularProducts(
+    public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
             GetSimpleProductResponseDto[],
             GetSeasonalProductsQuery> handler,

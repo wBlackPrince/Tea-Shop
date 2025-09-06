@@ -1,12 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 
-public class DeleteReviewHandler
+public class DeleteReviewHandler: 
+    ICommandHandler<DeleteReviewDto, DeleteReviewCommand>
 {
     private readonly IReadDbContext _readDbContext;
     private readonly IReviewsRepository _reviewsRepository;
@@ -19,13 +22,13 @@ public class DeleteReviewHandler
         _reviewsRepository = reviewsRepository;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        Guid reviewId,
+    public async Task<Result<DeleteReviewDto, Error>> Handle(
+        DeleteReviewCommand command,
         CancellationToken cancellationToken)
     {
         var review = await _readDbContext.ReviewsRead
             .FirstOrDefaultAsync(
-                r => r.Id == new ReviewId(reviewId),
+                r => r.Id == new ReviewId(command.Request.ReviewId),
                 cancellationToken);
 
         if (review is null)
@@ -34,9 +37,9 @@ public class DeleteReviewHandler
         }
 
         await _reviewsRepository.DeleteReview(
-            new ReviewId(reviewId),
+            new ReviewId(command.Request.ReviewId),
             cancellationToken);
 
-        return review.Id.Value;
+        return command.Request;
     }
 }

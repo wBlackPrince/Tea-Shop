@@ -23,6 +23,8 @@ using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries;
+using Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
+using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
@@ -63,7 +65,7 @@ public static class DependencyInjection
             IQueryHandler<GetProductDto[], GetProductsByTagQuery>,
             GetProductsByTagHandler>();
         services.AddScoped<
-            IQueryHandler<GetReviewDto[], GetProductReviewsQuery>,
+            IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery>,
             GetProductReviewsHandler>();
         services.AddScoped<
             IQueryHandler<GetPopularProductsResponseDto[], GetPopularProductsQuery>,
@@ -97,12 +99,18 @@ public static class DependencyInjection
 
         // handlers для обзоров
         services.AddScoped<
+            IQueryHandler<GetReviewResponseDto?, GetReviewByIdQuery>,
             GetReviewByIdHandler>();
+        services.AddScoped<
+            IQueryHandler<GetReviewCommentsResponseDto, GetReviewCommentsQuery>,
+            GetReviewCommentsHandler>();
         services.AddScoped<
             ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>,
             CreateReviewHandler>();
         services.AddScoped<UpdateReviewHandler>();
-        services.AddScoped<DeleteReviewHandler>();
+        services.AddScoped<
+            ICommandHandler<DeleteReviewDto, DeleteReviewCommand>,
+            DeleteReviewHandler>();
 
         // handlers для пользователей
         services.AddScoped<

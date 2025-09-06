@@ -6,7 +6,7 @@ using Tea_Shop.Contract.Reviews;
 namespace Tea_Shop.Application.Products.Queries.GetProductReviews;
 
 public class GetProductReviewsHandler:
-    IQueryHandler<GetReviewDto[], GetProductReviewsQuery>
+    IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery>
 {
     private readonly IDbConnectionFactory _connectionFactory;
 
@@ -15,13 +15,13 @@ public class GetProductReviewsHandler:
         _connectionFactory = connectionFactory;
     }
 
-    public async Task<GetReviewDto[]> Handle(
+    public async Task<GetReviewResponseDto[]> Handle(
         GetProductReviewsQuery query,
         CancellationToken cancellationToken)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var reviews = await connection.QueryAsync<GetReviewDto>(
+        var reviews = await connection.QueryAsync<GetReviewResponseDto>(
             """
             SELECT 
                 r.id,

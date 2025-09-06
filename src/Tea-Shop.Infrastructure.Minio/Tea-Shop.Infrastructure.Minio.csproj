@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Tea-Shop.Application\Tea-Shop.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Minio" Version="6.0.5" />
+      <PackageReference Include="Minio.AspNetCore" Version="6.0.1" />
+    </ItemGroup>
+
 </Project>
