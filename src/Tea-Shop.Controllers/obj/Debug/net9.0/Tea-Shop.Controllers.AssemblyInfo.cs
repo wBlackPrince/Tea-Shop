@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tea-Shop.Controllers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea6de85d107ddbbc6f00783e6fc288f10275159c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94364ceb7aa975d69cf973e8dbca6aeca38b8352")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tea-Shop.Controllers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tea-Shop.Controllers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

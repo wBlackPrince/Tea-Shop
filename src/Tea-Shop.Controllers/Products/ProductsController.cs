@@ -72,14 +72,23 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("popular")]
+    [HttpGet("popular")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
             GetPopularProductsResponseDto[],
             GetPopularProductsQuery> handler,
-        [FromBody] GetPopularProductRequestDto request,
+        [FromQuery] int popularProductsCount,
+        [FromQuery] DateTime startSeasonDate,
+        [FromQuery] DateTime endSeasonDate,
         CancellationToken cancellationToken)
     {
+        var request = new GetPopularProductRequestDto()
+        {
+            PopularProductsCount = popularProductsCount,
+            StartSeasonDate = startSeasonDate,
+            EndSeasonDate = endSeasonDate,
+        };
+
         var query = new GetPopularProductsQuery(request);
 
         var result = await handler.Handle(query, cancellationToken);
