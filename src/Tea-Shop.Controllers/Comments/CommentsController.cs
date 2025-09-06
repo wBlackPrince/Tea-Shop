@@ -21,7 +21,7 @@ public class CommentsController: ControllerBase
         [FromServices]IQueryHandler<CommentDto, GetCommentByIdQuery> handler,
         CancellationToken cancellationToken)
     {
-        var query = new GetCommentByIdQuery(new GetCommentRequestDto(commentId));
+        var query = new GetCommentByIdQuery(new CommentWithOnlyIdDto(commentId));
 
         var result = await handler.Handle(query, cancellationToken);
 
@@ -34,7 +34,7 @@ public class CommentsController: ControllerBase
         [FromServices]IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery> handler,
         CancellationToken cancellationToken)
     {
-        var query = new GetCommentChildCommentsQuery(new GetCommentRequestDto(commentId));
+        var query = new GetCommentChildCommentsQuery(new CommentWithOnlyIdDto(commentId));
 
         var result = await handler.Handle(query, cancellationToken);
 
@@ -77,12 +77,14 @@ public class CommentsController: ControllerBase
     }
 
     [HttpDelete("{commentId:guid}")]
-    public async Task<IActionResult> DeleteComment(
+    public async Task<ActionResult<CommentWithOnlyIdDto>> DeleteComment(
         [FromRoute] Guid commentId,
-        [FromServices] DeleteCommentHandler handler,
+        [FromServices] ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(commentId, cancellationToken);
+        var command = new DeleteCommentCommand(new CommentWithOnlyIdDto(commentId));
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {

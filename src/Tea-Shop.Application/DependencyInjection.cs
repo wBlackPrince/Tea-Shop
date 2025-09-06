@@ -91,7 +91,7 @@ public static class DependencyInjection
 
         // handlers для комментов
         services.AddScoped<
-            IQueryHandler<CommentDto, GetCommentByIdQuery>,
+            IQueryHandler<CommentDto?, GetCommentByIdQuery>,
             GetCommentByIdHandler>();
         services.AddScoped<
             IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery>,
@@ -100,7 +100,9 @@ public static class DependencyInjection
             ICommandHandler<CreateCommentResponseDto, CreateCommentCommand>,
             CreateCommentHandler>();
         services.AddScoped<UpdateCommentHandler>();
-        services.AddScoped<DeleteCommentHandler>();
+        services.AddScoped<
+            ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand>,
+            DeleteCommentHandler>();
 
         // handlers для обзоров
         services.AddScoped<
@@ -121,7 +123,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<CreateUserResponseDto, CreateUserCommand>,
             CreateUserHandler>();
-        services.AddScoped<DeleteUserHandler>();
+        services.AddScoped<
+            ICommandHandler<UserWithOnlyIdDto, DeleteUserCommand>,
+            DeleteUserHandler>();
         services.AddScoped<UpdateUserHandler>();
         services.AddScoped<GetUserByIdHandler>();
         services.AddScoped<GetActiveUsersHandler>();

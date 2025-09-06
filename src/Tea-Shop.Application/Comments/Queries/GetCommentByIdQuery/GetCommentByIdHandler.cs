@@ -21,7 +21,7 @@ public class GetCommentByIdHandler:
         CancellationToken cancellationToken)
     {
         var comment = await _readDbContext.CommentsRead.FirstOrDefaultAsync(
-            c => c.Id == new CommentId(query.Request.CommentId),
+            c => c.Id == new CommentId(query.WithOnlyId.CommentId),
             cancellationToken);
 
         if (comment is null)

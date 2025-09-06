@@ -1,12 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 
-public class DeleteCommentHandler
+public class DeleteCommentHandler:
+    ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand>
 {
     private readonly ICommentsRepository _commentsRepository;
     private readonly IReadDbContext _readDbContext;
@@ -19,12 +22,12 @@ public class DeleteCommentHandler
         _readDbContext = readDbContext;
     }
 
-    public async Task<Result<Guid, Error>> Handle(
-        Guid commentId,
+    public async Task<Result<CommentWithOnlyIdDto, Error>> Handle(
+        DeleteCommentCommand command,
         CancellationToken cancellationToken)
     {
         var comment = await _readDbContext.CommentsRead.FirstOrDefaultAsync(
-            c => c.Id == new CommentId(commentId),
+            c => c.Id == new CommentId(command.Request.CommentId),
             cancellationToken);
 
         if (comment is null)
@@ -32,10 +35,10 @@ public class DeleteCommentHandler
             return Error.Failure("delete.comment", "Comment not found");
         }
 
-        await _commentsRepository.DeleteComment(new CommentId(commentId), cancellationToken);
+        await _commentsRepository.DeleteComment(new CommentId(command.Request.CommentId), cancellationToken);
 
         await _commentsRepository.SaveChangesAsync(cancellationToken);
 
-        return commentId;
+        return command.Request;
     }
 }

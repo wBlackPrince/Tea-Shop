@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
@@ -97,18 +96,20 @@ public class UsersController: ControllerBase
     }
 
     [HttpDelete("{userId:guid}")]
-    public async Task<IActionResult> DeleteUser(
+    public async Task<ActionResult<UserWithOnlyIdDto>> DeleteUser(
         [FromRoute] Guid userId,
-        [FromServices] DeleteUserHandler handler,
+        [FromServices] ICommandHandler<UserWithOnlyIdDto, DeleteUserCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(userId, cancellationToken);
+        var command = new DeleteUserCommand(new UserWithOnlyIdDto(userId));
+
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
             return NotFound(result.Error);
         }
 
-        return Ok(userId);
+        return Ok(result.Value);
     }
 }

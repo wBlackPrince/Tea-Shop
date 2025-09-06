@@ -40,7 +40,7 @@ public class GetCommentChildCommentsHandler:
             from comments as c1 inner join comments as c2 on c1.id = c2.parent_id
             where c1.id = @commentId
             """,
-            param: new { commentId = query.Request.CommentId });
+            param: new { commentId = query.WithOnlyId.CommentId });
 
         var response = new GetChildCommentsResponseDto(
             childComments.ToArray());

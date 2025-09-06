@@ -3,4 +3,4 @@ using Tea_Shop.Contract.Comments;
 
 namespace Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 
-public record GetCommentByIdQuery(GetCommentRequestDto Request): IQuery;
+public record GetCommentByIdQuery(CommentWithOnlyIdDto WithOnlyId): IQuery;
