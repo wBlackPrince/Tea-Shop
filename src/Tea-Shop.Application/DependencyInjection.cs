@@ -18,7 +18,7 @@ using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
-using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
+using Tea_Shop.Application.Products.Queries.GetProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
@@ -62,8 +62,8 @@ public static class DependencyInjection
             IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery>,
             GetProductIngredientsHandler>();
         services.AddScoped<
-            IQueryHandler<GetProductDto[], GetProductsByTagQuery>,
-            GetProductsByTagHandler>();
+            IQueryHandler<GetProductsResponseDto, GetProductsQuery>,
+            GetProductsHandler>();
         services.AddScoped<
             IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery>,
             GetProductReviewsHandler>();

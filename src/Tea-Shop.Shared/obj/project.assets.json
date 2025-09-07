@@ -136,13 +136,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: The HTTP request to 'GET https://api.nuget.org/v3/vulnerabilities/index.json' has timed out after 100000ms."
-    }
-  ]
+  }
 }

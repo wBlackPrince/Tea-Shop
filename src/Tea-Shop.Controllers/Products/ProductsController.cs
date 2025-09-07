@@ -8,7 +8,7 @@ using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
-using Tea_Shop.Application.Products.Queries.GetProductsByTagQuery;
+using Tea_Shop.Application.Products.Queries.GetProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
@@ -34,16 +34,16 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<GetProductDto[]>> GetProductsByTag(
-        [FromServices] IQueryHandler<GetProductDto[], GetProductsByTagQuery> handler,
-        [FromQuery] Guid tagId,
+    public async Task<ActionResult<GetProductDto[]>> GetProducts(
+        [FromServices] IQueryHandler<GetProductsResponseDto, GetProductsQuery> handler,
+        [FromQuery] GetProductsRequestDto request,
         CancellationToken cancellationToken)
     {
-        var query = new GetProductsByTagQuery(new GetProductsByTagRequestDto(tagId));
+        var query = new GetProductsQuery(request);
 
-        var productsResult = await handler.Handle(query, cancellationToken);
+        var products = await handler.Handle(query, cancellationToken);
 
-        return Ok(productsResult);
+        return Ok(products);
     }
 
     [HttpGet("{productId:guid}/ingridients")]

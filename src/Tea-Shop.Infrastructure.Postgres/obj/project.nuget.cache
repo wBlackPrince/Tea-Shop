@@ -38,15 +38,5 @@
     "C:\\Users\\maste\\.nuget\\packages\\stylecop.analyzers.unstable\\1.2.0.556\\stylecop.analyzers.unstable.1.2.0.556.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\system.diagnostics.diagnosticsource\\10.0.0-preview.7.25380.108\\system.diagnostics.diagnosticsource.10.0.0-preview.7.25380.108.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "message": "Error occurred while getting package vulnerability data: The HTTP request to 'GET https://api.nuget.org/v3/vulnerabilities/index.json' has timed out after 100000ms.",
-      "projectPath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Infrastructure.Postgres\\Tea-Shop.Infrastructure.Postgres.csproj",
-      "targetGraphs": []
-    }
-  ]
+  "logs": []
 }
