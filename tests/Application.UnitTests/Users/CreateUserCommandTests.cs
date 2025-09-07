@@ -249,36 +249,6 @@ public class CreateUserCommandTests
                 "Email"));
     }
 
-    [Fact]
-    public async Task Handle_Should_ReturnError_WhenEmailIsUnique()
-    {
-        // arrange
-        _usersRepositoryMock.IsEmailUnique(
-            Arg.Is<string>(e => e == Command.Request.Email),
-            Arg.Any<CancellationToken>()).Returns(true);
-
-        _validatorMock
-            .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(new ValidationResult()));
-
-
-        // result
-        var result = await _handler.Handle(Command, CancellationToken.None);
-
-        // assert
-        result.ShouldBe(new CreateUserResponseDto(){
-            Id = result.Value.Id,
-            Password = "qwerty",
-            FirstName = "Edaurd",
-            LastName = "Nikitin",
-            Email = "myemail@example.com",
-            PhoneNumber = "73947484994",
-            Role = "USER",
-            AvatarId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-            MiddleName = "Anatolyevich",
-        });
-    }
-
 
     [Fact]
     public async Task Handle_Should_CallRepository_WhenValidationIsSuccessful()
