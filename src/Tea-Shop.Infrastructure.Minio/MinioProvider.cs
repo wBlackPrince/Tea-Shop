@@ -2,19 +2,18 @@
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
-using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Domain;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.S3;
 
-public class MinioProvider: IFileProvider
+public class MinioProvider: Tea_Shop.Application.FilesStorage.IFileProvider
 {
     private readonly int MAX_STREAMS_LENGHT = 5;
-    private readonly MinioClient _minioClient;
+    private readonly IMinioClient _minioClient;
     private readonly ILogger<MinioProvider> _logger;
 
-    public MinioProvider(MinioClient minioClient, ILogger<MinioProvider> logger)
+    public MinioProvider(IMinioClient minioClient, ILogger<MinioProvider> logger)
     {
         _minioClient = minioClient;
         _logger = logger;
@@ -58,7 +57,8 @@ public class MinioProvider: IFileProvider
         string message = $"Файл {fileName} загружен в {bucket} бакет";
         _logger.LogInformation(message);
 
-        return Media.Create(bucket, fileName);
+        //TODO раньше возвращал Media.Create(bucket, key)
+        return Media.Create(bucket, key);
     }
 
     private async Task<Result<string, Error>> CheckIsExistsBucket(

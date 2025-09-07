@@ -5,6 +5,7 @@ using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries;
+using Tea_Shop.Contract;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 
@@ -61,12 +62,34 @@ public class UsersController: ControllerBase
     }
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(10_000_000)]
     public async Task<ActionResult<CreateUserResponseDto>> CreateUser(
-        [FromBody] CreateUserRequestDto request,
+        [FromForm] CreateUserHttpRequestDto request,
         [FromServices] ICommandHandler<CreateUserResponseDto, CreateUserCommand> handler,
         CancellationToken cancellationToken)
     {
-        var command = new CreateUserCommand(request);
+        UploadFileDto? fileDto = null;
+
+        if (request.AvatarFile is not null && request.AvatarFile.Length > 0)
+        {
+            fileDto = new UploadFileDto(
+                Stream: request.AvatarFile.OpenReadStream(),
+                FileName: request.AvatarFile.FileName,
+                ContentType: request.AvatarFile.ContentType);
+        }
+
+        var command = new CreateUserCommand(
+            new CreateUserRequestDto(
+                request.Password,
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.PhoneNumber,
+                request.Role,
+                request.AvatarId,
+                request.MiddleName,
+                fileDto));
 
         var result = await handler.Handle(command, cancellationToken);
 

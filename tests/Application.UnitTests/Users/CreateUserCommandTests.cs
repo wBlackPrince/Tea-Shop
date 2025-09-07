@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
+using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Contract.Users;
@@ -22,7 +23,8 @@ public class CreateUserCommandTests
             "73947484994",
             "USER",
             Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-            "Anatolyevich"));
+            "Anatolyevich",
+            null));
 
     private readonly CreateUserHandler _handler;
 
@@ -32,15 +34,19 @@ public class CreateUserCommandTests
 
     private readonly IValidator<CreateUserRequestDto> _validatorMock;
 
+    private readonly IFileProvider _filesProviderMock;
+
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
+        _filesProviderMock = Substitute.For<IFileProvider>();
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
             _loggerMock,
+            _filesProviderMock,
             _validatorMock);
     }
 

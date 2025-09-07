@@ -5,12 +5,17 @@ namespace Tea_Shop.Domain;
 
 public record Media
 {
+    public Guid Id { get; }
+
     public string BucketName { get; }
 
     public string FileName { get; }
 
-    private Media(string bucketName, string fileName)
+    public string Key => FileName;
+
+    private Media(Guid id, string bucketName, string fileName)
     {
+        Id = id;
         BucketName = bucketName;
         FileName = fileName;
     }
@@ -24,6 +29,6 @@ public record Media
                 "Backet's name or filename must be not empty");
         }
 
-        return new Media(bucketName, fileName);
+        return new Media(Guid.NewGuid(), bucketName, fileName);
     }
 }

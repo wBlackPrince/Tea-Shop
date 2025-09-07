@@ -1,7 +1,5 @@
 using Tea_Shop.Application.Database;
-using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Infrastructure.Postgres;
-using Tea_Shop.Infrastructure.Postgres.Seeders;
 using Tea_Shop.Infrastructure.S3;
 using Tea_Shop.Web;
 
@@ -15,8 +13,8 @@ builder.Services.AddScoped<ProductsDbContext>(_ => new ProductsDbContext(
 builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsDbContext(
     builder.Configuration.GetConnectionString("TeaShopDb")!));
 
-//builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Minio"));
-//builder.Services.AddMinioDependencies(builder.Configuration);
+builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Minio"));
+builder.Services.AddMinioDependencies(builder.Configuration);
 
 var app = builder.Build();
 
