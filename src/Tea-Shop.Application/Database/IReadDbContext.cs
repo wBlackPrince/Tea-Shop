@@ -2,6 +2,7 @@
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Application.Database;
 
@@ -14,4 +15,6 @@ public interface IReadDbContext
     IQueryable<Comment> CommentsRead { get; }
 
     IQueryable<Review> ReviewsRead { get; }
+
+    IQueryable<User> UsersRead { get; }
 }

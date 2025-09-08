@@ -1,8 +1,4 @@
-using System.Text.Json.Serialization;
-using Tea_Shop.Domain.Products;
-
 namespace Tea_Shop.Domain.Users;
-
 
 public record UserId(Guid Value);
 
@@ -95,7 +91,7 @@ public class User
     public Role Role { get; set; }
 
     /// <summary>
-    /// Gets or sets Способность пользователя пользоваться приложением
+    /// Gets or sets a value indicating whether Способность пользователя пользоваться приложением
     /// </summary>
     public bool IsActive { get; set; } = true;
 }

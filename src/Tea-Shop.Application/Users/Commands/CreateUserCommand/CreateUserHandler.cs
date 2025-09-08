@@ -56,7 +56,7 @@ public class CreateUserHandler: ICommandHandler<
         var userId = new UserId(Guid.NewGuid());
 
 
-        Guid? avatarMediaId = null;
+        Guid? avatarId = Guid.NewGuid();
         string? avatarKey = null;
 
         if (command.Request.FileDto is not null)
@@ -65,7 +65,7 @@ public class CreateUserHandler: ICommandHandler<
             var ext = Path.GetExtension(command.Request.FileDto.FileName);
 
             // путь + имя внутри бакета
-            var key = $"users/{userId.Value}/avatars/{Guid.NewGuid():N}{ext}";
+            var key = $"users/{userId.Value}/avatars/{avatarId:N}{ext}";
 
             await using var s = command.Request.FileDto.Stream;
 
@@ -85,7 +85,6 @@ public class CreateUserHandler: ICommandHandler<
             var media = upload.Value;
 
             avatarKey = media.Key;
-            avatarMediaId = media.Id;
         }
 
         User user = new User(
@@ -96,7 +95,7 @@ public class CreateUserHandler: ICommandHandler<
             command.Request.Email,
             command.Request.PhoneNumber,
             (Role)Enum.Parse(typeof(Role), command.Request.Role),
-            avatarMediaId,
+            avatarId,
             command.Request.MiddleName);
 
         await _usersRepository.CreateUser(user, cancellationToken);

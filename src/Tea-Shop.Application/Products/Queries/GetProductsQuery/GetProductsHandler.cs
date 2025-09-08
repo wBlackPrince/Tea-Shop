@@ -52,6 +52,7 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
         long totalCount = await productsQuery.LongCountAsync(cancellationToken);
 
         productsQuery = productsQuery
+            .OrderBy(p => p.CreatedAt)
             .Skip((query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize)
             .Take(query.Request.Pagination.PageSize);
 

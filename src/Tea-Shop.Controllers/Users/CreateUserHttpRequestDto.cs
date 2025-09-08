@@ -16,8 +16,6 @@ public record CreateUserHttpRequestDto
 
     public string Role { get; init; }
 
-    public Guid? AvatarId { get; init; }
-
     public string MiddleName { get; init; }
 
     public IFormFile? AvatarFile { get; init; }

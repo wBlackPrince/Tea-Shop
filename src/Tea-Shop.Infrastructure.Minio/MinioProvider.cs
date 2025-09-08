@@ -31,17 +31,17 @@ public class MinioProvider: Tea_Shop.Application.FilesStorage.IFileProvider
             bucket,
             cancellationToken);
 
-        if (isBucketExists.IsFailure && !createBucketIfNotExists)
-        {
-            string failMessage = "Bucket с именем {bucketName} не найден";
-            _logger.LogError(failMessage);
-            return Error.Failure("upload.file", failMessage);
-        }
-        else
+        if (isBucketExists.IsFailure && createBucketIfNotExists)
         {
             var makeBucketArgs = new MakeBucketArgs()
                 .WithBucket(bucket);
             await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
+        }
+        else if (isBucketExists.IsFailure)
+        {
+            string failMessage = "Bucket с именем {bucketName} не найден";
+            _logger.LogError(failMessage);
+            return Error.Failure("upload.file", failMessage);
         }
 
         PutObjectArgs minioFileArgs = new PutObjectArgs()

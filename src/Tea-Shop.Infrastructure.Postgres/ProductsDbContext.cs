@@ -50,4 +50,6 @@ public class ProductsDbContext: DbContext, IReadDbContext
     public IQueryable<Comment> CommentsRead => Set<Comment>().AsNoTracking();
 
     public IQueryable<Review> ReviewsRead => Set<Review>().AsNoTracking();
+
+    public IQueryable<User> UsersRead => Set<User>().AsNoTracking();
 }

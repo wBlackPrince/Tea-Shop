@@ -7,6 +7,5 @@ public record CreateUserRequestDto(
     string Email,
     string PhoneNumber,
     string Role,
-    Guid? AvatarId,
     string MiddleName,
     UploadFileDto? FileDto);

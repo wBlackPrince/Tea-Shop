@@ -22,7 +22,6 @@ public class CreateUserCommandTests
             "myemail@example.com",
             "73947484994",
             "USER",
-            Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
             "Anatolyevich",
             null));
 

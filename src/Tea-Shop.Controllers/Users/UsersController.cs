@@ -5,6 +5,8 @@ using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries;
+using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
+using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
@@ -16,49 +18,31 @@ namespace Tea_Shop.Users;
 public class UsersController: ControllerBase
 {
     [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUserById(
+    public async Task<ActionResult<GetUserResponseDto>> GetUserById(
         [FromRoute] Guid userId,
-        [FromServices] GetUserByIdHandler handler,
+        [FromServices] IQueryHandler<GetUserResponseDto, GetUserByIdQuery> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(userId, cancellationToken);
+        var query = new GetUserByIdQuery(new UserWithOnlyIdDto(userId));
 
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
+        var user = await handler.Handle(
+            query,
+            cancellationToken);
 
-        return Ok(result.Value);
+        return Ok(user);
     }
 
-    [HttpGet("active")]
-    public async Task<IActionResult> GetActiveUsers(
-        [FromServices] GetActiveUsersHandler handler,
+    [HttpGet("users")]
+    public async Task<IActionResult> GetUsers(
+        [FromQuery] GetUsersRequestDto request,
+        [FromServices] IQueryHandler<GetUsersResponseDto, GetUsersQuery> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(cancellationToken);
+        var query = new GetUsersQuery(request);
 
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
+        var users = await handler.Handle(query, cancellationToken);
 
-        return Ok(result.Value);
-    }
-
-    [HttpGet("banned")]
-    public async Task<IActionResult> GetBannedUsers(
-        [FromServices] GetBannedUsersHandler handler,
-        CancellationToken cancellationToken)
-    {
-        var result = await handler.Handle(cancellationToken);
-
-        if (result.IsFailure)
-        {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+        return Ok(users);
     }
 
     [HttpPost]
@@ -87,7 +71,6 @@ public class UsersController: ControllerBase
                 request.Email,
                 request.PhoneNumber,
                 request.Role,
-                request.AvatarId,
                 request.MiddleName,
                 fileDto));
 

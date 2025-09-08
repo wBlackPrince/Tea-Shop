@@ -30,6 +30,8 @@ using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries;
+using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
+using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Products;
@@ -126,10 +128,13 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<UserWithOnlyIdDto, DeleteUserCommand>,
             DeleteUserHandler>();
+        services.AddScoped<
+            IQueryHandler<GetUsersResponseDto, GetUsersQuery>,
+            GetUsersHandler>();
+        services.AddScoped<
+            IQueryHandler<GetUserResponseDto?, GetUserByIdQuery>,
+            GetUserByIdHandler>();
         services.AddScoped<UpdateUserHandler>();
-        services.AddScoped<GetUserByIdHandler>();
-        services.AddScoped<GetActiveUsersHandler>();
-        services.AddScoped<GetBannedUsersHandler>();
 
         return services;
     }
