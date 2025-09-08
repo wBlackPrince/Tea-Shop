@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250901104928_Initial")]
+    [Migration("20250908170554_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

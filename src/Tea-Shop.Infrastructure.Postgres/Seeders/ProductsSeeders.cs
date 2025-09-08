@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Domain.Users;
@@ -15,14 +15,15 @@ public class ProductsSeeders: ISeeder
     private readonly Random _random = new();
 
     // Константы для количества данных
-    private const int USERS_COUNT = 10000;
-    private const int PRODUCTS_COUNT = 30;
+    private const int USERS_COUNT = 50000;
+    private const int PRODUCTS_COUNT = 100;
     private const int TAGS_COUNT = 20;
-    private const int ORDERS_COUNT = 70000;
+    private const int ORDERS_COUNT = 120000;
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
     private static Season[] seasons = { Season.SPRING , Season.SUMMER, Season.AUTUMN, Season.WINTER };
     private static string[] _roles = { "USER", "ADMINISTRATOR", "DEVELOPER" };
+
     private static string[] ingredientsNames =
     {
         // Чайные основы
@@ -93,7 +94,7 @@ public class ProductsSeeders: ISeeder
         "Roasted rice",
         "Honey granules",
         "Cocoa nibs",
-        "Tea oil"
+        "Tea oil",
     };
 
     private static string[] ingredientDescriptions =
@@ -166,7 +167,7 @@ public class ProductsSeeders: ISeeder
         "Обжаренный рис с ореховым вкусом.",
         "Медовые гранулы с натуральной сладостью.",
         "Какао-крошка с шоколадным вкусом.",
-        "Масло чая для усиления аромата."
+        "Масло чая для усиления аромата.",
     };
 
     private static readonly string[] preparationDescriptions =
@@ -175,7 +176,7 @@ public class ProductsSeeders: ISeeder
         "Залить кипятком 90–95°C, настоять 3 минуты.",
         "Заваривать 4 минуты при 95°C.",
         "Кипятить с молоком и специями 5 минут.",
-        "Медленно заваривать в гайвани, 7 проливов по 20 секунд."
+        "Медленно заваривать в гайвани, 7 проливов по 20 секунд.",
     };
 
     private static readonly string[] productTitles =
@@ -209,7 +210,7 @@ public class ProductsSeeders: ISeeder
         "Lychee Black",
         "Blueberry Oolong",
         "Jasmine Pearls",
-        "Coconut Black"
+        "Coconut Black",
     };
 
     private static readonly string[] productDescriptions =
@@ -243,7 +244,7 @@ public class ProductsSeeders: ISeeder
         "Чёрный чай с ароматом личи.",
         "Улун с черникой.",
         "Жасминовый зелёный чай в форме жемчужин.",
-        "Чёрный чай с кокосом."
+        "Чёрный чай с кокосом.",
     };
 
     private static readonly float[] productPrices =
@@ -253,7 +254,7 @@ public class ProductsSeeders: ISeeder
         8.5f, 9.0f, 7.5f, 10.5f, 8.0f,
         8.5f, 6.5f, 7.0f, 6.8f, 5.9f,
         5.5f, 5.7f, 6.3f, 6.6f, 6.9f,
-        7.2f, 7.4f, 8.1f, 9.0f, 6.8f
+        7.2f, 7.4f, 8.1f, 9.0f, 6.8f,
     };
 
     private static readonly float[] productAmounts =
@@ -263,7 +264,7 @@ public class ProductsSeeders: ISeeder
         45, 40, 50, 35, 70,
         65, 75, 50, 60, 55,
         80, 70, 65, 55, 60,
-        75, 50, 45, 40, 55
+        75, 50, 45, 40, 55,
     };
 
     private static float[] ingredientAmounts =
@@ -336,9 +337,59 @@ public class ProductsSeeders: ISeeder
         1.0f, // Roasted rice
         0.5f, // Honey granules
         0.6f, // Cocoa nibs
-        0.2f  // Tea oil
+        0.2f,  // Tea oil
     };
 
+    private static readonly string[] deliveryAddresses =
+    {
+        "123 Main St, Springfield",
+        "45 Baker St, London",
+        "78 Elm Ave, New York",
+        "221B Baker St, London",
+        "10 Downing St, London",
+        "742 Evergreen Terrace, Springfield",
+        "1600 Pennsylvania Ave NW, Washington",
+        "4 Privet Drive, Little Whinging",
+        "99 Wall St, New York",
+        "500 Fifth Ave, New York",
+        "350 Fifth Ave, New York",
+        "1 Infinite Loop, Cupertino",
+        "1600 Amphitheatre Parkway, Mountain View",
+        "11 Wall St, New York",
+        "55 Rue du Faubourg Saint-Honoré, Paris",
+        "5th Avenue, Manhattan, New York",
+        "Kremlin, Moscow",
+        "Red Square 1, Moscow",
+        "Unter den Linden 77, Berlin",
+        "Friedrichstrasse 43, Berlin",
+        "Karl Johans gate 15, Oslo",
+        "Rosenborggata 23, Oslo",
+        "Nyhavn 20, Copenhagen",
+        "Amalienborg Slotsplads 5, Copenhagen",
+        "Piazza San Marco 1, Venice",
+        "Via Condotti 10, Rome",
+        "Gran Via 28, Madrid",
+        "Passeig de Gracia 12, Barcelona",
+        "Shibuya Crossing, Tokyo",
+        "1 Chome-1-2 Oshiage, Tokyo",
+    };
+
+    private static readonly PaymentWay[] PaymentWays =
+    {
+        PaymentWay.CashOnDelivery,
+        PaymentWay.CardOnline,
+        PaymentWay.CardOnDelivery,
+        PaymentWay.BankTransfer,
+    };
+
+    private static readonly OrderStatus[] OrderStatuses =
+    {
+        OrderStatus.Pending,
+        OrderStatus.Processing,
+        OrderStatus.Shipped,
+        OrderStatus.Delivered,
+        OrderStatus.Canceled,
+    };
 
     public ProductsSeeders(
         ProductsDbContext dbContext,
@@ -350,9 +401,10 @@ public class ProductsSeeders: ISeeder
 
     public async Task SeedAsync()
     {
-        await SeedUsersBatched();
-        await SeedTagsBatched();
-        await SeedProductsBatched();
+        // await SeedUsersBatched();
+        // await SeedTagsBatched();
+        // await SeedProductsBatched();
+        await SeedOrdersBatched();
     }
 
     private async Task SeedOrdersBatched()
@@ -361,10 +413,77 @@ public class ProductsSeeders: ISeeder
         _logger.LogInformation("Seeding orders in batching...");
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
 
-        // for (int i = 0; i < ORDERS_COUNT; i++)
-        // {
-        //     var user = _dbContext.Users.Select().
-        // }
+        var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
+        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+
+        int orderCount;
+        int quantity;
+        Guid userId;
+        Guid productId;
+        string deliveryAddress;
+        PaymentWay paymentWay;
+        OrderStatus orderStatus;
+        DateTime createdAt;
+        DateTime updatedAt;
+        DateTime expectedTimeDelivery;
+        DateTime startDate = new DateTime(2023, 1, 1);
+        DateTime endDate = new DateTime(2025, 9, 8);
+        OrderItem[] orderItems;
+        Order order;
+
+        const int batchSize = 1000;
+        List<Order> orders = [];
+
+        for (int i = 0; i < ORDERS_COUNT; i++)
+        {
+            orderCount = _random.Next(1, 10);
+            userId = usersIds[_random.Next(0, usersIds.Length)];
+            deliveryAddress = deliveryAddresses[_random.Next(0, deliveryAddresses.Length)];
+            paymentWay = PaymentWays[_random.Next(0, PaymentWays.Length)];
+            orderStatus = OrderStatuses[_random.Next(0, OrderStatuses.Length)];
+            createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
+            updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
+            expectedTimeDelivery = updatedAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
+            orderItems = new OrderItem[orderCount];
+
+            for (int j = 0; j < orderCount; j++)
+            {
+                productId = productIds[_random.Next(0, productIds.Length)];
+                quantity = _random.Next(1, 10);
+
+                orderItems[j] = OrderItem.Create(
+                    new OrderItemId(Guid.NewGuid()),
+                    new ProductId(productId),
+                    quantity).Value;
+            }
+
+            order = new Order(
+                new OrderId(Guid.NewGuid()),
+                new UserId(userId),
+                deliveryAddress,
+                paymentWay,
+                expectedTimeDelivery,
+                orderStatus,
+                orderItems,
+                createdAt,
+                updatedAt);
+
+            orders.Add(order);
+
+            if (i % batchSize == 0)
+            {
+                _logger.LogInformation($"Saved {i} orders...");
+                _dbContext.Orders.AddRange(orders);
+                await _dbContext.SaveChangesAsync();
+                orders.Clear();
+            }
+        }
+
+        if (orders.Any())
+        {
+            _dbContext.Orders.AddRange(orders);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
     private async Task SeedTagsBatched()
@@ -468,7 +587,7 @@ public class ProductsSeeders: ISeeder
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var products = new List<Product>();
-        for (var i = 0; i < USERS_COUNT; i++)
+        for (var i = 0; i < PRODUCTS_COUNT; i++)
         {
             var title = productTitles[_random.Next(productTitles.Length)];
             var description = productDescriptions[_random.Next(productDescriptions.Length)];
@@ -482,7 +601,7 @@ public class ProductsSeeders: ISeeder
             {
                 ingrendients[j] = new Ingrendient(
                     ingredientAmounts[_random.Next(ingredientAmounts.Length)],
-                    ingredientsNames[_random.Next(ingrendients.Length)],
+                    ingredientsNames[_random.Next(ingredientsNames.Length)],
                     ingredientDescriptions[_random.Next(ingredientDescriptions.Length)],
                     _random.Next(2) == 0
                 );
@@ -525,7 +644,6 @@ public class ProductsSeeders: ISeeder
 
             _dbContext.Set<Product>().AddRange(products);
             await _dbContext.SaveChangesAsync();
-            _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             products.Clear();
         }
 
@@ -616,5 +734,14 @@ public class ProductsSeeders: ISeeder
             digits[i] = (char)('0' + RandomNumberGenerator.GetInt32(10));
 
         return $"+7{new string(digits)}";
+    }
+
+    DateTime GetRandomDate(DateTime start, DateTime end)
+    {
+        var range = (end - start).Days;
+        return start.AddDays(_random.Next(range))
+            .AddHours(_random.Next(0, 24))
+            .AddMinutes(_random.Next(0, 60))
+            .AddSeconds(_random.Next(0, 60));
     }
 }

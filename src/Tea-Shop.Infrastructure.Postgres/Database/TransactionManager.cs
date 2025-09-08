@@ -1,4 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Database;
@@ -22,11 +24,15 @@ public class TransactionManager : ITransactionManager
         _loggerFactory = loggerFactory;
     }
 
-    public async Task<Result<ITransactionScope, Error>> BeginTransactionAsync(CancellationToken cancellationToken)
+    public async Task<Result<ITransactionScope, Error>> BeginTransactionAsync(
+        IsolationLevel? isolationLevel,
+        CancellationToken cancellationToken)
     {
         try
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+            var transaction = await _dbContext.Database.BeginTransactionAsync(
+                isolationLevel ?? IsolationLevel.ReadCommitted,
+                cancellationToken);
 
             var logger = _loggerFactory.CreateLogger<TransactionScope>();
 

@@ -1,5 +1,6 @@
 using Tea_Shop.Application.Database;
 using Tea_Shop.Infrastructure.Postgres;
+using Tea_Shop.Infrastructure.Postgres.Seeders;
 using Tea_Shop.Infrastructure.S3;
 using Tea_Shop.Web;
 

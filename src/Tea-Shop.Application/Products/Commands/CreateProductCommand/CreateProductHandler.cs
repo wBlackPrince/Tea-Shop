@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
@@ -43,7 +44,9 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
         }
 
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(cancellationToken);
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
