@@ -2,6 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
@@ -13,15 +14,18 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
     private readonly IProductsRepository _productsRepository;
     private readonly ILogger<CreateProductHandler> _logger;
     private readonly IValidator<CreateProductRequestDto> _validator;
+    private readonly ITransactionManager _transactionManager;
 
     public CreateProductHandler(
         IProductsRepository productsRepository,
         ILogger<CreateProductHandler> logger,
-        IValidator<CreateProductRequestDto> validator)
+        IValidator<CreateProductRequestDto> validator,
+        ITransactionManager transactionManager)
     {
         _productsRepository = productsRepository;
         _validator = validator;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<CreateProductResponseDto, Error>> Handle(
@@ -37,6 +41,17 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
                 "validation errors",
                 validationResult.Errors.First().PropertyName);
         }
+
+
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
 
         ProductId productId = new ProductId(Guid.NewGuid());
 
@@ -61,9 +76,25 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
             command.Request.PreparationTime,
             command.Request.PhotosIds);
 
-        await _productsRepository.CreateProduct(product, cancellationToken);
 
-        await _productsRepository.SaveChangesAsync(cancellationToken);
+        var createResult = await _productsRepository.CreateProduct(product, cancellationToken);
+
+        if (createResult.IsFailure)
+        {
+            transactionScope.Rollback();
+            return createResult.Error;
+        }
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
 
         _logger.LogInformation("Create product {productId}", productId);
 

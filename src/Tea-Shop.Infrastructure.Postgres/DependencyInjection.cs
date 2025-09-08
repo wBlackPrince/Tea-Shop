@@ -30,6 +30,8 @@ public static class DependencyInjection
 
         services.AddSingleton<IDbConnectionFactory, NpgSqlConnectionFactory>();
 
+        services.AddScoped<ITransactionManager, TransactionManager>();
+
         return services;
     }
 }

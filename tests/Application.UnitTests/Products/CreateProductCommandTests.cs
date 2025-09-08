@@ -3,6 +3,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Contract.Products;
@@ -39,16 +40,20 @@ public class CreateProductCommandTests
 
     private readonly IValidator<CreateProductRequestDto> _validatorMock;
 
+    private readonly ITransactionManager _transactionManagerMock;
+
     public CreateProductCommandTests()
     {
         _productRepositoryMock = Substitute.For<IProductsRepository>();
         _loggerMock = Substitute.For<ILogger<CreateProductHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateProductRequestDto>>();
+        _transactionManagerMock = Substitute.For<ITransactionManager>();
 
         _handler = new CreateProductHandler(
             _productRepositoryMock,
             _loggerMock,
-            _validatorMock);
+            _validatorMock,
+            _transactionManagerMock);
     }
 
     [Fact]

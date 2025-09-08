@@ -40,6 +40,8 @@ public class CreateUserHandler: ICommandHandler<
 
         if (!validationResult.IsValid)
         {
+            _logger.LogError(validationResult.Errors.ToString());
+
             return Error.Validation(
                 "create.user",
                 "validation failed",
@@ -50,6 +52,7 @@ public class CreateUserHandler: ICommandHandler<
 
         if (!isEmailUnique)
         {
+            _logger.LogError($"email {command.Request.Email} already exists");
             return Error.Failure("create.user", "email is already taken");
         }
 
@@ -79,6 +82,7 @@ public class CreateUserHandler: ICommandHandler<
 
             if (upload.IsFailure)
             {
+                _logger.LogError($"avatar upload failed: {upload.Error.Message}");
                 return Error.Failure("create.user", $"avatar upload failed: {upload.Error.Message}");
             }
 

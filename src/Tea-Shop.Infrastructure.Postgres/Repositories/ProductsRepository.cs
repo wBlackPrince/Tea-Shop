@@ -1,9 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Products;
-using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
@@ -26,11 +24,18 @@ public class ProductsRepository: IProductsRepository
         return product;
     }
 
-    public async Task<Guid> CreateProduct(Product product, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> CreateProduct(Product product, CancellationToken cancellationToken)
     {
-        await _dbContext.Products.AddAsync(product, cancellationToken);
+        try
+        {
+            await _dbContext.Products.AddAsync(product, cancellationToken);
 
-        return product.Id.Value;
+            return product.Id.Value;
+        }
+        catch (Exception e)
+        {
+            return Error.Failure("create.product", "failed to create product");
+        }
     }
 
     public async Task<Result<Guid, Error>> DeleteProduct(
