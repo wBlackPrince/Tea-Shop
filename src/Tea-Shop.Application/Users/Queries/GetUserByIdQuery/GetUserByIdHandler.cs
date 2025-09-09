@@ -1,10 +1,9 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
-using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 
@@ -12,22 +11,29 @@ public class GetUserByIdHandler:
     IQueryHandler<GetUserResponseDto?, GetUserByIdQuery>
 {
     private readonly IReadDbContext _readDbContext;
+    private readonly ILogger<GetUserByIdHandler> _logger;
 
-    public GetUserByIdHandler(IReadDbContext readDbContext)
+    public GetUserByIdHandler(
+        IReadDbContext readDbContext,
+        ILogger<GetUserByIdHandler> logger)
     {
         _readDbContext = readDbContext;
+        _logger = logger;
     }
 
     public async Task<GetUserResponseDto?> Handle(
         GetUserByIdQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetUserByIdHandler));
+
         User? user = await _readDbContext.UsersRead.FirstOrDefaultAsync(
             u => u.Id == new UserId(query.Request.UserId),
             cancellationToken);
 
         if (user is null)
         {
+            _logger.LogWarning("User with {userId} not found", query.Request.UserId);
             return null;
         }
 
@@ -38,6 +44,8 @@ public class GetUserByIdHandler:
             user.Role.ToString(),
             user.AvatarId,
             user.MiddleName);
+
+        _logger.LogDebug("Get user with id {userId}.", query.Request.UserId);
 
         return response;
     }

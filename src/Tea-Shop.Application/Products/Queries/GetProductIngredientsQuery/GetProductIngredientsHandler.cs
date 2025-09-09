@@ -26,6 +26,8 @@ public class GetProductIngredientsHandler: IQueryHandler<
         GetProductsIngredientsQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetProductIngredientsHandler));
+
         var product = await _readDbContext.ProductsRead
             .FirstOrDefaultAsync(
                 p => p.Id == new ProductId(query.Request.ProductId),
@@ -33,6 +35,9 @@ public class GetProductIngredientsHandler: IQueryHandler<
 
         if (product is null)
         {
+            _logger.LogWarning(
+                "Product with id {productId} not found",
+                query.Request.ProductId);
             return [];
         }
 
@@ -45,6 +50,10 @@ public class GetProductIngredientsHandler: IQueryHandler<
                 i.Description,
                 i.IsAllergen))
             .ToArray();
+
+        _logger.LogDebug(
+            "Get product with id {productId}.",
+            query.Request.ProductId);
 
         return ingredientsResponse;
     }

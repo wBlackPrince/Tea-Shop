@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Comments;
@@ -10,22 +11,29 @@ public class GetCommentByIdHandler:
     IQueryHandler<CommentDto?, GetCommentByIdQuery>
 {
     private readonly IReadDbContext _readDbContext;
+    private readonly ILogger<GetCommentByIdHandler> _logger;
 
-    public GetCommentByIdHandler(IReadDbContext readDbContext)
+    public GetCommentByIdHandler(
+        IReadDbContext readDbContext,
+        ILogger<GetCommentByIdHandler> logger)
     {
         _readDbContext = readDbContext;
+        _logger = logger;
     }
 
     public async Task<CommentDto?> Handle(
         GetCommentByIdQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetCommentByIdHandler));
+
         var comment = await _readDbContext.CommentsRead.FirstOrDefaultAsync(
             c => c.Id == new CommentId(query.WithOnlyId.CommentId),
             cancellationToken);
 
         if (comment is null)
         {
+            _logger.LogWarning("Comment with id {commentId} not found", query.WithOnlyId.CommentId);
             return null;
         }
 
@@ -37,8 +45,9 @@ public class GetCommentByIdHandler:
             comment.ReviewId.Value,
             comment.ParentId?.Value,
             comment.CreatedAt,
-            comment.UpdatedAt
-        );
+            comment.UpdatedAt);
+
+        _logger.LogDebug("Get comment with id {commentId}.", query.WithOnlyId.CommentId);
 
         return response;
     }

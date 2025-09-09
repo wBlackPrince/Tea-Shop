@@ -24,6 +24,8 @@ public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductById
         GetProductByIdQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetProductByIdHandler));
+
         Product? product = await _readDbContext.ProductsRead
             .Include(p => p.TagsIds)
             .FirstOrDefaultAsync(
@@ -32,6 +34,7 @@ public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductById
 
         if (product is null)
         {
+            _logger.LogWarning("Product with id {productId} not found", query.Request.ProductId);
             return null;
         }
 
@@ -62,7 +65,7 @@ public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductById
             tagsIds,
             product.PhotosIds);
 
-        _logger.LogInformation("Get product {productId}", query.Request.ProductId);
+        _logger.LogDebug("Get product {productId}", query.Request.ProductId);
 
         return productGetDto;
     }

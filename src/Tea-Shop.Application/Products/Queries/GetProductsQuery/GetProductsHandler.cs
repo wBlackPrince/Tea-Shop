@@ -25,12 +25,16 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
         GetProductsQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetProductsHandler));
+
         var productsQuery = _readDbContext.ProductsRead;
 
         if (!string.IsNullOrEmpty(query.Request.Search))
+        {
             productsQuery = productsQuery.Where(p => EF.Functions.Like(
-                p.Title.ToLower(), 
+                p.Title.ToLower(),
                 $"%{query.Request.Search.ToLower()}%"));
+        }
 
         if (query.Request.TagId is not null)
             productsQuery = productsQuery.Where(p => p.TagsIds.Any(ti => ti.TagId == new TagId(query.Request.TagId.Value)));
@@ -71,9 +75,15 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
                 TagsIds = p.TagsIds.Select(ti => ti.TagId.Value).ToArray(),
                 PhotosIds = p.PhotosIds,
             })
-            .ToArrayAsync();
+            .ToArrayAsync(cancellationToken);
 
-        _logger.LogInformation($"Get products by tag: {query.Request.TagId}");
+        if (products.Length == 0)
+        {
+            _logger.LogWarning("Products not found");
+        }
+
+
+        _logger.LogDebug($"Get products");
 
         return new GetProductsResponseDto(products, totalCount);
     }

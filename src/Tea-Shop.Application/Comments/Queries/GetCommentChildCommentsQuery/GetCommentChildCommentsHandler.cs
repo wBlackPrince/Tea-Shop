@@ -24,9 +24,11 @@ public class GetCommentChildCommentsHandler:
         GetCommentChildCommentsQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetCommentChildCommentsHandler));
+
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var childComments = await connection.QueryAsync<CommentDto>(
+        var childComments = (await connection.QueryAsync<CommentDto>(
             """
             select
                 c2.id,
@@ -40,10 +42,21 @@ public class GetCommentChildCommentsHandler:
             from comments as c1 inner join comments as c2 on c1.id = c2.parent_id
             where c1.id = @commentId
             """,
-            param: new { commentId = query.WithOnlyId.CommentId });
+            param: new { commentId = query.WithOnlyId.CommentId })).ToArray();
+
+        if (childComments.Length == 0)
+        {
+            _logger.LogWarning(
+                "Children comments from comment with id {commentId} not found.",
+                query.WithOnlyId.CommentId);
+        }
 
         var response = new GetChildCommentsResponseDto(
             childComments.ToArray());
+
+        _logger.LogDebug(
+            "Get children comments from comment with id {commentId}.",
+            query.WithOnlyId.CommentId);
 
         return response;
     }

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Orders;
@@ -9,21 +10,27 @@ public class GetOrderByIdHandler: IQueryHandler<
     GetOrderResponseDto?, GetOrderByIdQuery>
 {
     private readonly IDbConnectionFactory _connectionFactory;
+    private readonly ILogger<GetOrderByIdHandler> _logger;
 
-    public GetOrderByIdHandler(IDbConnectionFactory connectionFactory)
+    public GetOrderByIdHandler(
+        IDbConnectionFactory connectionFactory,
+        ILogger<GetOrderByIdHandler> logger)
     {
         _connectionFactory = connectionFactory;
+        _logger = logger;
     }
 
     public async Task<GetOrderResponseDto?> Handle(
         GetOrderByIdQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetOrderByIdHandler));
+
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetOrderResponseDto? orderDto = null;
 
-        var order = await connection.QueryAsync<GetOrderResponseDto, OrderItemDto, GetOrderResponseDto>(
+        await connection.QueryAsync<GetOrderResponseDto, OrderItemDto, GetOrderResponseDto>(
             """
             select
                 o.id,
@@ -56,6 +63,13 @@ public class GetOrderByIdHandler: IQueryHandler<
 
                 return orderDto;
             });
+
+        if (orderDto is null)
+        {
+            _logger.LogWarning("Order not found");
+        }
+
+        _logger.LogDebug("Order with id {orderId} found.", query.Request.OrderId);
 
         return orderDto;
     }

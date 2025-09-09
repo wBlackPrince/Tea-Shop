@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Users;
@@ -10,16 +11,22 @@ public class GetUsersHandler:
     IQueryHandler<GetUsersResponseDto, GetUsersQuery>
 {
     private readonly IReadDbContext _readDbContext;
+    private readonly ILogger<GetUsersHandler> _logger;
 
-    public GetUsersHandler(IReadDbContext readDbContext)
+    public GetUsersHandler(
+        IReadDbContext readDbContext,
+        ILogger<GetUsersHandler> logger)
     {
         _readDbContext = readDbContext;
+        _logger = logger;
     }
 
     public async Task<GetUsersResponseDto> Handle(
         GetUsersQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetUsersHandler));
+
         var usersQuery = _readDbContext.UsersRead;
 
         if (!string.IsNullOrWhiteSpace(query.Request.SearchFirstName))
@@ -73,6 +80,13 @@ public class GetUsersHandler:
                 u.AvatarId,
                 u.MiddleName))
             .ToArrayAsync(cancellationToken);
+
+        if (users.Length == 0)
+        {
+            _logger.LogWarning("Users with these filters not found.");
+        }
+
+        _logger.LogDebug("Users with these filters found.");
 
         return new GetUsersResponseDto(users, totalCount);
     }

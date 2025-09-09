@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
@@ -10,20 +11,26 @@ public class GetPopularProductsHandler: IQueryHandler<
     GetPopularProductsQuery>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
+    private readonly ILogger<GetPopularProductsHandler> _logger;
 
-    public GetPopularProductsHandler(IDbConnectionFactory dbConnectionFactory)
+    public GetPopularProductsHandler(
+        IDbConnectionFactory dbConnectionFactory,
+        ILogger<GetPopularProductsHandler> logger)
     {
         _dbConnectionFactory = dbConnectionFactory;
+        _logger = logger;
     }
 
     public async Task<GetPopularProductsResponseDto[]> Handle(
         GetPopularProductsQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetPopularProductsHandler));
+
         using var connection = await _dbConnectionFactory.CreateConnectionAsync(
             cancellationToken: cancellationToken);
 
-        var popularProducts = await connection.QueryAsync<GetPopularProductsResponseDto>(
+        var popularProducts = (await connection.QueryAsync<GetPopularProductsResponseDto>(
             """
             select
                 p.id as product_id,
@@ -43,8 +50,15 @@ public class GetPopularProductsHandler: IQueryHandler<
                 popularProductsCount = query.Request.PopularProductsCount,
                 startSeasonDate = query.Request.StartSeasonDate,
                 EndSeasonDate = query.Request.EndSeasonDate,
-            });
+            })).ToArray();
 
-        return popularProducts.ToArray();
+        if (popularProducts.Length == 0)
+        {
+            _logger.LogWarning("Popular products not found.");
+        }
+
+        _logger.LogDebug("Get popular products.");
+
+        return popularProducts;
     }
 }

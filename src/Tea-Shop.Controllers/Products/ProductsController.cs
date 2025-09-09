@@ -9,7 +9,6 @@ using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsQuery;
-using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
@@ -90,24 +89,6 @@ public class ProductsController : ControllerBase
         };
 
         var query = new GetPopularProductsQuery(request);
-
-        var result = await handler.Handle(query, cancellationToken);
-
-        return Ok(result);
-    }
-
-    [HttpGet("seasonal")]
-    public async Task<ActionResult<GetReviewResponseDto[]>> GetSeasonalProducts(
-        [FromServices] IQueryHandler<
-            GetSimpleProductResponseDto[],
-            GetSeasonalProductsQuery> handler,
-        [FromQuery] string season,
-        [FromQuery] int productsLimit,
-        CancellationToken cancellationToken)
-    {
-        var request = new GetSeasonalProductsRequestDto(season, productsLimit);
-
-        var query = new GetSeasonalProductsQuery(request);
 
         var result = await handler.Handle(query, cancellationToken);
 

@@ -19,7 +19,6 @@ using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsQuery;
-using Tea_Shop.Application.Products.Queries.GetSeasonalProductsQuery;
 using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
 using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
@@ -29,7 +28,6 @@ using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
-using Tea_Shop.Application.Users.Queries;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract.Comments;
@@ -72,9 +70,6 @@ public static class DependencyInjection
         services.AddScoped<
             IQueryHandler<GetPopularProductsResponseDto[], GetPopularProductsQuery>,
             GetPopularProductsHandler>();
-        services.AddScoped<
-            IQueryHandler<GetSimpleProductResponseDto[], GetSeasonalProductsQuery>,
-            GetSeasonalProductsHandler>();
 
         // handlers для заказов
         services.AddScoped<

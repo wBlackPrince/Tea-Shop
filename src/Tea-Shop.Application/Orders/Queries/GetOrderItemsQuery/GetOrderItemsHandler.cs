@@ -24,9 +24,11 @@ public class GetOrderItemsHandler: IQueryHandler<
         GetOrderItemQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetOrderItemsHandler));
+
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var orderItems = await connection.QueryAsync<OrderItemDto>(
+        var orderItems = (await connection.QueryAsync<OrderItemDto>(
             """
             select
                 oi.product_id,
@@ -37,8 +39,15 @@ public class GetOrderItemsHandler: IQueryHandler<
             param: new
             {
                 orderId = query.Request.OrderId,
-            });
+            })).ToArray();
 
-        return orderItems.ToArray();
+        if (orderItems.Length == 0)
+        {
+            _logger.LogWarning("Items from order with id {orderId} not found", query.Request.OrderId);
+        }
+
+        _logger.LogDebug("Items from order with id {orderId} found", query.Request.OrderId);
+
+        return orderItems;
     }
 }
