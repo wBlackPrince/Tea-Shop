@@ -25,9 +25,11 @@ public class GetReviewCommentsHandler:
         GetReviewCommentsQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(GetReviewCommentsHandler));
+
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var reviewComments = await connection.QueryAsync<CommentDto>(
+        var reviewComments = (await connection.QueryAsync<CommentDto>(
             """
             select
                 id,
@@ -41,16 +43,23 @@ public class GetReviewCommentsHandler:
             from comments
             where review_id = @reviewId
             """,
-            param: new
-            {
-                reviewId = query.Request.ReviewId
-            });
+            param: new { reviewId = query.Request.ReviewId }))
+            .ToList();
+
+        if (reviewComments.Count == 0)
+        {
+            _logger.LogWarning(
+                "Comments from review with id {reviewId} not found",
+                query.Request.ReviewId);
+        }
 
         var response = new GetReviewCommentsResponseDto()
         {
             ReviewId = query.Request.ReviewId,
-            Comments = reviewComments.ToList(),
+            Comments = reviewComments,
         };
+
+        _logger.LogDebug("Get comments from review with id {reviewId}", query.Request.ReviewId);
 
         return response;
     }
