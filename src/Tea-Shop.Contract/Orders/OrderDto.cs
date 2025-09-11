@@ -2,7 +2,7 @@
 
 public record OrderDto
 {
-    public Guid Id { get; init; }
+    public Guid OrderId { get; init; }
 
     public string DeliveryAddress { get; init; } = string.Empty;
 

@@ -49,7 +49,7 @@ public class ReviewsController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateReview(
         [FromBody] CreateReviewRequestDto request,
-        [FromServices] CreateReviewHandler handler,
+        [FromServices] ICommandHandler<CreateReviewResponseDto, CreateReviewCommand> handler,
         CancellationToken cancellationToken)
     {
         await handler.Handle(

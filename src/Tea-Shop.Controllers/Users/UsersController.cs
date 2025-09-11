@@ -4,10 +4,12 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
-using Tea_Shop.Application.Users.Queries;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
+using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
+using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract;
+using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 
@@ -43,6 +45,32 @@ public class UsersController: ControllerBase
         var users = await handler.Handle(query, cancellationToken);
 
         return Ok(users);
+    }
+
+    [HttpGet("orders")]
+    public async Task<ActionResult<GetUserOrdersResponseDto?>> GetUserOrders(
+        [FromQuery] GetUserOrdersRequestDto request,
+        [FromServices] IQueryHandler<GetUserOrdersResponseDto?, GetUserOrdersQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetUserOrdersQuery(request);
+
+        var userOrders = await handler.Handle(query, cancellationToken);
+
+        return Ok(userOrders);
+    }
+
+    [HttpGet("comments")]
+    public async Task<ActionResult<GetUserCommentsResponseDto?>> GetUserComments(
+        [FromQuery] GetUserCommentsRequestDto request,
+        [FromServices] IQueryHandler<GetUserCommentsResponseDto?, GetUserCommentsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetUserCommentsQuery(request);
+
+        var userComments = await handler.Handle(query, cancellationToken);
+
+        return Ok(userComments);
     }
 
     [HttpPost]
