@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Domain.Users;
 
@@ -19,6 +20,8 @@ public class ProductsSeeders: ISeeder
     private const int PRODUCTS_COUNT = 100;
     private const int TAGS_COUNT = 20;
     private const int ORDERS_COUNT = 120000;
+    private const int REVIEWS_COUNT = 35000;
+    private const int COMMENTS_COUNT = 300000;
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
     private static Season[] seasons = { Season.SPRING , Season.SUMMER, Season.AUTUMN, Season.WINTER };
@@ -391,6 +394,50 @@ public class ProductsSeeders: ISeeder
         OrderStatus.Canceled,
     };
 
+
+    private static readonly string[] ReviewTitles =
+    {
+        "Отличный товар",
+        "Не оправдал ожиданий",
+        "Лучшее соотношение цены и качества",
+        "Очень доволен покупкой",
+        "Не рекомендую",
+        "Просто супер!",
+        "Хорошее качество",
+        "Средний вариант",
+        "Лучше, чем ожидал",
+        "Разочаровался",
+    };
+
+    private static readonly string[] ReviewTexts =
+    {
+        "Прекрасный продукт, всё соответствует описанию. Пользуюсь уже месяц, всё работает отлично.",
+        "К сожалению, качество оказалось хуже, чем ожидал. Больше заказывать не буду.",
+        "За свою цену – просто находка! Рекомендую всем.",
+        "Товар пришёл быстро, хорошо упакован. Работает без нареканий.",
+        "Не стоит своих денег. Ожидал гораздо большего.",
+        "Очень доволен покупкой, работает отлично, а внешний вид просто супер!",
+        "Хорошее качество материалов, приятно пользоваться.",
+        "В целом неплохо, но есть некоторые недочёты.",
+        "Превзошёл все мои ожидания. Буду брать ещё.",
+        "Товар не понравился, пожалел о покупке.",
+    };
+
+    private static readonly string[] CommentTexts =
+    {
+        "Согласен с автором отзыва!",
+        "У меня совсем другой опыт.",
+        "Спасибо за полезный отзыв.",
+        "Подтверждаю, у меня тоже всё отлично работает.",
+        "Мне наоборот не понравилось.",
+        "Очень помогло определиться с выбором.",
+        "Хороший комментарий, поддерживаю.",
+        "Не согласен, думаю по-другому.",
+        "Да, тоже обратил внимание на это.",
+        "Полезная информация, благодарю!",
+    };
+
+
     public ProductsSeeders(
         ProductsDbContext dbContext,
         ILogger<ProductsSeeders> logger)
@@ -404,14 +451,66 @@ public class ProductsSeeders: ISeeder
         // await SeedUsersBatched();
         // await SeedTagsBatched();
         // await SeedProductsBatched();
-        await SeedOrdersBatched();
+        // await SeedOrdersBatched();
+        await SeedReviewsBatched();
+    }
+
+    private async Task SeedReviewsBatched()
+    {
+        _logger.LogInformation("Seeding reviews in batching...");
+        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
+        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+
+        const int batchSize = 1000;
+        List<Review> reviews = [];
+
+        DateTime startDate = new DateTime(2023, 1, 1);
+        DateTime endDate = new DateTime(2025, 9, 8);
+
+        DateTime createdAt;
+        DateTime updatedAt;
+
+        Review? review = null;
+
+        for (int i = 0; i < REVIEWS_COUNT; i++)
+        {
+            createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
+            updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
+
+            review = new Review(
+                new ReviewId(Guid.NewGuid()),
+                new ProductId(productIds[_random.Next(0, productIds.Length)]),
+                new UserId(usersIds[_random.Next(0, usersIds.Length)]),
+                ReviewTitles[_random.Next(0, ReviewTitles.Length)],
+                ReviewTexts[_random.Next(0, ReviewTexts.Length)],
+                startDate.ToUniversalTime(),
+                updatedAt.ToUniversalTime());
+
+            reviews.Add(review);
+
+            if (i % batchSize == 0)
+            {
+                _logger.LogInformation($"Saved {i} reviews...");
+                _dbContext.Reviews.AddRange(reviews);
+                await _dbContext.SaveChangesAsync();
+                reviews.Clear();
+            }
+        }
+
+        if (reviews.Any())
+        {
+            _dbContext.Reviews.AddRange(reviews);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
     private async Task SeedOrdersBatched()
     {
         // string tagName = tagNames[_random.Next(tagNames.Length)];
         _logger.LogInformation("Seeding orders in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
         var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
@@ -513,7 +612,7 @@ public class ProductsSeeders: ISeeder
             "Seasonal",
             "Wellness",
             "Classic",
-            "Sweet"
+            "Sweet",
         };
 
         string[] tagDescriptions =
@@ -537,7 +636,7 @@ public class ProductsSeeders: ISeeder
             "Сезонные смеси для зимы, весны, лета или осени.",
             "Чаи для здоровья и расслабления.",
             "Классические вкусы для ежедневного чаепития.",
-            "Сладкие десертные чаи."
+            "Сладкие десертные чаи.",
         };
 
 
@@ -550,12 +649,10 @@ public class ProductsSeeders: ISeeder
             string tagName = tagNames[_random.Next(tagNames.Length)];
             string tagDescription = tagDescriptions[_random.Next(tagDescriptions.Length)];
 
-            tags.Add(new Tag
-            (
+            tags.Add(new Tag(
                 new TagId(Guid.NewGuid()),
                 tagName,
-                tagDescription
-            ));
+                tagDescription));
 
             if (tags.Count < batchSize)
                 continue;
