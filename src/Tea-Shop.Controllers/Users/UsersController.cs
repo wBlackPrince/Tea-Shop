@@ -7,6 +7,7 @@ using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
+using Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract;
 using Tea_Shop.Contract.Orders;
@@ -62,7 +63,7 @@ public class UsersController: ControllerBase
 
     [HttpGet("comments")]
     public async Task<ActionResult<GetUserCommentsResponseDto?>> GetUserComments(
-        [FromQuery] GetUserCommentsRequestDto request,
+        [FromQuery] GetUserWithPaginationRequestDto request,
         [FromServices] IQueryHandler<GetUserCommentsResponseDto?, GetUserCommentsQuery> handler,
         CancellationToken cancellationToken)
     {
@@ -71,6 +72,19 @@ public class UsersController: ControllerBase
         var userComments = await handler.Handle(query, cancellationToken);
 
         return Ok(userComments);
+    }
+
+    [HttpGet("reviews")]
+    public async Task<ActionResult<GetUserReviewsResponseDto?>> GetUserReviews(
+        [FromQuery] GetUserWithPaginationRequestDto request,
+        [FromServices] IQueryHandler<GetUserReviewsResponseDto?, GetUserReviewsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetUserReviewsQuery(request);
+
+        var userReviews = await handler.Handle(query, cancellationToken);
+
+        return Ok(userReviews);
     }
 
     [HttpPost]

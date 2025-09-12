@@ -1,3 +1,6 @@
-﻿namespace Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
+﻿using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Users;
 
-public record GetUserReviewsQuery();
+namespace Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
+
+public record GetUserReviewsQuery(GetUserWithPaginationRequestDto Request): IQuery;

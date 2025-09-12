@@ -53,7 +53,7 @@ public class GetUserCommentsHandler:
             """,
             param: new
             {
-                userId = query.Request.UserDto.UserId,
+                userId = query.Request.UserId,
                 commentsLimit = query.Request.Pagination.PageSize,
                 commentsOffset = (query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize,
             },
@@ -69,10 +69,10 @@ public class GetUserCommentsHandler:
 
         if (commentsDto is null)
         {
-            _logger.LogWarning("User's comments with id {userId}", query.Request.UserDto.UserId);
+            _logger.LogWarning("User's comments with id {userId}", query.Request.UserId);
         }
 
-        _logger.LogDebug("Get user's comments with id {userId}", query.Request.UserDto.UserId);
+        _logger.LogDebug("Get user's comments with id {userId}", query.Request.UserId);
 
         return commentsDto;
     }

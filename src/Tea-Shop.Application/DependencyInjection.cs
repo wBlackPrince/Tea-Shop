@@ -31,6 +31,7 @@ using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
+using Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Contract.Orders;
@@ -137,6 +138,9 @@ public static class DependencyInjection
         services.AddScoped<
             IQueryHandler<GetUserCommentsResponseDto?, GetUserCommentsQuery>,
             GetUserCommentsHandler>();
+        services.AddScoped<
+            IQueryHandler<GetUserReviewsResponseDto?, GetUserReviewsQuery>,
+            GetUserReviewsHandler>();
         services.AddScoped<UpdateUserHandler>();
 
         return services;

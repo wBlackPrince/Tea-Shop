@@ -2,6 +2,6 @@
 
 namespace Tea_Shop.Contract.Users;
 
-public record GetUserCommentsRequestDto(
-    UserWithOnlyIdDto UserDto,
+public record GetUserWithPaginationRequestDto(
+    Guid UserId,
     PaginationRequest Pagination);
