@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
@@ -31,13 +32,44 @@ public class GetUserCommentsHandler:
 
         GetUserCommentsResponseDto? commentsDto = null;
 
+        long? totalCount = null;
+
+        List<string> conditions = [];
+        var parameters = new DynamicParameters();
+
+        parameters.Add("user_id", query.Request.UserId, DbType.Guid);
+        conditions.Add("c.user_id = @user_id");
+
+        if (query.Request.DateFrom is not null)
+        {
+            parameters.Add("date_from", query.Request.DateFrom?.ToUniversalTime(), DbType.DateTime);
+            conditions.Add("c.created_at >= @date_from");
+        }
+
+        if (query.Request.DateTo is not null)
+        {
+            parameters.Add("date_to", query.Request.DateTo?.ToUniversalTime(), DbType.DateTime);
+            conditions.Add("c.updated_at <= @date_to");
+        }
+
+        parameters.Add("commentsLimit", query.Request.Pagination.PageSize, DbType.Int32);
+        parameters.Add(
+            "commentsOffset",
+            (query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize,
+            DbType.Int32);
+
+        string whereClause = (conditions.Count > 0)
+                ? "WHERE " + string.Join(" AND ", conditions)
+                : string.Empty;
+
         await connection.QueryAsync<
             GetUserCommentsResponseDto,
             CommentDto,
             GetUserCommentsResponseDto>(
-            """
+            $"""
             SELECT
                 u.id AS user_id,
+                count(*) over () as total_count,
                 c.id AS id,
                 c.user_id AS user_id,
                 c.text AS text,
@@ -47,16 +79,11 @@ public class GetUserCommentsHandler:
                 c.created_at AS created_at,
                 c.updated_at as updated_at
             FROM users AS u INNER JOIN comments AS c ON u.id = c.user_id
-            WHERE u.id = @userId
+            {whereClause}
             LIMIT @commentsLimit
             OFFSET @commentsOffset
             """,
-            param: new
-            {
-                userId = query.Request.UserId,
-                commentsLimit = query.Request.Pagination.PageSize,
-                commentsOffset = (query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize,
-            },
+            param: parameters,
             splitOn: "id",
             map: (u, c) =>
             {

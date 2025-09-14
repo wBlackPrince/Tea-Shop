@@ -149,6 +149,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     text = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
+                    product_rating = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

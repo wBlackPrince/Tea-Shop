@@ -234,6 +234,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
+                    b.Property<int>("ProductRating")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_rating");
+
                     b.Property<int>("Rating")
                         .HasColumnType("integer")
                         .HasColumnName("rating");

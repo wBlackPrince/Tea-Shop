@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Tea_Shop.Contract.Reviews;
+using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
@@ -16,6 +17,11 @@ public class CreateReviewValidator:AbstractValidator<CreateReviewRequestDto>
             .NotNull().WithMessage("User Id is required")
             .NotEmpty().WithMessage("User Id is required");
 
+        this.RuleFor(r => r.ProductRate)
+            .NotNull().WithMessage("Product rate is required")
+            .NotEmpty().WithMessage("Product rate is required")
+            .Must(BeValidProductRate).WithMessage("Product rate must be valid");
+
         this.RuleFor(r => r.Title)
             .NotNull().WithMessage("Title is required")
             .NotEmpty().WithMessage("Title is required")
@@ -25,5 +31,10 @@ public class CreateReviewValidator:AbstractValidator<CreateReviewRequestDto>
             .NotNull().WithMessage("Text is required")
             .NotEmpty().WithMessage("Text is required")
             .MaximumLength(Constants.Limit2000).WithMessage("Text must not exceed 100 characters");
+    }
+
+    private bool BeValidProductRate(int rate)
+    {
+        return (rate >= 1) && (rate <= 5);
     }
 }

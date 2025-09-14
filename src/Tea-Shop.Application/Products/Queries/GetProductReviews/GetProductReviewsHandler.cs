@@ -34,6 +34,7 @@ public class GetProductReviewsHandler:
                 r.id,
                 r.product_id,
                 r.user_id,
+                r.product_rating,
                 r.title,
                 r.text,
                 r.rating,

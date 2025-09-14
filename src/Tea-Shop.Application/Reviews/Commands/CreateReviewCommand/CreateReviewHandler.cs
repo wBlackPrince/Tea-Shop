@@ -41,6 +41,7 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
             new ReviewId(Guid.NewGuid()),
             new ProductId(command.Request.ProductId),
             new UserId(command.Request.UserId),
+            command.Request.ProductRate,
             command.Request.Title,
             command.Request.Text,
             DateTime.UtcNow,
@@ -56,8 +57,9 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
         {
             Id = review.Id.Value,
             UserId = review.UserId.Value,
+            ProductRate = (int)review.ProductRating,
             Title = review.Title,
-            Text = review.Text
+            Text = review.Text,
         };
 
         return response;

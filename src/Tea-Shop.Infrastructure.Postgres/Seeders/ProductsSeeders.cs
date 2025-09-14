@@ -395,7 +395,6 @@ public class ProductsSeeders: ISeeder
         OrderStatus.Canceled,
     };
 
-
     private static readonly string[] ReviewTitles =
     {
         "Отличный товар",
@@ -449,11 +448,11 @@ public class ProductsSeeders: ISeeder
 
     public async Task SeedAsync()
     {
-        // await SeedUsersBatched();
-        // await SeedTagsBatched();
-        // await SeedProductsBatched();
-        // await SeedOrdersBatched();
-        // await SeedReviewsBatched();
+        await SeedUsersBatched();
+        await SeedTagsBatched();
+        await SeedProductsBatched();
+        await SeedOrdersBatched();
+        await SeedReviewsBatched();
         await SeedCommentsBatched();
     }
 
@@ -549,6 +548,7 @@ public class ProductsSeeders: ISeeder
                 new ReviewId(Guid.NewGuid()),
                 new ProductId(productIds[_random.Next(0, productIds.Length)]),
                 new UserId(usersIds[_random.Next(0, usersIds.Length)]),
+                _random.Next(1, 5),
                 ReviewTitles[_random.Next(0, ReviewTitles.Length)],
                 ReviewTexts[_random.Next(0, ReviewTexts.Length)],
                 startDate.ToUniversalTime(),

@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250908170554_Initial")]
+    [Migration("20250914095750_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -236,6 +236,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
+
+                    b.Property<int>("ProductRating")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_rating");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer")

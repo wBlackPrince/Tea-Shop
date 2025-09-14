@@ -37,9 +37,10 @@ public class GetUserReviewsHandler:
                     r.id AS id,
                     r.product_id AS product_id,
                     r.user_id AS user_id,
+                    r.product_rating AS product_rating,
+                    r.rating AS rating,
                     r.title AS title,
                     r.text AS text,
-                    r.rating AS rating,
                     r.created_at AS created_at,
                     r.updated_at as updated_at
                 FROM users AS u INNER JOIN reviews AS r ON u.id = r.user_id

@@ -6,6 +6,8 @@ public record CreateReviewResponseDto
 
     public Guid UserId { get; init; }
 
+    public int ProductRate { get; init; }
+
     public string Title { get; init; }
 
     public string Text { get; init; }

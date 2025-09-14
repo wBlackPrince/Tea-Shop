@@ -24,6 +24,10 @@ public class ReviewConfiguration: IEntityTypeConfiguration<Review>
             .HasColumnName("id");
 
         builder
+            .Property(r => r.ProductRating)
+            .HasColumnName("product_rating");
+
+        builder
             .Property(r => r.Title)
             .HasMaxLength(Constants.Limit50)
             .HasColumnName("title");

@@ -43,6 +43,7 @@ public class GetReviewByIdHandler: IQueryHandler<
             Id = review.Id.Value,
             ProductId = review.ProductId.Value,
             UserId = review.UserId.Value,
+            ProductRate = (int)review.ProductRating,
             Title = review.Title,
             Text = review.Text,
             CreatedAt = review.CreatedAt,

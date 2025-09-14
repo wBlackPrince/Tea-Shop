@@ -16,6 +16,10 @@ public record ProductDto
 
     public string Season { get; init; } = string.Empty;
 
+    public float Rating { get; init; }
+
+    public int ReviewsCount { get; init; }
+
     public DateTime CreatedAt { get; init; }
 
     public DateTime UpdatedAt { get; init; }
