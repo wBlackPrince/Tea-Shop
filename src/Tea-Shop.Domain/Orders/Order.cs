@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -77,24 +76,24 @@ public class Order
     public DateTime ExpectedDeliveryTime { get; set; }
 
     /// <summary>
-    /// Gets or sets статус заказа
+    /// Gets статус заказа
     /// </summary>
-    public OrderStatus OrderStatus { get; set; }
+    public OrderStatus OrderStatus { get; private set; }
 
     /// <summary>
-    /// Gets or sets список доставочных товаров
+    /// Gets список доставочных товаров
     /// </summary>
     public IReadOnlyList<OrderItem> OrderItems => _orderItems;
 
     public int OrderItemsCount => _orderItems.Count;
 
     /// <summary>
-    /// Get or sets время создания
+    /// Gets or sets время создания
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
     /// <summary>
-    /// Get or sets время обновления
+    /// Gets or sets время обновления
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 
@@ -107,6 +106,18 @@ public class Order
         }
 
         _orderItems.Add(orderItem);
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateStatus(OrderStatus orderStatus)
+    {
+        if (OrderStatus == OrderStatus.Delivered)
+        {
+            return Error.Failure("cancel.order", "Order is already delivered");
+        }
+
+        OrderStatus = orderStatus;
 
         return UnitResult.Success<Error>();
     }

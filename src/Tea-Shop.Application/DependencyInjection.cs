@@ -6,6 +6,7 @@ using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
+using Tea_Shop.Application.Orders.Commands.CancelOrderCommand;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
@@ -84,6 +85,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>,
             CreateOrderHandler>();
+        services.AddScoped<
+            ICommandHandler<OrderWithOnlyIdDto, CancelOrderCommand>,
+            CancelOrderHandler>();
         services.AddScoped<UpdateOrderHandler>();
         services.AddScoped<
             ICommandHandler<DeleteOrderDto, DeleteOrderCommand>,

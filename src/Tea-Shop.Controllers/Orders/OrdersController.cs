@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Orders.Commands.CancelOrderCommand;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
@@ -48,6 +49,24 @@ public class OrdersController: ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new CreateOrderCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPatch("orders/{orderId:guid}/cancel")]
+    public async Task<ActionResult<CreateOrderResponseDto>> CancelOrder(
+        [FromRoute] Guid orderId,
+        [FromServices] ICommandHandler<OrderWithOnlyIdDto, CancelOrderCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new CancelOrderCommand(orderId);
 
         var result = await handler.Handle(command, cancellationToken);
 

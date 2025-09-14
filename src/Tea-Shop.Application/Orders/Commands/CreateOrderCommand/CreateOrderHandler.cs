@@ -66,6 +66,21 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
                     "create.order",
                     "There is not enough stock to order item");
             }
+
+            if (command.Request.Items[i].Quantity > 30 && command.Request.PaymentMethod == "CashOnDelivery")
+            {
+                return Error.Failure(
+                    "create.order",
+                    "You cannot order 30 or more items and pay after delibvery");
+            }
+        }
+
+        // проверка ограничения числа товаров в заказа
+        if (command.Request.Items.Length > 20)
+        {
+            return Error.Failure(
+                "create.order",
+                "Too many order items");
         }
 
         var orderItems = command.Request.Items.Select(i =>
@@ -90,7 +105,7 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
 
         await _ordersRepository.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Create order {orderId}", order.Id);
+        _logger.LogDebug("Create order {orderId}", order.Id);
 
 
         var response = new CreateOrderResponseDto
@@ -102,9 +117,10 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
             Status = order.OrderStatus.ToString(),
             ExpectedTimeDelivery = order.ExpectedDeliveryTime,
             Items = order.OrderItems
-                .Select(o => 
+                .Select(o =>
                     new OrderItemDto(o.ProductId.Value, o.Quantity))
-                .ToArray()};
+                .ToArray(),
+        };
 
         return response;
     }

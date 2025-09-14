@@ -6,13 +6,13 @@ public record CreateOrderResponseDto
 
     public Guid UserId { get; init; }
 
-    public string DeliveryAddress { get; init; }
+    public string DeliveryAddress { get; init; } = string.Empty;
 
-    public string PaymentMethod { get; init; }
+    public string PaymentMethod { get; init; } = string.Empty;
 
-    public string Status { get; init; }
+    public string Status { get; init; } = string.Empty;
 
     public DateTime ExpectedTimeDelivery { get; init; }
 
-    public OrderItemDto[] Items { get; init; }
+    public OrderItemDto[] Items { get; init; } = [];
 }
