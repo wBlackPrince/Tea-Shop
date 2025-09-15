@@ -38,7 +38,15 @@ public class UpdateProductHandler
             return Error.NotFound("update product", "product not found");
         }
 
-        productUpdates.ApplyTo(product);
+        try
+        {
+            productUpdates.ApplyTo(product);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "update product error");
+            return Error.Validation("update.product", "update product error");
+        }
 
         await _productsRepository.SaveChangesAsync(cancellationToken);
 

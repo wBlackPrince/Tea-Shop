@@ -1,7 +1,10 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Database;
+using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
@@ -13,27 +16,47 @@ namespace Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>
 {
     private readonly IReviewsRepository _reviewsRepository;
+    private readonly IProductsRepository _productsRepository;
     private readonly IValidator<CreateReviewRequestDto> _validator;
     private readonly ILogger<CreateReviewHandler> _logger;
+    private readonly ITransactionManager _transactionManager;
 
     public CreateReviewHandler(
         IReviewsRepository reviewsRepository,
+        IProductsRepository productsRepository,
         IValidator<CreateReviewRequestDto> validator,
-        ILogger<CreateReviewHandler> logger)
+        ILogger<CreateReviewHandler> logger,
+        ITransactionManager transactionManager)
     {
         _reviewsRepository = reviewsRepository;
+        _productsRepository = productsRepository;
         _validator = validator;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<CreateReviewResponseDto, Error>> Handle(
         CreateReviewCommand command,
         CancellationToken cancellationToken)
     {
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
+        // валидация входных параметров
         var validationResult = await _validator.ValidateAsync(command.Request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
+            transactionScope.Rollback();
             return Error.Validation("create.review", "Validation Failed");
         }
 
@@ -47,9 +70,33 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
             DateTime.UtcNow,
             DateTime.UtcNow);
 
+
+        // обновляем количество отзывов и сумму рейтинга у продукта
+        Product? product = await _productsRepository.GetProductById(review.ProductId.Value, cancellationToken);
+
+        if (product is null)
+        {
+            transactionScope.Rollback();
+            return Error.Validation("create.review", "Product not found");
+        }
+
+        product.SumRatings += command.Request.ProductRate;
+        product.CountRatings += 1;
+
+
         await _reviewsRepository.CreateReview(review, cancellationToken);
 
-        await _reviewsRepository.SaveChangesAsync(cancellationToken);
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
 
         _logger.LogInformation("Created review {review.Id}", review.Id);
 

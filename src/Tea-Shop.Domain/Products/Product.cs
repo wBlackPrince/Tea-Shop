@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.ComponentModel.DataAnnotations;
+using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
@@ -12,14 +13,18 @@ public record ProductId(Guid Value);
 /// </summary>
 public class Product
 {
+    private string _title;
+    private string _description;
+    private Season _season;
+    private float _price;
+    private float _amount;
+    private int _stockQuantity;
+    private int _rating;
+
     private List<ProductsTags> _tags;
 
-    // Для Ef Core
-    private Product() { }
-
-
     /// <summary>
-    /// Initializes a new instance of the "Product" class.
+    /// Initializes a new instance of the <see cref="Product"/> class.
     /// </summary>
     /// <param name="id">Идентификатор продукта.</param>
     /// <param name="title">Заголовок.</param>
@@ -58,9 +63,7 @@ public class Product
 
         var productsTags = tagsIds
             .Select(tId => new ProductsTags(
-                 new ProductsTagsId(Guid.NewGuid()),
-                this,
-                new TagId(tId)))
+                 new ProductsTagsId(Guid.NewGuid()), this, new TagId(tId)))
             .ToList();
 
         _tags = productsTags;
@@ -76,6 +79,11 @@ public class Product
         PhotosIds = photosIds.ToArray();
     }
 
+    // Для Ef Core
+    private Product()
+    {
+    }
+
     /// <summary>
     /// Gets or sets идентификатор продукта
     /// </summary>
@@ -84,37 +92,66 @@ public class Product
     /// <summary>
     /// Gets or sets заголовок продукта
     /// </summary>
-    public string Title { get; set; }
+    public string Title
+    {
+        get => _title;
+        set => UpdateTitle(value);
+    }
 
     /// <summary>
     /// Gets or sets описание продукта
     /// </summary>
-    public string Description { get; set; }
+    public string Description
+    {
+        get => _description;
+        set => UpdateDescription(value);
+    }
 
     /// <summary>
     /// Gets or sets сезон данного продукта
     /// </summary>
-    public Season Season { get; set; }
+    public Season Season
+    {
+        get => _season;
+        set => UpdateSeason(value);
+    }
 
     /// <summary>
     /// Gets or sets цену продукта
     /// </summary>
-    public float Price { get; set; }
+    public float Price
+    {
+        get => _price;
+        set => UpdatePrice(value);
+    }
 
     /// <summary>
     /// Gets or sets количество продукта в граммах
     /// </summary>
-    public float Amount { get; set; }
+    public float Amount
+    {
+        get => _amount;
+        set => UpdateAmount(value);
+    }
 
     /// <summary>
     /// Gets or sets количество продукта на складе
     /// </summary>
-    public int StockQuantity { get; set; }
+    public int StockQuantity
+    {
+        get => _stockQuantity;
+        set => UpdateStockQuantity(value);
+    }
 
     /// <summary>
-    /// Gets or sets рейтинг продукта
+    /// Gets or sets сумма рейтингов обзоров у продукта
     /// </summary>
-    public int Rating { get; set; } = 0;
+    public int SumRatings = 0;
+
+    /// <summary>
+    /// Gets or sets количество рейтингов обзоров у продукта
+    /// </summary>
+    public int CountRatings = 0;
 
     /// <summary>
     /// Gets or sets время создания продукта
@@ -140,6 +177,7 @@ public class Product
         {
             return _tags;
         }
+
         private set
         {
             _tags = value;
@@ -150,4 +188,85 @@ public class Product
     /// Gets or sets список идентификаторов фото продукта
     /// </summary>
     public Guid[] PhotosIds { get; set; }
+
+    public UnitResult<Error> UpdateTitle(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new ValidationException("Product title cannot be empty");
+        }
+
+        if (!(title.Length >= Constants.Limit2) || !(title.Length <= Constants.Limit100))
+        {
+            throw new ValidationException("Product title has to be between 2 and 100 characters.");
+        }
+
+        _title = title;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            throw new ValidationException("Product description cannot be empty");
+        }
+
+        if (!(description.Length >= Constants.Limit2) || !(description.Length <= Constants.Limit2000))
+        {
+            throw new ValidationException("Product description has to be between 2 and 2000 characters.");
+        }
+
+        _description = description;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        return UnitResult.Success<Error>();
+    }
+
+    public void UpdateSeason(Season season)
+    {
+        _season = season;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+    }
+
+    public UnitResult<Error> UpdatePrice(float price)
+    {
+        if (price <= 0)
+        {
+            throw new ValidationException("Price must be greater than 0");
+        }
+
+        _price = price;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateAmount(float amount)
+    {
+        if (amount <= 0)
+        {
+            throw new ValidationException("Amount must be greater than 0");
+        }
+
+        _amount = amount;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateStockQuantity(int stockQuantity)
+    {
+        if (stockQuantity <= 0)
+        {
+            throw new ValidationException("Stock quantity must be greater than 0");
+        }
+
+        _stockQuantity = stockQuantity;
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        return UnitResult.Success<Error>();
+    }
 }

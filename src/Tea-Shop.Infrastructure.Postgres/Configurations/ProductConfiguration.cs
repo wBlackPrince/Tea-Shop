@@ -47,8 +47,11 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
         builder.Property(p => p.StockQuantity)
             .HasColumnName("stock_quantity");
 
-        builder.Property(p => p.Rating)
-            .HasColumnName("rating");
+        builder.Property(p => p.SumRatings)
+            .HasColumnName("sum_ratings");
+
+        builder.Property(p => p.CountRatings)
+            .HasColumnName("count_ratings");
 
         builder.Property(p => p.CreatedAt)
             .HasColumnName("created_at");

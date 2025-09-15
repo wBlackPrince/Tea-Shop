@@ -36,6 +36,10 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
             .NotNull().WithMessage("Amount is required")
             .GreaterThan(0).WithMessage("Amount must be greater than zero");
 
+        this.RuleFor(p => p.StockQuantity)
+            .NotEmpty().WithMessage("Stock quantity is required")
+            .NotNull().WithMessage("Stock quantity is required")
+            .GreaterThan(0).WithMessage("Stock quantity must be greater than zero");
 
         this.RuleFor(p => p.Ingridients)
             .NotEmpty().WithMessage("Ingredients is required")
