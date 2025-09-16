@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using CSharpFunctionalExtensions;
+using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
@@ -189,6 +190,9 @@ public class Product
     /// </summary>
     public Guid[] PhotosIds { get; set; }
 
+
+
+
     public UnitResult<Error> UpdateTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
@@ -268,5 +272,11 @@ public class Product
         UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
         return UnitResult.Success<Error>();
+    }
+
+    public void UpdateIngredients(Ingrendient[] ingredients)
+    {
+        PreparationMethod.Ingredients = ingredients.ToList();
+        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
     }
 }

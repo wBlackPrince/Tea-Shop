@@ -2,4 +2,4 @@
 
 namespace Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 
-public record GetSimilarProductsQuery(GetProductByIdRequestDto Request);
+public record GetSimilarProductsQuery(ProductWithOnlyIdDto Request);

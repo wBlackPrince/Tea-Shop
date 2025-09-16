@@ -99,7 +99,7 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
             return commitedResult.Error;
         }
 
-        _logger.LogInformation("Create product {productId}", productId);
+        _logger.LogDebug("Create product {productId}", productId);
 
         var productDto = new CreateProductResponseDto(
             product.Id.Value,

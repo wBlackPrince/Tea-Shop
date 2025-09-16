@@ -22,7 +22,7 @@ public record PreparationMethod
 
     public string Description { get; }
 
-    public List<Ingrendient> Ingredients { get; }
+    public List<Ingrendient> Ingredients { get; set; }
 
     public static Result<PreparationMethod, Error> Create(
         int preparationTime,

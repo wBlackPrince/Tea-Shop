@@ -4,6 +4,7 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
+using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
@@ -25,7 +26,7 @@ public class ProductsController : ControllerBase
         [FromRoute] Guid productId,
         CancellationToken cancellationToken)
     {
-        var query = new GetProductByIdQuery(new GetProductByIdRequestDto(productId));
+        var query = new GetProductByIdQuery(new ProductWithOnlyIdDto(productId));
 
         var getResult = await handler.Handle(query, cancellationToken);
 
@@ -121,6 +122,24 @@ public class ProductsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var updateResult = await handler.Handle(productId, productUpdates, cancellationToken);
+
+        if (updateResult.IsFailure)
+        {
+            return NotFound(updateResult.Error);
+        }
+
+        return Ok(updateResult.Value);
+    }
+
+    [HttpPatch("{productId:guid}/ingredients")]
+    public async Task<IActionResult> UpdateIngredients(
+        [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdateProductIngredientsCommand> handler,
+        [FromRoute] Guid productId,
+        [FromBody] GetIngrendientsResponseDto[] productUpdates,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateProductIngredientsCommand(productId, new IngridientsDto(productUpdates));
+        var updateResult = await handler.Handle(command, cancellationToken);
 
         if (updateResult.IsFailure)
         {
