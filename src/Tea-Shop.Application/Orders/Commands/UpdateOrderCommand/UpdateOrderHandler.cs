@@ -24,20 +24,33 @@ public class UpdateOrderHandler
         JsonPatchDocument<Order> orderUpdates,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handleName}", nameof(UpdateOrderHandler));
+
         Order? order = await _ordersRepository.GetOrderById(
             new OrderId(orderId),
             cancellationToken);
 
         if (order is null)
         {
+            _logger.LogError("Not found order with id {orderId}", orderId);
             return Error.NotFound("update order", "order not found");
         }
 
-        orderUpdates.ApplyTo(order);
+        try
+        {
+            orderUpdates.ApplyTo(order);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Validation error while updating order with id {orderId}", orderId);
+            return Error.Validation("update.order", e.Message);
+        }
+
+        order.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
         await _ordersRepository.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Update order {orderId}", orderId);
+        _logger.LogDebug("Update order {orderId}", orderId);
 
         return order.Id.Value;
     }

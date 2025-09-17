@@ -27,13 +27,15 @@ public class DeleteProductHandler: ICommandHandler<
         DeleteProductQuery query,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(DeleteProductHandler));
+
         var deleteResult = await _productsRepository.DeleteProduct(
             new ProductId(query.Request.ProductId),
             cancellationToken);
 
         if (deleteResult.IsFailure)
         {
-            _logger.LogInformation(
+            _logger.LogError(
                 "Failed to delete product {productId}",
                 query.Request.ProductId);
 

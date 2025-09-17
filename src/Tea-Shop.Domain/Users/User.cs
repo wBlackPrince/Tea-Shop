@@ -1,18 +1,22 @@
-namespace Tea_Shop.Domain.Users;
+using System.ComponentModel.DataAnnotations;
 
-public record UserId(Guid Value);
+namespace Tea_Shop.Domain.Users;
 
 /// <summary>
 /// Domain-модель пользователя
 /// </summary>
-public class User
+public class User: Entity
 {
-    // для Ef Core
-    private User() {}
+    private string _password;
+    private string _firstName;
+    private string _lastName;
+    private string _email;
+    private string _middleName;
+    private string _phoneNumber;
 
     /// <summary>
-    /// Initializes a new instance of the "User" class.
-    /// /// </summary>
+    /// Initializes a new instance of the <see cref="User"/> class.
+    /// </summary>
     /// <param name="id"> Идентификатор пользователя.</param>
     /// <param name="password"> Пароль.</param>
     /// <param name="firstName"> Имя.</param>
@@ -45,6 +49,11 @@ public class User
         MiddleName = middleName;
     }
 
+    // для Ef Core
+    private User()
+    {
+    }
+
     /// <summary>
     /// Gets or sets Идентификатор пользователя
     /// </summary>
@@ -53,32 +62,56 @@ public class User
     /// <summary>
     /// Gets or sets Пароль пользователя
     /// </summary>
-    public string Password { get; set; }
+    public string Password
+    {
+        get => _password;
+        set => UpdatePassword(value);
+    }
 
     /// <summary>
     /// Gets or sets Имя пользователя
     /// </summary>
-    public string FirstName { get; set; }
+    public string FirstName
+    {
+        get => _firstName;
+        set => UpdateFirstName(value);
+    }
 
     /// <summary>
     /// Gets or sets Фамилия пользователя
     /// </summary>
-    public string LastName { get; set; }
+    public string LastName
+    {
+        get => _lastName;
+        set => UpdateLastName(value);
+    }
 
     /// <summary>
     /// Gets or sets Отчество пользователя
     /// </summary>
-    public string MiddleName { get; set; }
+    public string MiddleName
+    {
+        get => _middleName;
+        set => UpdateMiddleName(value);
+    }
 
     /// <summary>
     /// Gets or sets Email пользователя
     /// </summary>
-    public string Email { get; set; }
+    public string Email
+    {
+        get => _email;
+        set => UpdateEmail(value);
+    }
 
     /// <summary>
     /// Gets or sets Номер телефона пользователя
     /// </summary>
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber
+    {
+        get => _phoneNumber;
+        set => UpdatePhoneNumber(value);
+    }
 
     /// <summary>
     /// Gets or sets Аватар пользователя
@@ -94,4 +127,66 @@ public class User
     /// Gets or sets a value indicating whether Способность пользователя пользоваться приложением
     /// </summary>
     public bool IsActive { get; set; } = true;
+
+    public void UpdatePassword(string password)
+    {
+        var validateResult = CheckAttributeIsNotEmpty(password);
+
+        if (validateResult.IsFailure)
+        {
+            throw new ValidationException(validateResult.Error.Message);
+        }
+
+        _password = password;
+    }
+
+    public void UpdateFirstName(string firstName)
+    {
+        var validateResult = CheckAttributeIsNotEmpty(firstName);
+
+        if (validateResult.IsFailure)
+        {
+            throw new ValidationException(validateResult.Error.Message);
+        }
+
+        _firstName = firstName;
+    }
+
+    public void UpdateLastName(string lastName)
+    {
+        var validateResult = CheckAttributeIsNotEmpty(lastName);
+
+        if (validateResult.IsFailure)
+        {
+            throw new ValidationException(validateResult.Error.Message);
+        }
+
+        _lastName = lastName;
+    }
+
+    public void UpdateMiddleName(string middleName) => _middleName = middleName;
+
+    public void UpdateEmail(string email)
+    {
+        var validateResult = CheckAttributeIsNotEmpty(email);
+
+        if (validateResult.IsFailure)
+        {
+            throw new ValidationException(validateResult.Error.Message);
+        }
+
+        _email = email;
+    }
+
+    public void UpdatePhoneNumber(string phoneNumber)
+    {
+        var validateResult = CheckAttributeIsNotEmpty(phoneNumber);
+
+        if (validateResult.IsFailure)
+        {
+            throw new ValidationException(validateResult.Error.Message);
+        }
+
+        _phoneNumber = phoneNumber;
+    }
 }

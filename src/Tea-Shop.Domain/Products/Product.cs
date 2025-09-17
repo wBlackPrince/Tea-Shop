@@ -6,17 +6,13 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;
 
-
-public record ProductId(Guid Value);
-
 /// <summary>
 /// Domain-модель продукта
 /// </summary>
-public class Product
+public class Product: Entity
 {
     private string _title;
     private string _description;
-    private Season _season;
     private float _price;
     private float _amount;
     private int _stockQuantity;
@@ -111,11 +107,7 @@ public class Product
     /// <summary>
     /// Gets or sets сезон данного продукта
     /// </summary>
-    public Season Season
-    {
-        get => _season;
-        set => UpdateSeason(value);
-    }
+    public Season Season { get; set; }
 
     /// <summary>
     /// Gets or sets цену продукта
@@ -193,7 +185,7 @@ public class Product
 
 
 
-    public UnitResult<Error> UpdateTitle(string title)
+    public void UpdateTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
@@ -206,12 +198,9 @@ public class Product
         }
 
         _title = title;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-
-        return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> UpdateDescription(string description)
+    public void UpdateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
         {
@@ -224,18 +213,9 @@ public class Product
         }
 
         _description = description;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-
-        return UnitResult.Success<Error>();
     }
 
-    public void UpdateSeason(Season season)
-    {
-        _season = season;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-    }
-
-    public UnitResult<Error> UpdatePrice(float price)
+    public void UpdatePrice(float price)
     {
         if (price <= 0)
         {
@@ -243,12 +223,9 @@ public class Product
         }
 
         _price = price;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-
-        return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> UpdateAmount(float amount)
+    public void UpdateAmount(float amount)
     {
         if (amount <= 0)
         {
@@ -256,12 +233,9 @@ public class Product
         }
 
         _amount = amount;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-
-        return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> UpdateStockQuantity(int stockQuantity)
+    public void UpdateStockQuantity(int stockQuantity)
     {
         if (stockQuantity <= 0)
         {
@@ -269,14 +243,10 @@ public class Product
         }
 
         _stockQuantity = stockQuantity;
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
-
-        return UnitResult.Success<Error>();
     }
 
     public void UpdateIngredients(Ingrendient[] ingredients)
     {
         PreparationMethod.Ingredients = ingredients.ToList();
-        UpdatedAt = DateTime.UtcNow.ToUniversalTime();
     }
 }

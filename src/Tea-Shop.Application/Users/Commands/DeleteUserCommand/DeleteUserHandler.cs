@@ -25,6 +25,8 @@ public class DeleteUserHandler:
         DeleteUserCommand command,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(DeleteUserHandler));
+
         var deleteResult = await _usersRepository.DeleteUser(
             new UserId(command.Request.UserId),
             cancellationToken);

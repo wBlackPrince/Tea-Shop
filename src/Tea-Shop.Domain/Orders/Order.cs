@@ -1,23 +1,20 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.ComponentModel.DataAnnotations;
+using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Orders;
 
-public record OrderId(Guid Value);
-
 /// <summary>
 /// Domain-модель заказа
 /// </summary>
-public class Order
+public class Order: Entity
 {
+    private string _deliveryAddress;
     private readonly List<OrderItem> _orderItems;
 
-    // Для Ef Core
-    private Order() { }
-
     /// <summary>
-    /// Initializes a new instance of the "Order" class.
+    /// Initializes a new instance of the <see cref="Order"/> class.
     /// </summary>
     /// <param name="id">Идентификатор заказа.</param>
     /// <param name="userId">Идентификатор пользователя.</param>
@@ -34,7 +31,6 @@ public class Order
         string deliveryAddress,
         PaymentWay paymentWay,
         DateTime expectedDeliveryTime,
-        OrderStatus orderStatus,
         IEnumerable<OrderItem> orderItems,
         DateTime createdAt,
         DateTime updatedAt)
@@ -44,26 +40,35 @@ public class Order
         DeliveryAddress = deliveryAddress;
         PaymentWay = paymentWay;
         ExpectedDeliveryTime = expectedDeliveryTime;
-        OrderStatus = orderStatus;
+        OrderStatus = OrderStatus.Pending;
         _orderItems = orderItems.ToList();
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
 
-    /// <summary>
-    /// Gets or sets идентификатор заказа
-    /// </summary>
-    public OrderId Id { get; set; }
+    // Для Ef Core
+    private Order()
+    {
+    }
 
     /// <summary>
-    /// Gets or sets идентификатор пользователя
+    /// Gets идентификатор заказа
     /// </summary>
-    public UserId UserId { get; set; }
+    public OrderId Id { get; init; }
+
+    /// <summary>
+    /// Gets идентификатор пользователя
+    /// </summary>
+    public UserId UserId { get; init; }
 
     /// <summary>
     /// Gets or sets адрес доставки
     /// </summary>
-    public string DeliveryAddress { get; set; }
+    public string DeliveryAddress
+    {
+        get => _deliveryAddress;
+        set => UpdateDeliveryAddress(value);
+    }
 
     /// <summary>
     /// Gets or sets способ оплаты
@@ -110,15 +115,26 @@ public class Order
         return UnitResult.Success<Error>();
     }
 
-    public UnitResult<Error> UpdateStatus(OrderStatus orderStatus)
+
+    public void UpdateDeliveryAddress(string deliveryAddress)
+    {
+        var validationResult = CheckAttributeIsNotEmpty(deliveryAddress);
+
+        if (validationResult.IsFailure)
+        {
+            throw new ValidationException("Delivery address cannot be empty");
+        }
+
+        _deliveryAddress = deliveryAddress;
+    }
+
+    public void UpdateStatus(OrderStatus orderStatus)
     {
         if (OrderStatus == OrderStatus.Delivered)
         {
-            return Error.Failure("cancel.order", "Order is already delivered");
+            throw new ValidationException("Order is already delivered");
         }
 
         OrderStatus = orderStatus;
-
-        return UnitResult.Success<Error>();
     }
 }

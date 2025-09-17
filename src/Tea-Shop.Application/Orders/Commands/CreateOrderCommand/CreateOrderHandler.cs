@@ -96,7 +96,6 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
             command.Request.DeliveryAddress,
             (PaymentWay)Enum.Parse(typeof(PaymentWay), command.Request.PaymentMethod),
             command.Request.ExpectedTimeDelivery,
-            (OrderStatus)Enum.Parse(typeof(OrderStatus), command.Request.Status),
             orderItems,
             DateTime.UtcNow,
             DateTime.UtcNow);

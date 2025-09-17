@@ -4,6 +4,5 @@ public record CreateOrderRequestDto(
     Guid UserId,
     string DeliveryAddress,
     string PaymentMethod,
-    string Status,
     DateTime ExpectedTimeDelivery,
     OrderItemDto[] Items);

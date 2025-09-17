@@ -1,17 +1,17 @@
-﻿using Tea_Shop.Domain.Comments;
+﻿using System.ComponentModel.DataAnnotations;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Reviews;
-
-
-public record ReviewId(Guid Value);
 
 /// <summary>
 /// Domain-модель обзора
 /// </summary>
-public class Review
+public class Review: Entity
 {
+    private string _title = string.Empty;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Review"/> class.
     /// </summary>
@@ -49,24 +49,28 @@ public class Review
     }
 
     /// <summary>
-    /// Gets or sets идентификатор обзора
+    /// Gets идентификатор обзора
     /// </summary>
-    public ReviewId Id { get; set; }
+    public ReviewId Id { get; init; }
 
     /// <summary>
-    /// Gets or sets идентификатор продукта
+    /// Gets идентификатор продукта
     /// </summary>
-    public ProductId ProductId { get; set; }
+    public ProductId ProductId { get; init; }
 
     /// <summary>
-    /// Gets or sets идентификатор пользователя
+    /// Gets идентификатор пользователя
     /// </summary>
-    public UserId UserId { get; set; }
+    public UserId UserId { get; init; }
 
     /// <summary>
     /// Gets or sets заголовок обзора
     /// </summary>
-    public string Title { get; set; }
+    public string Title
+    {
+        get => _title;
+        set => UpdateTitle(value);
+    }
 
     /// <summary>
     /// Gets or sets текст обзора
@@ -92,4 +96,19 @@ public class Review
     /// Gets or sets время обновления
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+
+    public void UpdateTitle(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new ValidationException("Title can't be empty");
+        }
+
+        if (title.Length > Constants.Limit2000)
+        {
+            throw new ValidationException("Title can't be longer than 2000 characters");
+        }
+
+        Title = title;
+    }
 }

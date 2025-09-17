@@ -33,7 +33,17 @@ public class UpdateReviewHandler
             return Error.NotFound("update review", "review not found");
         }
 
-        reviewUpdates.ApplyTo(review);
+        try
+        {
+            reviewUpdates.ApplyTo(review);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Validation error while updating review with id {reviewId}", reviewId);
+            return Error.Validation("update review", e.Message);
+        }
+
+        review.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
         await _reviewsRepository.SaveChangesAsync(cancellationToken);
 

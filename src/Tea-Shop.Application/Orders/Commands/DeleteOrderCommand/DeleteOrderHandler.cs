@@ -26,16 +26,19 @@ public class DeleteOrderHandler: ICommandHandler<
         DeleteOrderCommand command,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(DeleteOrderHandler));
+
         var deleteResult = await _ordersRepository
             .DeleteOrder(new OrderId(command.Dto.OrderId), cancellationToken);
 
         if (deleteResult.IsFailure)
         {
+            _logger.LogError("Failed to delete order with id {orderId}", command.Dto.OrderId);
             return deleteResult.Error;
         }
 
         await _ordersRepository.SaveChangesAsync(cancellationToken);
-        _logger.LogInformation("Deleted order {orderId}", command.Dto.OrderId);
+        _logger.LogDebug("Deleted order {orderId}", command.Dto.OrderId);
 
         var response = new DeleteOrderDto(command.Dto.OrderId);
 

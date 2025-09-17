@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Tea-Shop.Contract")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+01536f886b32174e5d850e33fc887dc4ab712367")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f70cda0348f88ffb7c9b39250e274577bc1aa03")]
 [assembly: System.Reflection.AssemblyProductAttribute("Tea-Shop.Contract")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Tea-Shop.Contract")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

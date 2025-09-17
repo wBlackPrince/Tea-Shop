@@ -18,10 +18,6 @@ public class CreateOrderValidator: AbstractValidator<CreateOrderRequestDto>
             .Must(BeValidPaymentWay).WithMessage("Payment method is invalid");
 
         this
-            .RuleFor(o => o.Status)
-            .Must(BeValidOrderStatus).WithMessage("Order status is invalid");
-
-        this
             .RuleForEach(o => o.Items)
             .ChildRules(items =>
             {
@@ -34,10 +30,5 @@ public class CreateOrderValidator: AbstractValidator<CreateOrderRequestDto>
     private bool BeValidPaymentWay(string paymentWay)
     {
         return PaymentWay.TryParse(typeof(PaymentWay), paymentWay, out _);
-    }
-
-    private bool BeValidOrderStatus(string orderStatus)
-    {
-        return OrderStatus.TryParse(typeof(OrderStatus), orderStatus, out _);
     }
 }

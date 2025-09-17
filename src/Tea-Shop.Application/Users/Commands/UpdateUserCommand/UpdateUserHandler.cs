@@ -25,19 +25,31 @@ public class UpdateUserHandler
         JsonPatchDocument<User> userUpdates,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handleName}", nameof(UpdateUserHandler));
+
         var (_, isFailure, user, error) = await _usersRepository.GetUser(
             new UserId(userId),
             cancellationToken);
 
         if (isFailure)
         {
+            _logger.LogError("User not found while updating");
             return error;
         }
 
-        userUpdates.ApplyTo(user);
+        try
+        {
+            userUpdates.ApplyTo(user);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Validation error while updating product");
+            return Error.Validation("update product", e.Message);
+        }
+
         await _usersRepository.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Update user with id {UserId}", userId);
+        _logger.LogDebug("Update user with id {UserId}", userId);
 
         return user.Id.Value;
     }

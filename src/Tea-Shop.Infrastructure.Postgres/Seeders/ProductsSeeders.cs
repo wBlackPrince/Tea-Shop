@@ -628,7 +628,6 @@ public class ProductsSeeders: ISeeder
                 deliveryAddress,
                 paymentWay,
                 expectedTimeDelivery,
-                orderStatus,
                 orderItems,
                 createdAt,
                 updatedAt);

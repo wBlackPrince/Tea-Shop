@@ -44,9 +44,11 @@ public class UpdateProductHandler
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "update product error");
-            return Error.Validation("update.product", "update product error");
+            _logger.LogError(e, e.Message);
+            return Error.Validation("update.product", e.Message);
         }
+
+        product.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
         await _productsRepository.SaveChangesAsync(cancellationToken);
 

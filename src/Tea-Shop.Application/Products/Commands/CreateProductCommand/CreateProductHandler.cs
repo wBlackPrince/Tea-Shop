@@ -33,10 +33,13 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
         CreateProductCommand command,
         CancellationToken cancellationToken)
     {
+        _logger.LogDebug("Handling {handler}", nameof(CreateProductHandler));
+
         var validationResult = await _validator.ValidateAsync(command.Request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
+            _logger.LogError("Failed validation while creating product");
             return Error.Validation(
                 "product.create",
                 "validation errors",
@@ -50,6 +53,7 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
 
         if (transactionScopeResult.IsFailure)
         {
+            _logger.LogError("Failed to begin transaction while creating product");
             return transactionScopeResult.Error;
         }
 
@@ -84,6 +88,7 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
 
         if (createResult.IsFailure)
         {
+            _logger.LogError("Failed to create product");
             transactionScope.Rollback();
             return createResult.Error;
         }
@@ -95,11 +100,12 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
 
         if (commitedResult.IsFailure)
         {
+            _logger.LogError("Failed to commit result while creating product");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Create product {productId}", productId);
+        _logger.LogDebug("Created product with id {productId}", productId);
 
         var productDto = new CreateProductResponseDto(
             product.Id.Value,
