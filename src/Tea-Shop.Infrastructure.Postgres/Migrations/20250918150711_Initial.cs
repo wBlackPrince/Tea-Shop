@@ -22,10 +22,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     price = table.Column<float>(type: "real", nullable: false),
                     amount = table.Column<float>(type: "real", nullable: false),
                     stock_quantity = table.Column<int>(type: "integer", nullable: false),
-                    rating = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     photos_ids = table.Column<Guid[]>(type: "uuid[]", nullable: false),
+                    count_ratings = table.Column<int>(type: "integer", nullable: false),
+                    sum_ratings = table.Column<int>(type: "integer", nullable: false),
                     ingredients = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -56,6 +57,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     last_name = table.Column<string>(type: "text", nullable: false),
                     middle_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
+                    email_verified = table.Column<bool>(type: "boolean", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     avatar_id = table.Column<Guid>(type: "uuid", nullable: true),
                     role = table.Column<string>(type: "text", nullable: false),

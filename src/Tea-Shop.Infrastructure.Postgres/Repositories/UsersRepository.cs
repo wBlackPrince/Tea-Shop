@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Users;
-using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -17,7 +16,7 @@ public class UsersRepository : IUsersRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<User, Error>> GetUser(
+    public async Task<User?> GetUserById(
         UserId userId,
         CancellationToken cancellationToken)
     {
@@ -25,10 +24,16 @@ public class UsersRepository : IUsersRepository
             u => u.Id == userId,
             cancellationToken);
 
-        if (user is null)
-        {
-            return Error.Failure("Get.User", "User not found");
-        }
+        return user;
+    }
+
+    public async Task<User?> GetUserByEmail(
+        string email,
+        CancellationToken cancellationToken)
+    {
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(
+            u => u.Email == email,
+            cancellationToken);
 
         return user;
     }

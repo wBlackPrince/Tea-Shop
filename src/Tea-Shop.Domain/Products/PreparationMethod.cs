@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 using CSharpFunctionalExtensions;
 using Tea_Shop.Shared;
 
@@ -6,7 +7,8 @@ namespace Tea_Shop.Domain.Products;
 
 public record PreparationMethod
 {
-    private PreparationMethod(){}
+    private string _description;
+    private int _preparationTime;
 
     private PreparationMethod(
         int preparationTime,
@@ -18,9 +20,21 @@ public record PreparationMethod
         Ingredients = ingredients;
     }
 
-    public int PreparationTime { get; }
+    private PreparationMethod()
+    {
+    }
 
-    public string Description { get; }
+    public int PreparationTime
+    {
+        get => _preparationTime;
+        set => UpdatePreparationTime(value);
+    }
+
+    public string Description
+    {
+        get => _description;
+        set => UpdateDescription(value);
+    }
 
     public List<Ingrendient> Ingredients { get; set; }
 
@@ -43,5 +57,27 @@ public record PreparationMethod
 
 
         return new PreparationMethod(preparationTime, description, ingredients);
+    }
+
+    public void UpdateDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ValidationException("description must not be empty");
+
+        if (description.Length > Constants.Limit1000 || description.Length < Constants.Limit2)
+            throw new ValidationException("description must be less than 1000 characters or greater than 1 character");
+
+        _description = description;
+    }
+
+    public void UpdatePreparationTime(int? preparationTime)
+    {
+        if (preparationTime is null)
+            throw new ValidationException("preparation time must not be null");
+
+        if (preparationTime.Value < 0)
+            throw new ValidationException("preparation time must be a positive number");
+
+        _preparationTime = preparationTime.Value;
     }
 }

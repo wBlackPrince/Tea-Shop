@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250914095750_Initial")]
+    [Migration("20250918150711_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -152,6 +152,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("real")
                         .HasColumnName("amount");
 
+                    b.Property<int>("CountRatings")
+                        .HasColumnType("integer")
+                        .HasColumnName("count_ratings");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -171,10 +175,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("real")
                         .HasColumnName("price");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer")
-                        .HasColumnName("rating");
-
                     b.Property<string>("Season")
                         .IsRequired()
                         .HasColumnType("text")
@@ -183,6 +183,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("integer")
                         .HasColumnName("stock_quantity");
+
+                    b.Property<int>("SumRatings")
+                        .HasColumnType("integer")
+                        .HasColumnName("sum_ratings");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -313,6 +317,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
+
+                    b.Property<bool>("EmailVerified")
+                        .HasColumnType("boolean")
+                        .HasColumnName("email_verified");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

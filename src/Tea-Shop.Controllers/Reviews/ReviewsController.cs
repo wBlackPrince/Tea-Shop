@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Orders.Commands;
@@ -46,6 +47,7 @@ public class ReviewsController: ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateReview(
         [FromBody] CreateReviewRequestDto request,
@@ -58,6 +60,7 @@ public class ReviewsController: ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpPatch("reviews/{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(
         [FromRoute] Guid reviewId,
@@ -75,6 +78,7 @@ public class ReviewsController: ControllerBase
         return Ok($"Updated review by id {result.Value}");
     }
 
+    [Authorize]
     [HttpDelete("{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(
         [FromRoute] Guid reviewId,

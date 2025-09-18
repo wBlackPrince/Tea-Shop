@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Contract.Tags;
@@ -18,6 +19,7 @@ public class TagsController: ControllerBase
     }
 
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateTag(
         [FromBody]CreateTagRequestDto request,
@@ -28,6 +30,7 @@ public class TagsController: ControllerBase
         return Ok(tagId);
     }
 
+    [Authorize]
     [HttpDelete("{tagId:guid}")]
     public async Task<ActionResult<Guid>> DeleteTag(
         [FromRoute] Guid tagId,

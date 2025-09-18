@@ -46,15 +46,15 @@ public class UpdateUserHandler
         using var transactionScope = transactionScopeResult.Value;
 
 
-        var (_, isFailure, user, error) = await _usersRepository.GetUser(
+        var user = await _usersRepository.GetUserById(
             new UserId(userId),
             cancellationToken);
 
-        if (isFailure)
+        if (user is null)
         {
-            _logger.LogError("User not found while updating");
+            _logger.LogWarning("User not found while updating");
             transactionScope.Rollback();
-            return error;
+            return Error.NotFound("update.user", "user not found");
         }
 
         try

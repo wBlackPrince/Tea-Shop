@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Auth;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
@@ -13,6 +14,7 @@ using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
@@ -28,6 +30,7 @@ using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
+using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
@@ -61,6 +64,9 @@ public static class DependencyInjection
             ICommandHandler<DeleteProductDto, DeleteProductQuery>,
             DeleteProductHandler>();
         services.AddScoped<UpdateProductHandler>();
+        services.AddScoped<
+            ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand>,
+            UpdatePreparationDescriptionHandler>();
         services.AddScoped<
             IQueryHandler<GetProductDto?, GetProductByIdQuery>,
             GetProductByIdHandler>();
@@ -146,6 +152,9 @@ public static class DependencyInjection
             IQueryHandler<GetUserReviewsResponseDto?, GetUserReviewsQuery>,
             GetUserReviewsHandler>();
         services.AddScoped<UpdateUserHandler>();
+        services.AddScoped<
+            ICommandHandler<string, LoginUserCommand>,
+            LoginUserHandler>();
 
         return services;
     }

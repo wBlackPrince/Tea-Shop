@@ -65,14 +65,14 @@ public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
             });
 
         this.RuleFor(p => p.PreparationDescription)
-            .NotEmpty().WithMessage("PreparationmMethod is required")
-            .NotNull().WithMessage("PreparationmMethod is required")
-            .MaximumLength(Constants.Limit1000).WithMessage("PreparationmMethod must not exceed 1000 characters")
-            .MinimumLength(Constants.Limit2).WithMessage("PreparationmMethod must contain at least 2 character");
+            .NotEmpty().WithMessage("Preparation Method is required")
+            .NotNull().WithMessage("Preparation Method is required")
+            .MaximumLength(Constants.Limit1000).WithMessage("Preparation Method must not exceed 1000 characters")
+            .MinimumLength(Constants.Limit2).WithMessage("Preparation Method must contain at least 2 character");
 
         this.RuleFor(p => p.PreparationTime)
-            .NotEmpty().WithMessage("PreparationmTime is required")
-            .NotNull().WithMessage("PreparationmMethod is required")
+            .NotEmpty().WithMessage("Preparation Time is required")
+            .NotNull().WithMessage("Preparation Time is required")
             .GreaterThan(0);
 
         this.RuleFor(p => p.TagsIds)

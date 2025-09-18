@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
@@ -28,6 +29,7 @@ public class CommentsController: ControllerBase
         return Ok(result);
     }
 
+
     [HttpGet("{commentId:guid}/comments")]
     public async Task<ActionResult<CommentDto>> GetChildCommentById(
         [FromRoute] Guid commentId,
@@ -41,6 +43,7 @@ public class CommentsController: ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateCommentResponseDto>> CreateComment(
         [FromBody] CreateCommentRequestDto request,
@@ -59,6 +62,7 @@ public class CommentsController: ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpPatch("{commentId:guid}")]
     public async Task<IActionResult> UpdateComment(
         [FromRoute] Guid commentId,
@@ -76,6 +80,7 @@ public class CommentsController: ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpDelete("{commentId:guid}")]
     public async Task<ActionResult<CommentWithOnlyIdDto>> DeleteComment(
         [FromRoute] Guid commentId,

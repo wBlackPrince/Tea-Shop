@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Tea_Shop.Web</RootNamespace>
+        <UserSecretsId>5cfb144e-6880-41ad-967e-f05497cc2f9a</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

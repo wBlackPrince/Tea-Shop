@@ -7,17 +7,17 @@ namespace Tea_Shop.Application.Users;
 
 public interface IUsersRepository
 {
-    Task<Result<User, Error>> GetUser(
+    Task<User?> GetUserById(
         UserId userId,
+        CancellationToken cancellationToken);
+
+    Task<User?> GetUserByEmail(
+        string email,
         CancellationToken cancellationToken);
 
     Task<bool> IsEmailUnique(
         string email,
         CancellationToken cancellationToken);
-
-    Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken);
-
-    Task<Result<IReadOnlyList<User>, Error>> GetBannedUsers(CancellationToken cancellationToken);
 
     Task<Guid> CreateUser(User user, CancellationToken cancellationToken);
 

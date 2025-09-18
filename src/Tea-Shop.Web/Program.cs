@@ -1,10 +1,27 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Infrastructure.Postgres;
-using Tea_Shop.Infrastructure.Postgres.Seeders;
 using Tea_Shop.Infrastructure.S3;
 using Tea_Shop.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.RequireHttpsMetadata = false;
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ClockSkew = TimeSpan.Zero,
+        };
+    });
 
 builder.Services.AddProgramDependencies();
 
@@ -20,9 +37,10 @@ builder.Services.AddMinioDependencies(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapOpenApi();
+//app.MapOpenApi();
+app.UseSwagger();
 app.UseSwaggerUI(
-    options => options.SwaggerEndpoint("/openapi/v1.json", "Tea-Shop v1"));
+    options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tea-Shop v1"));
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,6 +51,8 @@ if (app.Environment.IsDevelopment())
     // }
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

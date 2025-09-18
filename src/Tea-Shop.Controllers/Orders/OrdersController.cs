@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
@@ -15,6 +16,7 @@ namespace Tea_Shop.Orders;
 [Route("[controller]")]
 public class OrdersController: ControllerBase
 {
+    [Authorize]
     [HttpGet("orders/{orderId:guid}")]
     public async Task<ActionResult<GetOrderResponseDto>> GetOrderById(
         [FromRoute] Guid orderId,
@@ -28,6 +30,7 @@ public class OrdersController: ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("orders/{orderId:guid}/items")]
     public async Task<ActionResult<OrderItemDto[]>> GetOrderItems(
         [FromRoute] Guid orderId,
@@ -41,6 +44,7 @@ public class OrdersController: ControllerBase
         return Ok(orderItems);
     }
 
+    [Authorize]
     [HttpPost("orders")]
     public async Task<ActionResult<CreateOrderResponseDto>> CreateOrder(
         [FromBody] CreateOrderRequestDto request,
@@ -59,6 +63,7 @@ public class OrdersController: ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpPatch("orders/{orderId:guid}")]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] Guid orderId,
@@ -76,7 +81,7 @@ public class OrdersController: ControllerBase
         return Ok($"Updated order by id {result.Value}");
     }
 
-
+    [Authorize]
     [HttpDelete("orders/{orderId:guid}")]
     public async Task<IActionResult> DeleteOrder(
         [FromRoute] Guid orderId,

@@ -36,6 +36,9 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder.Property(u => u.Email)
             .HasColumnName("email");
 
+        builder.Property(u => u.EmailVerified)
+            .HasColumnName("email_verified");
+
         builder.Property(u => u.PhoneNumber)
             .HasColumnName("phone_number");
 

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
+using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
@@ -20,6 +22,7 @@ namespace Tea_Shop.Users;
 [Route("[controller]")]
 public class UsersController: ControllerBase
 {
+    [Authorize]
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<GetUserResponseDto>> GetUserById(
         [FromRoute] Guid userId,
@@ -35,6 +38,7 @@ public class UsersController: ControllerBase
         return Ok(user);
     }
 
+    [Authorize]
     [HttpGet("users")]
     public async Task<IActionResult> GetUsers(
         [FromQuery] GetUsersRequestDto request,
@@ -48,6 +52,7 @@ public class UsersController: ControllerBase
         return Ok(users);
     }
 
+    [Authorize]
     [HttpGet("orders")]
     public async Task<ActionResult<GetUserOrdersResponseDto?>> GetUserOrders(
         [FromQuery] GetUserOrdersRequestDto request,
@@ -61,6 +66,7 @@ public class UsersController: ControllerBase
         return Ok(userOrders);
     }
 
+    [Authorize]
     [HttpGet("comments")]
     public async Task<ActionResult<GetUserCommentsResponseDto?>> GetUserComments(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -74,6 +80,7 @@ public class UsersController: ControllerBase
         return Ok(userComments);
     }
 
+    [Authorize]
     [HttpGet("reviews")]
     public async Task<ActionResult<GetUserReviewsResponseDto?>> GetUserReviews(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -87,6 +94,7 @@ public class UsersController: ControllerBase
         return Ok(userReviews);
     }
 
+    [Authorize]
     [HttpPost]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(10_000_000)]
@@ -126,6 +134,25 @@ public class UsersController: ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> LoginUser(
+        [FromBody] LoginRequestDto request,
+        [FromServices] ICommandHandler<string, LoginUserCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new LoginUserCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
@@ -143,6 +170,7 @@ public class UsersController: ControllerBase
         return Ok(updateResult.Value);
     }
 
+    [Authorize]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult<UserWithOnlyIdDto>> DeleteUser(
         [FromRoute] Guid userId,

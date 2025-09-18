@@ -109,6 +109,6 @@ public class Review: Entity
             throw new ValidationException("Title can't be longer than 2000 characters");
         }
 
-        Title = title;
+        _title = title;
     }
 }

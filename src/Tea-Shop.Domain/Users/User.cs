@@ -42,6 +42,7 @@ public class User: Entity
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+        EmailVerified = false;
         PhoneNumber = phoneNumber;
         Role = role;
         AvatarId = avatarId;
@@ -103,6 +104,11 @@ public class User: Entity
         get => _email;
         set => UpdateEmail(value);
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether подтверждение email пользвоателя
+    /// </summary>
+    public bool EmailVerified { get; set; }
 
     /// <summary>
     /// Gets or sets Номер телефона пользователя

@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
@@ -96,6 +98,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateProductResponseDto>> Create(
         [FromServices] ICommandHandler<CreateProductResponseDto, CreateProductCommand> handler,
@@ -114,6 +117,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPatch("{productId:guid}")]
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
@@ -131,6 +135,7 @@ public class ProductsController : ControllerBase
         return Ok(updateResult.Value);
     }
 
+    [Authorize]
     [HttpPatch("{productId:guid}/ingredients")]
     public async Task<IActionResult> UpdateIngredients(
         [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdateProductIngredientsCommand> handler,
@@ -149,6 +154,25 @@ public class ProductsController : ControllerBase
         return Ok(updateResult.Value);
     }
 
+    [Authorize]
+    [HttpPatch("preparation-description")]
+    public async Task<IActionResult> UpdatePreparationDescription(
+        [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand> handler,
+        [FromBody] UpdatePreparationDescriptionRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdatePreparationDescriptionCommand(request);
+        var updateResult = await handler.Handle(command, cancellationToken);
+
+        if (updateResult.IsFailure)
+        {
+            return NotFound(updateResult.Error);
+        }
+
+        return Ok(updateResult.Value);
+    }
+
+    [Authorize]
     [HttpDelete("{productId:guid}")]
     public async Task<IActionResult> DeleteProduct(
         [FromServices] ICommandHandler<DeleteProductDto, DeleteProductQuery> handler,
