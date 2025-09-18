@@ -68,6 +68,14 @@ public class CreateUserCommandTests
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
 
+        var scope = Substitute.For<ITransactionScope>();
+
+        scope.Commit().Returns(UnitResult.Success<Error>());
+
+        _transactionManagerMock
+            .BeginTransactionAsync(IsolationLevel.RepeatableRead, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(Result.Success<ITransactionScope, Error>(scope)));
+
 
         // result
         var result = await _handler.Handle(Command, CancellationToken.None);
@@ -263,6 +271,14 @@ public class CreateUserCommandTests
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
+
+        var scope = Substitute.For<ITransactionScope>();
+
+        scope.Commit().Returns(UnitResult.Success<Error>());
+
+        _transactionManagerMock
+            .BeginTransactionAsync(IsolationLevel.RepeatableRead, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(Result.Success<ITransactionScope, Error>(scope)));
 
         // result
         var result = await _handler.Handle(Command, CancellationToken.None);
