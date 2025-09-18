@@ -56,10 +56,4 @@ public class ProductsRepository: IProductsRepository
 
         return productId.Value;
     }
-
-
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
-    }
 }

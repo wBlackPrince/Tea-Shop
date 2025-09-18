@@ -39,12 +39,7 @@ public class ReviewsRepository : IReviewsRepository
         await _dbContext.Reviews
             .Where(r => r.Id == reviewId)
             .ExecuteDeleteAsync(cancellationToken);
- 
-        return reviewId.Value;
-    }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return reviewId.Value;
     }
 }

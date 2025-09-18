@@ -14,6 +14,4 @@ public interface IOrdersRepository
     Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> DeleteOrder(OrderId orderId, CancellationToken cancellationToken);
-
-    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

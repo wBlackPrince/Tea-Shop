@@ -9,6 +9,4 @@ public interface ICommentsRepository
     Task<Guid?> CreateComment(Comment comment, CancellationToken cancellationToken);
 
     Task<Guid?> DeleteComment(CommentId commentId, CancellationToken cancellationToken);
-
-    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -1,6 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -10,13 +12,16 @@ public class UpdateUserHandler
 {
     private readonly IUsersRepository _usersRepository;
     private readonly ILogger<UpdateUserHandler> _logger;
+    private readonly ITransactionManager _transactionManager;
 
     public UpdateUserHandler(
         IUsersRepository usersRepository,
-        ILogger<UpdateUserHandler> logger)
+        ILogger<UpdateUserHandler> logger,
+        ITransactionManager transactionManager)
     {
         _usersRepository = usersRepository;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
 
@@ -27,6 +32,20 @@ public class UpdateUserHandler
     {
         _logger.LogDebug("Handling {handleName}", nameof(UpdateUserHandler));
 
+
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            _logger.LogError("Failed to begin transaction while updating user");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
         var (_, isFailure, user, error) = await _usersRepository.GetUser(
             new UserId(userId),
             cancellationToken);
@@ -34,6 +53,7 @@ public class UpdateUserHandler
         if (isFailure)
         {
             _logger.LogError("User not found while updating");
+            transactionScope.Rollback();
             return error;
         }
 
@@ -44,10 +64,23 @@ public class UpdateUserHandler
         catch (Exception e)
         {
             _logger.LogError("Validation error while updating product");
+            transactionScope.Rollback();
             return Error.Validation("update product", e.Message);
         }
 
-        await _usersRepository.SaveChangesAsync(cancellationToken);
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            _logger.LogError("Failed to commit result while updating user");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
 
         _logger.LogDebug("Update user with id {UserId}", userId);
 

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Domain.Orders;
-using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
@@ -50,11 +49,5 @@ public class OrdersRepository: IOrdersRepository
             .ExecuteDeleteAsync(cancellationToken);
 
         return orderId.Value;
-    }
-
-
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

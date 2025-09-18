@@ -45,6 +45,7 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
 
         if (transactionScopeResult.IsFailure)
         {
+            _logger.LogError("Failed to begin transaction while creating review");
             return transactionScopeResult.Error;
         }
 
@@ -94,11 +95,13 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
 
         if (commitedResult.IsFailure)
         {
+            _logger.LogError("Failed to commit result while creating review");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogInformation("Created review {review.Id}", review.Id);
+
+        _logger.LogDebug("Created review {review.Id}", review.Id);
 
         var response = new CreateReviewResponseDto
         {

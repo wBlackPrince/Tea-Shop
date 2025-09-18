@@ -11,11 +11,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Seeders;
 
 public class ProductsSeeders: ISeeder
 {
-    private readonly ProductsDbContext _dbContext;
-    private readonly ILogger<ProductsSeeders> _logger;
-
-    private readonly Random _random = new();
-
     // Константы для количества данных
     private const int USERS_COUNT = 50000;
     private const int PRODUCTS_COUNT = 100;
@@ -25,7 +20,7 @@ public class ProductsSeeders: ISeeder
     private const int COMMENTS_COUNT = 150000;
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
-    private static Season[] seasons = { Season.SPRING , Season.SUMMER, Season.AUTUMN, Season.WINTER };
+    private static Season[] seasons = { Season.SPRING, Season.SUMMER, Season.AUTUMN, Season.WINTER };
     private static string[] _roles = { "USER", "ADMINISTRATOR", "DEVELOPER" };
 
     private static string[] ingredientsNames =
@@ -251,26 +246,6 @@ public class ProductsSeeders: ISeeder
         "Чёрный чай с кокосом.",
     };
 
-    private static readonly float[] productPrices =
-    {
-        5.5f, 6.0f, 7.0f, 6.5f, 5.8f,
-        6.2f, 9.5f, 12.0f, 6.8f, 8.0f,
-        8.5f, 9.0f, 7.5f, 10.5f, 8.0f,
-        8.5f, 6.5f, 7.0f, 6.8f, 5.9f,
-        5.5f, 5.7f, 6.3f, 6.6f, 6.9f,
-        7.2f, 7.4f, 8.1f, 9.0f, 6.8f,
-    };
-
-    private static readonly float[] productAmounts =
-    {
-        50, 60, 40, 70, 80,
-        65, 30, 25, 55, 60,
-        45, 40, 50, 35, 70,
-        65, 75, 50, 60, 55,
-        80, 70, 65, 55, 60,
-        75, 50, 45, 40, 55,
-    };
-
     private static float[] ingredientAmounts =
     {
         // Чайные основы
@@ -435,6 +410,31 @@ public class ProductsSeeders: ISeeder
         "Не согласен, думаю по-другому.",
         "Да, тоже обратил внимание на это.",
         "Полезная информация, благодарю!",
+    };
+
+    private readonly ProductsDbContext _dbContext;
+    private readonly ILogger<ProductsSeeders> _logger;
+
+    private readonly Random _random = new();
+
+    private static readonly float[] ProductPrices =
+    {
+        5.5f, 6.0f, 7.0f, 6.5f, 5.8f,
+        6.2f, 9.5f, 12.0f, 6.8f, 8.0f,
+        8.5f, 9.0f, 7.5f, 10.5f, 8.0f,
+        8.5f, 6.5f, 7.0f, 6.8f, 5.9f,
+        5.5f, 5.7f, 6.3f, 6.6f, 6.9f,
+        7.2f, 7.4f, 8.1f, 9.0f, 6.8f,
+    };
+
+    private static readonly float[] ProductAmounts =
+    {
+        50, 60, 40, 70, 80,
+        65, 30, 25, 55, 60,
+        45, 40, 50, 35, 70,
+        65, 75, 50, 60, 55,
+        80, 70, 65, 55, 60,
+        75, 50, 45, 40, 55,
     };
 
 
@@ -753,8 +753,8 @@ public class ProductsSeeders: ISeeder
         {
             var title = productTitles[_random.Next(productTitles.Length)];
             var description = productDescriptions[_random.Next(productDescriptions.Length)];
-            var price = productPrices[_random.Next(productPrices.Length)];
-            var amount = productAmounts[_random.Next(productAmounts.Length)];
+            var price = ProductPrices[_random.Next(ProductPrices.Length)];
+            var amount = ProductAmounts[_random.Next(ProductAmounts.Length)];
             var stockQuantity = _random.Next(100, 1000);
             var season = seasons[_random.Next(seasons.Length)];
 

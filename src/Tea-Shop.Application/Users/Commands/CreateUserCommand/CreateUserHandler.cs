@@ -1,7 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
@@ -17,6 +19,7 @@ public class CreateUserHandler: ICommandHandler<
     private readonly ILogger<CreateUserHandler> _logger;
     private readonly IValidator<CreateUserRequestDto> _validator;
     private readonly IFileProvider _fileProvider;
+    private readonly ITransactionManager _transactionManager;
 
     private const string _avatarBucket = "media";
 
@@ -24,12 +27,14 @@ public class CreateUserHandler: ICommandHandler<
         IUsersRepository usersRepository,
         ILogger<CreateUserHandler> logger,
         IFileProvider fileProvider,
-        IValidator<CreateUserRequestDto> validator)
+        IValidator<CreateUserRequestDto> validator,
+        ITransactionManager transactionManager)
     {
         _usersRepository = usersRepository;
         _logger = logger;
         _fileProvider = fileProvider;
         _validator = validator;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<CreateUserResponseDto, Error>> Handle(
@@ -48,11 +53,28 @@ public class CreateUserHandler: ICommandHandler<
                 validationResult.Errors.First().PropertyName);
         }
 
+
+
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            _logger.LogError("Failed to begin transaction while creating user");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
+
         bool isEmailUnique = await _usersRepository.IsEmailUnique(command.Request.Email, cancellationToken);
 
         if (!isEmailUnique)
         {
             _logger.LogError($"email {command.Request.Email} already exists");
+            transactionScope.Rollback();
             return Error.Failure("create.user", "email is already taken");
         }
 
@@ -60,7 +82,33 @@ public class CreateUserHandler: ICommandHandler<
 
 
         Guid? avatarId = Guid.NewGuid();
-        string? avatarKey = null;
+
+        User user = new User(
+            userId,
+            command.Request.Password,
+            command.Request.FirstName,
+            command.Request.LastName,
+            command.Request.Email,
+            command.Request.PhoneNumber,
+            (Role)Enum.Parse(typeof(Role), command.Request.Role),
+            avatarId,
+            command.Request.MiddleName);
+
+        await _usersRepository.CreateUser(user, cancellationToken);
+
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            _logger.LogError("Failed to commit result while creating user");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
 
         if (command.Request.FileDto is not null)
         {
@@ -85,28 +133,9 @@ public class CreateUserHandler: ICommandHandler<
                 _logger.LogError($"avatar upload failed: {upload.Error.Message}");
                 return Error.Failure("create.user", $"avatar upload failed: {upload.Error.Message}");
             }
-
-            var media = upload.Value;
-
-            avatarKey = media.Key;
         }
 
-        User user = new User(
-            userId,
-            command.Request.Password,
-            command.Request.FirstName,
-            command.Request.LastName,
-            command.Request.Email,
-            command.Request.PhoneNumber,
-            (Role)Enum.Parse(typeof(Role), command.Request.Role),
-            avatarId,
-            command.Request.MiddleName);
-
-        await _usersRepository.CreateUser(user, cancellationToken);
-
-        await _usersRepository.SaveChangesAsync(cancellationToken);
-
-        _logger.LogInformation("User with id {UserId} created a new account.", user.Id.Value);
+        _logger.LogDebug("User with id {UserId} created a new account.", user.Id.Value);
 
         var response = new CreateUserResponseDto()
         {

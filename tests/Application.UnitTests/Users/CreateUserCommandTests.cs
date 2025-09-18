@@ -1,8 +1,11 @@
-﻿using FluentValidation;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
@@ -35,18 +38,22 @@ public class CreateUserCommandTests
 
     private readonly IFileProvider _filesProviderMock;
 
+    private readonly ITransactionManager _transactionManagerMock;
+
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
         _filesProviderMock = Substitute.For<IFileProvider>();
+        _transactionManagerMock = Substitute.For<ITransactionManager>();
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
             _loggerMock,
             _filesProviderMock,
-            _validatorMock);
+            _validatorMock,
+            _transactionManagerMock);
     }
 
     [Fact]
@@ -203,9 +210,7 @@ public class CreateUserCommandTests
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(new[]
             {
-                new ValidationFailure(
-                    "PhoneNumber",
-                    "Phone Number is required")
+                new ValidationFailure("PhoneNumber", "Phone Number is required")
             }));
 
         // result
@@ -232,9 +237,7 @@ public class CreateUserCommandTests
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(new[]
             {
-                new ValidationFailure(
-                    "Email",
-                    "Email is required")
+                new ValidationFailure("Email","Email is required")
             }));
 
         // result
@@ -265,7 +268,7 @@ public class CreateUserCommandTests
         var result = await _handler.Handle(Command, CancellationToken.None);
 
         // assert
-        _usersRepositoryMock.Received(1).CreateUser(
+        await _usersRepositoryMock.Received(1).CreateUser(
             Arg.Is<User>(u => u.Id == new UserId(result.Value.Id)),
             Arg.Any<CancellationToken>());
     }
@@ -276,16 +279,27 @@ public class CreateUserCommandTests
         // arrange
         _usersRepositoryMock.IsEmailUnique(
             Arg.Is<string>(e => e == Command.Request.Email),
-            Arg.Any<CancellationToken>()).Returns(true);
+            Arg.Any<CancellationToken>()).Returns(Task.FromResult(true));
 
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
 
+        _usersRepositoryMock.CreateUser(Arg.Any<User>(), Arg.Any<CancellationToken>());
+
+        var scope = Substitute.For<ITransactionScope>();
+
+        scope.Commit().Returns(UnitResult.Success<Error>());
+
+        _transactionManagerMock
+            .BeginTransactionAsync(IsolationLevel.RepeatableRead, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(Result.Success<ITransactionScope, Error>(scope)));
+        _transactionManagerMock.SaveChangesAsync(Arg.Any<CancellationToken>());
+
         // result
         var result = await _handler.Handle(Command, CancellationToken.None);
 
         // assert
-        _usersRepositoryMock.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _transactionManagerMock.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
     }
 }

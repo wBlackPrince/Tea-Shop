@@ -1,6 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Shared;
 
@@ -10,13 +12,16 @@ public class UpdateOrderHandler
 {
     private readonly IOrdersRepository _ordersRepository;
     private readonly ILogger<UpdateOrderHandler> _logger;
+    private readonly ITransactionManager _transactionManager;
 
     public UpdateOrderHandler(
         IOrdersRepository ordersRepository,
-        ILogger<UpdateOrderHandler> logger)
+        ILogger<UpdateOrderHandler> logger,
+        ITransactionManager transactionManager)
     {
         _ordersRepository = ordersRepository;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -25,6 +30,20 @@ public class UpdateOrderHandler
         CancellationToken cancellationToken)
     {
         _logger.LogDebug("Handling {handleName}", nameof(UpdateOrderHandler));
+
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            _logger.LogError("Failed to begin transaction while updating order");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
 
         Order? order = await _ordersRepository.GetOrderById(
             new OrderId(orderId),
@@ -48,7 +67,19 @@ public class UpdateOrderHandler
 
         order.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
-        await _ordersRepository.SaveChangesAsync(cancellationToken);
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            _logger.LogError("Failed to commit result while updating order");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
 
         _logger.LogDebug("Update order {orderId}", orderId);
 

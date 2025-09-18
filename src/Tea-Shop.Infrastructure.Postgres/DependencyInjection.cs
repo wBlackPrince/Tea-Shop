@@ -18,8 +18,10 @@ public static class DependencyInjection
     {
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
         services.AddScoped<IProductsRepository, ProductsRepository>();
+
         // выбираем для DI либо ef core либо postgres
-        //services.AddScoped<IProductsRepository, ProductsSqlRepository>();
+
+        // services.AddScoped<IProductsRepository, ProductsSqlRepository>();
 
         services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<IOrdersRepository, OrdersRepository>();

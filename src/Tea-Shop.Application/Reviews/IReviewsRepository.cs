@@ -13,6 +13,4 @@ public interface IReviewsRepository
     Task<Guid> DeleteReview(
         ReviewId reviewId,
         CancellationToken cancellationToken);
-
-    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

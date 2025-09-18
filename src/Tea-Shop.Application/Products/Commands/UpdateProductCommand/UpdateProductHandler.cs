@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Database;
@@ -11,17 +12,17 @@ namespace Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 public class UpdateProductHandler
 {
     private readonly IProductsRepository _productsRepository;
-    private readonly IReadDbContext _readDbContext;
     private readonly ILogger<CreateProductHandler> _logger;
+    private readonly ITransactionManager _transactionManager;
 
     public UpdateProductHandler(
         IProductsRepository productsRepository,
-        IReadDbContext readDbContext,
-        ILogger<CreateProductHandler> logger)
+        ILogger<CreateProductHandler> logger,
+        ITransactionManager transactionManager)
     {
         _productsRepository = productsRepository;
-        _readDbContext = readDbContext;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -29,12 +30,26 @@ public class UpdateProductHandler
         JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            _logger.LogError("Failed to begin transaction while updating product");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
         Product? product = await _productsRepository.GetProductById(
             productId,
             cancellationToken);
 
         if (product is null)
         {
+            transactionScope.Rollback();
             return Error.NotFound("update product", "product not found");
         }
 
@@ -45,12 +60,26 @@ public class UpdateProductHandler
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+            transactionScope.Rollback();
             return Error.Validation("update.product", e.Message);
         }
 
         product.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
-        await _productsRepository.SaveChangesAsync(cancellationToken);
+
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            _logger.LogError("Failed to commit result while updating product");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
+
 
         _logger.LogInformation("Update product {productId}", productId);
 

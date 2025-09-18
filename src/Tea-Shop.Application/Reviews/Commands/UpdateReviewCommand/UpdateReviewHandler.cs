@@ -1,6 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Data;
+using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Shared;
 
@@ -10,13 +12,16 @@ public class UpdateReviewHandler
 {
     private readonly IReviewsRepository _reviewsRepository;
     private readonly ILogger<UpdateReviewHandler> _logger;
+    private readonly ITransactionManager _transactionManager;
 
     public UpdateReviewHandler(
         IReviewsRepository reviewsRepository,
-        ILogger<UpdateReviewHandler> logger)
+        ILogger<UpdateReviewHandler> logger,
+        ITransactionManager transactionManager)
     {
         _reviewsRepository = reviewsRepository;
         _logger = logger;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<Guid, Error>> Handle(
@@ -24,12 +29,26 @@ public class UpdateReviewHandler
         JsonPatchDocument<Review> reviewUpdates,
         CancellationToken cancellationToken)
     {
+        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            _logger.LogError("Failed to begin transaction while updating review");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
         Review? review = await _reviewsRepository.GetReviewById(
             new ReviewId(reviewId),
             cancellationToken);
 
         if (review is null)
         {
+            transactionScope.Rollback();
             return Error.NotFound("update review", "review not found");
         }
 
@@ -40,12 +59,24 @@ public class UpdateReviewHandler
         catch (Exception e)
         {
             _logger.LogError("Validation error while updating review with id {reviewId}", reviewId);
+            transactionScope.Rollback();
             return Error.Validation("update review", e.Message);
         }
 
         review.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
-        await _reviewsRepository.SaveChangesAsync(cancellationToken);
+
+        await _transactionManager.SaveChangesAsync(cancellationToken);
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            _logger.LogError("Failed to commit result while updating review");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
 
         _logger.LogInformation("Update review {reviewId}", reviewId);
 

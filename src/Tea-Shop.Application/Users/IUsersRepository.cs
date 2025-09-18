@@ -22,6 +22,4 @@ public interface IUsersRepository
     Task<Guid> CreateUser(User user, CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> DeleteUser(UserId useId, CancellationToken cancellationToken);
-
-    Task SaveChangesAsync(CancellationToken cancellationToken);
 }
