@@ -60,6 +60,7 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
         using var transactionScope = transactionScopeResult.Value;
 
 
+
         ProductId productId = new ProductId(Guid.NewGuid());
 
         Ingrendient[] ingrindients = command.Request.Ingridients

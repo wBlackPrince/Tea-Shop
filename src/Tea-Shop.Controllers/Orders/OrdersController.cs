@@ -17,7 +17,7 @@ namespace Tea_Shop.Orders;
 public class OrdersController: ControllerBase
 {
     [Authorize]
-    [HttpGet("orders/{orderId:guid}")]
+    [HttpGet("{orderId:guid}")]
     public async Task<ActionResult<GetOrderResponseDto>> GetOrderById(
         [FromRoute] Guid orderId,
         [FromServices] IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery> handler,
@@ -31,7 +31,7 @@ public class OrdersController: ControllerBase
     }
 
     [Authorize]
-    [HttpGet("orders/{orderId:guid}/items")]
+    [HttpGet("{orderId:guid}/items")]
     public async Task<ActionResult<OrderItemDto[]>> GetOrderItems(
         [FromRoute] Guid orderId,
         [FromServices] IQueryHandler<OrderItemDto[], GetOrderItemQuery> handler,
@@ -45,7 +45,7 @@ public class OrdersController: ControllerBase
     }
 
     [Authorize]
-    [HttpPost("orders")]
+    [HttpPost]
     public async Task<ActionResult<CreateOrderResponseDto>> CreateOrder(
         [FromBody] CreateOrderRequestDto request,
         [FromServices] ICommandHandler<CreateOrderResponseDto, CreateOrderCommand> handler,
@@ -64,7 +64,7 @@ public class OrdersController: ControllerBase
     }
 
     [Authorize]
-    [HttpPatch("orders/{orderId:guid}")]
+    [HttpPatch("{orderId:guid}")]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] Guid orderId,
         [FromBody] JsonPatchDocument<Order> orderUpdates,
@@ -82,7 +82,7 @@ public class OrdersController: ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("orders/{orderId:guid}")]
+    [HttpDelete("{orderId:guid}")]
     public async Task<IActionResult> DeleteOrder(
         [FromRoute] Guid orderId,
         [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
@@ -98,5 +98,25 @@ public class OrdersController: ControllerBase
         }
 
         return Ok(orderId);
+    }
+
+    [Authorize]
+    [HttpPost("{orderId:guid}/items")]
+    public async Task<IActionResult> AddOrderItemById(
+        [FromBody] OrderItemDto orderItem,
+        [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    [Authorize]
+    [HttpDelete("{orderId:guid}/items")]
+    public async Task<IActionResult> DeleteOrderItemById(
+        [FromBody] OrderItemDto orderItem,
+        [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

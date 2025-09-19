@@ -5,6 +5,7 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
+using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
@@ -171,6 +172,26 @@ public class ProductsController : ControllerBase
 
         return Ok(updateResult.Value);
     }
+
+
+    [Authorize]
+    [HttpPatch("preparation-time")]
+    public async Task<IActionResult> UpdatePreparationTime(
+        [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationTimeCommand> handler,
+        [FromBody] UpdatePreparationTimeRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdatePreparationTimeCommand(request);
+        var updateResult = await handler.Handle(command, cancellationToken);
+
+        if (updateResult.IsFailure)
+        {
+            return NotFound(updateResult.Error);
+        }
+
+        return Ok(updateResult.Value);
+    }
+
 
     [Authorize]
     [HttpDelete("{productId:guid}")]

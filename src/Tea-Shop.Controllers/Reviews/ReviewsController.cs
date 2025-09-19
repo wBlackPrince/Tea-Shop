@@ -61,7 +61,7 @@ public class ReviewsController: ControllerBase
     }
 
     [Authorize]
-    [HttpPatch("reviews/{reviewId:guid}")]
+    [HttpPatch("{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(
         [FromRoute] Guid reviewId,
         [FromBody] JsonPatchDocument<Review> reviewUpdates,

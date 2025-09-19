@@ -7,9 +7,6 @@ namespace Tea_Shop.Domain.Products;
 
 public record PreparationMethod
 {
-    private string _description;
-    private int _preparationTime;
-
     private PreparationMethod(
         int preparationTime,
         string description,
@@ -24,17 +21,9 @@ public record PreparationMethod
     {
     }
 
-    public int PreparationTime
-    {
-        get => _preparationTime;
-        set => UpdatePreparationTime(value);
-    }
+    public int PreparationTime { get; private set; }
 
-    public string Description
-    {
-        get => _description;
-        set => UpdateDescription(value);
-    }
+    public string Description { get; private set; }
 
     public List<Ingrendient> Ingredients { get; set; }
 
@@ -59,25 +48,45 @@ public record PreparationMethod
         return new PreparationMethod(preparationTime, description, ingredients);
     }
 
-    public void UpdateDescription(string description)
+    public UnitResult<Error> UpdateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
-            throw new ValidationException("description must not be empty");
+        {
+            return Error.Validation(
+                "update.preparation_time",
+                "description must not be empty");
+        }
 
         if (description.Length > Constants.Limit1000 || description.Length < Constants.Limit2)
-            throw new ValidationException("description must be less than 1000 characters or greater than 1 character");
+        {
+            return Error.Validation(
+                "update.preparation_description",
+                "description must be less than 1000 characters or greater than 1 character");
+        }
 
-        _description = description;
+        Description = description;
+
+        return UnitResult.Success<Error>();
     }
 
-    public void UpdatePreparationTime(int? preparationTime)
+    public UnitResult<Error> UpdatePreparationTime(int? preparationTime)
     {
         if (preparationTime is null)
-            throw new ValidationException("preparation time must not be null");
+        {
+            return Error.Validation(
+                "update.preparation_time",
+                "preparation time must not be null");
+        }
 
         if (preparationTime.Value < 0)
-            throw new ValidationException("preparation time must be a positive number");
+        {
+            return Error.Validation(
+                "update.preparation_time",
+                "preparation time must be a positive number");
+        }
 
-        _preparationTime = preparationTime.Value;
+        PreparationTime = preparationTime.Value;
+
+        return UnitResult.Success<Error>();
     }
 }

@@ -1,3 +1,6 @@
-﻿namespace Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
+﻿using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Products;
 
-public record UpdatePreparationTimeCommand();
+namespace Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
+
+public record UpdatePreparationTimeCommand(UpdatePreparationTimeRequestDto Request): ICommand;

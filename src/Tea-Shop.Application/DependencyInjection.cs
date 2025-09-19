@@ -15,6 +15,7 @@ using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
+using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
@@ -67,6 +68,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand>,
             UpdatePreparationDescriptionHandler>();
+        services.AddScoped<
+            ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationTimeCommand>,
+            UpdatePreparationTimeHandler>();
         services.AddScoped<
             IQueryHandler<GetProductDto?, GetProductByIdQuery>,
             GetProductByIdHandler>();

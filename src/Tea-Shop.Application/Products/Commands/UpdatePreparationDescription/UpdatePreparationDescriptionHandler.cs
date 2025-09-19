@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
-using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
@@ -58,13 +57,11 @@ public class UpdatePreparationDescriptionHandler:
                 "Product with id {productId} does not exist");
         }
 
-        try
+        var updatedResult = product.PreparationMethod.UpdateDescription(command.Request.Description);
+
+        if (updatedResult.IsFailure)
         {
-            product.PreparationMethod.Description = command.Request.Description;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error while updating product preparation description");
+            _logger.LogError("Error while updating product preparation description");
             transactionScope.Rollback();
             return Error.Failure(
                 "update.product.preparation_description",

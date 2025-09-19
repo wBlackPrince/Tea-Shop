@@ -39,7 +39,7 @@ public class UsersController: ControllerBase
     }
 
     [Authorize]
-    [HttpGet("users")]
+    [HttpGet]
     public async Task<IActionResult> GetUsers(
         [FromQuery] GetUsersRequestDto request,
         [FromServices] IQueryHandler<GetUsersResponseDto, GetUsersQuery> handler,
