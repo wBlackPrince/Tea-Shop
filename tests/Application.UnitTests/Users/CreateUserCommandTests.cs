@@ -11,6 +11,7 @@ using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Infrastructure.Postgres.Repositories;
 using Tea_Shop.Shared;
 
 namespace Application.UnitTests.Users;
@@ -32,6 +33,8 @@ public class CreateUserCommandTests
 
     private readonly IUsersRepository _usersRepositoryMock;
 
+    private readonly IBusketsRepository _busketsRepositoryMock;
+
     private readonly ILogger<CreateUserHandler> _loggerMock;
 
     private readonly IValidator<CreateUserRequestDto> _validatorMock;
@@ -43,6 +46,7 @@ public class CreateUserCommandTests
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
+        _busketsRepositoryMock = Substitute.For<IBusketsRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
         _filesProviderMock = Substitute.For<IFileProvider>();
@@ -50,6 +54,7 @@ public class CreateUserCommandTests
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
+            _busketsRepositoryMock,
             _loggerMock,
             _filesProviderMock,
             _validatorMock,

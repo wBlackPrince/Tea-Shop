@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20250918150711_Initial")]
+    [Migration("20250920141141_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,53 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Tea_Shop.Domain.Buskets.Busket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_buskets");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("buskets", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Buskets.BusketItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("BusketId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("busket_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id")
+                        .HasName("pk_buskets_items");
+
+                    b.HasIndex("BusketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("buskets_items", (string)null);
+                });
 
             modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
                 {
@@ -313,6 +360,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("avatar_id");
 
+                    b.Property<Guid>("BusketId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("busket_id");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
@@ -360,6 +411,30 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasName("pk_users");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Buskets.Busket", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("Tea_Shop.Domain.Buskets.Busket", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Buskets.BusketItem", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Buskets.Busket", null)
+                        .WithMany()
+                        .HasForeignKey("BusketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>

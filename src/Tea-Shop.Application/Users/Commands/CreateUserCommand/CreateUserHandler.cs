@@ -6,7 +6,9 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain.Buskets;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Infrastructure.Postgres.Repositories;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Users.Commands.CreateUserCommand;
@@ -16,6 +18,7 @@ public class CreateUserHandler: ICommandHandler<
     CreateUserCommand>
 {
     private readonly IUsersRepository _usersRepository;
+    private readonly IBusketsRepository _busketsRepository;
     private readonly ILogger<CreateUserHandler> _logger;
     private readonly IValidator<CreateUserRequestDto> _validator;
     private readonly IFileProvider _fileProvider;
@@ -25,12 +28,14 @@ public class CreateUserHandler: ICommandHandler<
 
     public CreateUserHandler(
         IUsersRepository usersRepository,
+        IBusketsRepository busketsRepository,
         ILogger<CreateUserHandler> logger,
         IFileProvider fileProvider,
         IValidator<CreateUserRequestDto> validator,
         ITransactionManager transactionManager)
     {
         _usersRepository = usersRepository;
+        _busketsRepository = busketsRepository;
         _logger = logger;
         _fileProvider = fileProvider;
         _validator = validator;
@@ -95,6 +100,13 @@ public class CreateUserHandler: ICommandHandler<
             command.Request.MiddleName);
 
         await _usersRepository.CreateUser(user, cancellationToken);
+
+
+        // создание корзины для пользователя
+        BusketId busketId = new BusketId(Guid.NewGuid());
+        Busket busket = new Busket(busketId, user.Id);
+
+        await _busketsRepository.Create(busket, cancellationToken);
 
 
 

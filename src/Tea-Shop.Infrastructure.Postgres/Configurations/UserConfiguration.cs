@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tea_Shop.Domain.Buskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
@@ -20,6 +21,11 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             .Property(u => u.Id)
             .HasConversion(u => u.Value, id => new UserId(id))
             .HasColumnName("id");
+
+        builder
+            .Property(u => u.BusketId)
+            .HasConversion(bi => bi.Value, id => new BusketId(id))
+            .HasColumnName("busket_id");
 
         builder.Property(u => u.Password)
             .HasColumnName("password");
@@ -65,6 +71,13 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             .HasMany<Comment>()
             .WithOne()
             .HasForeignKey(c => c.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne<Busket>()
+            .WithOne()
+            .HasForeignKey<Busket>(r => r.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

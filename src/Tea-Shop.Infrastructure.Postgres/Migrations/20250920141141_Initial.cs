@@ -52,6 +52,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    busket_id = table.Column<Guid>(type: "uuid", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
@@ -89,6 +90,24 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         name: "FK_products_tags_tags_tag_id",
                         column: x => x.tag_id,
                         principalTable: "tags",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "buskets",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_buskets", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_buskets_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -173,6 +192,32 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "buskets_items",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    busket_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_buskets_items", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_buskets_items_buskets_busket_id",
+                        column: x => x.busket_id,
+                        principalTable: "buskets",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_buskets_items_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "order_items",
                 columns: table => new
                 {
@@ -197,6 +242,22 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_buskets_user_id",
+                table: "buskets",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_buskets_items_busket_id",
+                table: "buskets_items",
+                column: "busket_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_buskets_items_product_id",
+                table: "buskets_items",
+                column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comments_user_id",
@@ -243,6 +304,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "buskets_items");
+
+            migrationBuilder.DropTable(
                 name: "comments");
 
             migrationBuilder.DropTable(
@@ -253,6 +317,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "reviews");
+
+            migrationBuilder.DropTable(
+                name: "buskets");
 
             migrationBuilder.DropTable(
                 name: "orders");

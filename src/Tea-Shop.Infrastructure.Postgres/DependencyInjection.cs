@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
         services.AddScoped<ICommentsRepository, CommentsRepository>();
+        services.AddScoped<IBusketsRepository, BusketsRepository>();
         services.AddScoped<ISeeder, ProductsSeeders>();
 
         services.AddSingleton<IDbConnectionFactory, NpgSqlConnectionFactory>();

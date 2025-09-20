@@ -21,7 +21,6 @@ public class Order: Entity
     /// <param name="deliveryAddress">Адрес доставки.</param>
     /// <param name="paymentWay">Способ оплаты.</param>
     /// <param name="expectedDeliveryTime">Ожидаемое время доставки.</param>
-    /// <param name="orderStatus">Статус заказа.</param>
     /// <param name="orderItems">Список заказанных товаров.</param>
     /// <param name="createdAt">Дата создания.</param>
     /// <param name="updatedAt">Дата обновления.</param>

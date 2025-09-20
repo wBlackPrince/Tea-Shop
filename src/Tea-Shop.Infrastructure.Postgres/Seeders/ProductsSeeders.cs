@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Domain.Buskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -18,6 +19,7 @@ public class ProductsSeeders: ISeeder
     private const int ORDERS_COUNT = 120000;
     private const int REVIEWS_COUNT = 35000;
     private const int COMMENTS_COUNT = 150000;
+    private const int BUSKETS_ITEMS_COUNT = 310000;
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
     private static Season[] seasons = { Season.SPRING, Season.SUMMER, Season.AUTUMN, Season.WINTER };
@@ -451,6 +453,7 @@ public class ProductsSeeders: ISeeder
         await SeedUsersBatched();
         await SeedTagsBatched();
         await SeedProductsBatched();
+        await SeedBusketItems();
         await SeedOrdersBatched();
         await SeedReviewsBatched();
         await SeedCommentsBatched();
@@ -574,7 +577,6 @@ public class ProductsSeeders: ISeeder
 
     private async Task SeedOrdersBatched()
     {
-        // string tagName = tagNames[_random.Next(tagNames.Length)];
         _logger.LogInformation("Seeding orders in batching...");
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
@@ -605,7 +607,6 @@ public class ProductsSeeders: ISeeder
             userId = usersIds[_random.Next(0, usersIds.Length)];
             deliveryAddress = deliveryAddresses[_random.Next(0, deliveryAddresses.Length)];
             paymentWay = PaymentWays[_random.Next(0, PaymentWays.Length)];
-            orderStatus = OrderStatuses[_random.Next(0, OrderStatuses.Length)];
             createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
             updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
             expectedTimeDelivery = updatedAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
@@ -837,6 +838,10 @@ public class ProductsSeeders: ISeeder
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var users = new List<User>();
+        var buskets = new List<Busket>();
+        User? user = null;
+        Busket? busket = null;
+
         for (var i = 0; i < USERS_COUNT; i++)
         {
             var firstName = firstNames[_random.Next(firstNames.Length)];
@@ -845,35 +850,92 @@ public class ProductsSeeders: ISeeder
             var phoneNumber = RandomPhone();
             var role = _roles[_random.Next(_roles.Length)];
 
-            users.Add(new User
-            (
+            user = new User(
                 new UserId(Guid.NewGuid()),
                 "qwerty",
                 firstName,
                 lastName,
                 email,
                 phoneNumber,
-                (Role)Enum.Parse(typeof(Role), role)
-            ));
+                (Role)Enum.Parse(typeof(Role), role));
+
+            busket = new Busket(
+                new BusketId(Guid.NewGuid()),
+                user.Id);
+
+            user.BusketId = busket.Id;
+
+            users.Add(user);
+            buskets.Add(busket);
 
             if (users.Count < batchSize)
                 continue;
 
             _dbContext.Set<User>().AddRange(users);
+            _dbContext.Set<Busket>().AddRange(buskets);
             await _dbContext.SaveChangesAsync();
             users.Clear();
+            buskets.Clear();
         }
 
         if (users.Count != 0)
         {
             _dbContext.Set<User>().AddRange(users);
+            _dbContext.Set<Busket>().AddRange(buskets);
             await _dbContext.SaveChangesAsync();
+            users.Clear();
+            buskets.Clear();
         }
 
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
         _logger.LogInformation("Seeded {UsersCount} users.", USERS_COUNT);
     }
 
+    private async Task SeedBusketItems()
+    {
+        _logger.LogInformation("Seeding busket items in batching...");
+        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
+        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+
+        List<BusketItem> busketItems = new List<BusketItem>();
+
+        int quantity = 0;
+        UserId userId;
+        ProductId productId;
+        BusketId busketId;
+
+        const int batchSize = 3000;
+
+        for (int i = 0; i < BUSKETS_ITEMS_COUNT; i++)
+        {
+            quantity = _random.Next(1, 20);
+            userId = new UserId(usersIds[_random.Next(usersIds.Length)]);
+            busketId = _dbContext.UsersRead.First(u => u.Id == userId).BusketId;
+            productId = new ProductId(productIds[_random.Next(productIds.Length)]);
+
+            busketItems.Add(new BusketItem(
+                new BusketItemId(Guid.NewGuid()),
+                busketId,
+                productId,
+                quantity));
+
+            if (i % batchSize == 0)
+            {
+                _logger.LogInformation($"Saved {i} busket items...");
+                _dbContext.BusketsItems.AddRange(busketItems);
+                await _dbContext.SaveChangesAsync();
+                busketItems.Clear();
+            }
+        }
+
+        if (busketItems.Any())
+        {
+            _dbContext.BusketsItems.AddRange(busketItems);
+            await _dbContext.SaveChangesAsync();
+        }
+    }
 
     static string RandomEmail(int minLen = 6, int maxLen = 12)
     {

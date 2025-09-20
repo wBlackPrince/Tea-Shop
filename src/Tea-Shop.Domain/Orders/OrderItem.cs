@@ -12,9 +12,6 @@ public record OrderItemId(Guid Value);
 /// </summary>
 public class OrderItem
 {
-    // для Ef Core
-    private OrderItem() { }
-
     /// <summary>
     /// Initializes a new instance of the "OrderItem" class.
     /// </summary>
@@ -26,6 +23,11 @@ public class OrderItem
         Id = id;
         ProductId = productId;
         Quantity = quantity;
+    }
+
+    // для Ef Core
+    private OrderItem()
+    {
     }
 
     public ProductId ProductId { get; set; }
