@@ -3,12 +3,12 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Buskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Buskets;
 using Tea_Shop.Domain.Users;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Users.Commands.CreateUserCommand;

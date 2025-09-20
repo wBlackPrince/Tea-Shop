@@ -5,13 +5,13 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
+using Tea_Shop.Application.Buskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
-using Tea_Shop.Infrastructure.Postgres.Repositories;
 using Tea_Shop.Shared;
 
 namespace Application.UnitTests.Users;
@@ -96,7 +96,7 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { Password = "" }
+            Request = Command.Request with { Password = string.Empty },
         };
 
         _validatorMock
@@ -105,7 +105,7 @@ public class CreateUserCommandTests
             {
                 new ValidationFailure(
                     "Password",
-                    "Password is required")
+                    "Password is required"),
             }));
 
 
@@ -126,7 +126,7 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { FirstName = "" }
+            Request = Command.Request with { FirstName = string.Empty },
         };
 
         _validatorMock
@@ -135,7 +135,7 @@ public class CreateUserCommandTests
             {
                 new ValidationFailure(
                     "FirstName",
-                    "First Name is required")
+                    "First Name is required"),
             }));
 
 
@@ -156,7 +156,7 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { LastName = "" }
+            Request = Command.Request with { LastName = string.Empty },
         };
 
         _validatorMock
@@ -165,7 +165,7 @@ public class CreateUserCommandTests
             {
                 new ValidationFailure(
                     "LastName",
-                    "Last Name is required")
+                    "Last Name is required"),
             }));
 
 
@@ -186,7 +186,7 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { Role = "invalid" }
+            Request = Command.Request with { Role = "invalid" },
         };
 
         _validatorMock
@@ -195,7 +195,7 @@ public class CreateUserCommandTests
             {
                 new ValidationFailure(
                     "Role",
-                    "Role is not valid")
+                    "Role is not valid"),
             }));
 
 
@@ -216,14 +216,16 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { PhoneNumber = "" }
+            Request = Command.Request with { PhoneNumber = "" },
         };
 
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(new[]
             {
-                new ValidationFailure("PhoneNumber", "Phone Number is required")
+                new ValidationFailure(
+                    "PhoneNumber",
+                    "Phone Number is required"),
             }));
 
         // result
@@ -243,14 +245,14 @@ public class CreateUserCommandTests
         // arrange
         var command = Command with
         {
-            Request = Command.Request with { Email = "" }
+            Request = Command.Request with { Email = string.Empty },
         };
 
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(new[]
             {
-                new ValidationFailure("Email","Email is required")
+                new ValidationFailure("Email", "Email is required"),
             }));
 
         // result
@@ -306,7 +308,7 @@ public class CreateUserCommandTests
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
 
-        _usersRepositoryMock.CreateUser(Arg.Any<User>(), Arg.Any<CancellationToken>());
+        await _usersRepositoryMock.CreateUser(Arg.Any<User>(), Arg.Any<CancellationToken>());
 
         var scope = Substitute.For<ITransactionScope>();
 
@@ -315,7 +317,7 @@ public class CreateUserCommandTests
         _transactionManagerMock
             .BeginTransactionAsync(IsolationLevel.RepeatableRead, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(Result.Success<ITransactionScope, Error>(scope)));
-        _transactionManagerMock.SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _transactionManagerMock.SaveChangesAsync(Arg.Any<CancellationToken>());
 
         // result
         var result = await _handler.Handle(Command, CancellationToken.None);
