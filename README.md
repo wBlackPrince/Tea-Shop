@@ -8,7 +8,7 @@ docker compose up -d --build
 ```
 4. Чтобы перейти в swagger перейди по ссылке
 ```
-http://localhost:5267/swagger/index.html
+http://localhost:8080/swagger/index.html
 ```
 6. Если хочешь перейти в pg admin, вот скриншоты с параметрами подключения:
 
