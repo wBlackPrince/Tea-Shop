@@ -22,7 +22,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Tea_Shop.Domain.Buskets.Busket", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -41,13 +41,13 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("buskets", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Buskets.BusketItem", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Baskets.BasketItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("BusketId")
+                    b.Property<Guid>("BasketId")
                         .HasColumnType("uuid")
                         .HasColumnName("busket_id");
 
@@ -62,7 +62,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.HasKey("Id")
                         .HasName("pk_buskets_items");
 
-                    b.HasIndex("BusketId");
+                    b.HasIndex("BasketId");
 
                     b.HasIndex("ProductId");
 
@@ -357,7 +357,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("avatar_id");
 
-                    b.Property<Guid>("BusketId")
+                    b.Property<Guid>("BasketId")
                         .HasColumnType("uuid")
                         .HasColumnName("busket_id");
 
@@ -410,20 +410,20 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Buskets.Busket", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Users.User", null)
                         .WithOne()
-                        .HasForeignKey("Tea_Shop.Domain.Buskets.Busket", "UserId")
+                        .HasForeignKey("Tea_Shop.Domain.Baskets.Basket", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Buskets.BusketItem", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Baskets.BasketItem", b =>
                 {
-                    b.HasOne("Tea_Shop.Domain.Buskets.Busket", null)
-                        .WithMany()
-                        .HasForeignKey("BusketId")
+                    b.HasOne("Tea_Shop.Domain.Baskets.Basket", null)
+                        .WithMany("Items")
+                        .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -566,6 +566,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>

@@ -1,4 +1,4 @@
-﻿using Tea_Shop.Domain.Buskets;
+﻿using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -19,7 +19,7 @@ public interface IReadDbContext
 
     IQueryable<User> UsersRead { get; }
 
-    IQueryable<Busket> BusketsRead { get; }
+    IQueryable<Basket> BusketsRead { get; }
 
-    IQueryable<BusketItem> BusketsItemsRead { get; }
+    IQueryable<BasketItem> BusketsItemsRead { get; }
 }

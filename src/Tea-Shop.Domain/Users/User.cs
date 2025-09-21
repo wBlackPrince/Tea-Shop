@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Tea_Shop.Domain.Buskets;
+using Tea_Shop.Domain.Baskets;
 
 namespace Tea_Shop.Domain.Users;
 
@@ -64,7 +64,7 @@ public class User: Entity
     /// <summary>
     /// Gets or sets Идентификатор корзины
     /// </summary>
-    public BusketId BusketId { get; set; }
+    public BasketId BasketId { get; set; }
 
     /// <summary>
     /// Gets or sets Пароль пользователя

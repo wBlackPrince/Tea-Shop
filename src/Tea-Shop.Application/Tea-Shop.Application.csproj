@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Baskets\Queries\" />
       <Folder Include="Products\Queries\GetProductsAlsoBought\" />
     </ItemGroup>
 

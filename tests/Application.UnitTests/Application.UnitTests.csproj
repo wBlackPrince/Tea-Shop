@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Buskets\" />
       <Folder Include="Comments\" />
       <Folder Include="Orders\" />
       <Folder Include="Reviews\" />

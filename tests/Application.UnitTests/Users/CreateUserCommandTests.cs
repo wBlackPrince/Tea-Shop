@@ -5,7 +5,7 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
-using Tea_Shop.Application.Buskets;
+using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
@@ -33,7 +33,7 @@ public class CreateUserCommandTests
 
     private readonly IUsersRepository _usersRepositoryMock;
 
-    private readonly IBusketsRepository _busketsRepositoryMock;
+    private readonly IBasketsRepository _basketsRepositoryMock;
 
     private readonly ILogger<CreateUserHandler> _loggerMock;
 
@@ -46,7 +46,7 @@ public class CreateUserCommandTests
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
-        _busketsRepositoryMock = Substitute.For<IBusketsRepository>();
+        _basketsRepositoryMock = Substitute.For<IBasketsRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
         _filesProviderMock = Substitute.For<IFileProvider>();
@@ -54,7 +54,7 @@ public class CreateUserCommandTests
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
-            _busketsRepositoryMock,
+            _basketsRepositoryMock,
             _loggerMock,
             _filesProviderMock,
             _validatorMock,

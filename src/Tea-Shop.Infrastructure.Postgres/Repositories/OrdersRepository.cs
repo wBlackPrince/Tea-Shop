@@ -19,11 +19,7 @@ public class OrdersRepository: IOrdersRepository
 
     public async Task<Order?> GetOrderById(OrderId orderId, CancellationToken cancellationToken)
     {
-        Order? order = await _dbContext.Orders.FirstOrDefaultAsync(
-            o => o.Id == orderId,
-            cancellationToken);
-
-        return order;
+        return await _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId, cancellationToken);
     }
 
     public async Task<Guid> CreateOrder(Order order, CancellationToken cancellationToken)

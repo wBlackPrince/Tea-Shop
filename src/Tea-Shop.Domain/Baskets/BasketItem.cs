@@ -1,45 +1,45 @@
 ﻿using Tea_Shop.Domain.Products;
 
-namespace Tea_Shop.Domain.Buskets;
+namespace Tea_Shop.Domain.Baskets;
 
 /// <summary>
 /// Domain-модель элемента корзины
 /// </summary>
-public class BusketItem
+public class BasketItem
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BusketItem"/> class.
+    /// Initializes a new instance of the <see cref="BasketItem"/> class.
     /// </summary>
     /// <param name="id">Идентификатор элемента корзины.</param>
-    /// <param name="busketId">Идентификатор корзины.</param>
+    /// <param name="basketId">Идентификатор корзины.</param>
     /// <param name="productId">Идентификатор продукта.</param>
     /// <param name="quantity">Количество.</param>
-    public BusketItem(
-        BusketItemId id,
-        BusketId busketId,
+    public BasketItem(
+        BasketItemId id,
+        BasketId basketId,
         ProductId productId,
         int quantity)
     {
         Id = id;
-        BusketId = busketId;
+        BasketId = basketId;
         ProductId = productId;
         Quantity = quantity;
     }
 
     // для Ef Core
-    private BusketItem()
+    private BasketItem()
     {
     }
 
     /// <summary>
     /// Gets or sets Идентификатор продукта
     /// </summary>
-    public BusketItemId Id { get; set; }
+    public BasketItemId Id { get; set; }
 
     /// <summary>
     /// Gets or sets Идентификатор корзины
     /// </summary>
-    public BusketId BusketId { get; set; }
+    public BasketId BasketId { get; set; }
 
     /// <summary>
     /// Gets or sets Идентификатор продукта

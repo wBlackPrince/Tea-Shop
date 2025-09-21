@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
-using Tea_Shop.Domain.Buskets;
+using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -838,9 +838,9 @@ public class ProductsSeeders: ISeeder
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var users = new List<User>();
-        var buskets = new List<Busket>();
+        var buskets = new List<Basket>();
         User? user = null;
-        Busket? busket = null;
+        Basket? busket = null;
 
         for (var i = 0; i < USERS_COUNT; i++)
         {
@@ -859,11 +859,11 @@ public class ProductsSeeders: ISeeder
                 phoneNumber,
                 (Role)Enum.Parse(typeof(Role), role));
 
-            busket = new Busket(
-                new BusketId(Guid.NewGuid()),
+            busket = new Basket(
+                new BasketId(Guid.NewGuid()),
                 user.Id);
 
-            user.BusketId = busket.Id;
+            user.BasketId = busket.Id;
 
             users.Add(user);
             buskets.Add(busket);
@@ -872,7 +872,7 @@ public class ProductsSeeders: ISeeder
                 continue;
 
             _dbContext.Set<User>().AddRange(users);
-            _dbContext.Set<Busket>().AddRange(buskets);
+            _dbContext.Set<Basket>().AddRange(buskets);
             await _dbContext.SaveChangesAsync();
             users.Clear();
             buskets.Clear();
@@ -881,7 +881,7 @@ public class ProductsSeeders: ISeeder
         if (users.Count != 0)
         {
             _dbContext.Set<User>().AddRange(users);
-            _dbContext.Set<Busket>().AddRange(buskets);
+            _dbContext.Set<Basket>().AddRange(buskets);
             await _dbContext.SaveChangesAsync();
             users.Clear();
             buskets.Clear();
@@ -899,12 +899,12 @@ public class ProductsSeeders: ISeeder
         var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
         var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
 
-        List<BusketItem> busketItems = new List<BusketItem>();
+        List<BasketItem> busketItems = new List<BasketItem>();
 
         int quantity = 0;
         UserId userId;
         ProductId productId;
-        BusketId busketId;
+        BasketId basketId;
 
         const int batchSize = 3000;
 
@@ -912,12 +912,12 @@ public class ProductsSeeders: ISeeder
         {
             quantity = _random.Next(1, 20);
             userId = new UserId(usersIds[_random.Next(usersIds.Length)]);
-            busketId = _dbContext.UsersRead.First(u => u.Id == userId).BusketId;
+            basketId = _dbContext.UsersRead.First(u => u.Id == userId).BasketId;
             productId = new ProductId(productIds[_random.Next(productIds.Length)]);
 
-            busketItems.Add(new BusketItem(
-                new BusketItemId(Guid.NewGuid()),
-                busketId,
+            busketItems.Add(new BasketItem(
+                new BasketItemId(Guid.NewGuid()),
+                basketId,
                 productId,
                 quantity));
 

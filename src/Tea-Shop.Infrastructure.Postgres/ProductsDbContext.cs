@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Database;
-using Tea_Shop.Domain.Buskets;
+using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -43,9 +43,9 @@ public class ProductsDbContext: DbContext, IReadDbContext
 
     public DbSet<Order> Orders { get; set; }
 
-    public DbSet<Busket> Buskets { get; set; }
+    public DbSet<Basket> Buskets { get; set; }
 
-    public DbSet<BusketItem> BusketsItems { get; set; }
+    public DbSet<BasketItem> BusketsItems { get; set; }
 
     public DbSet<Tag> Tags { get; set; }
 
@@ -62,7 +62,7 @@ public class ProductsDbContext: DbContext, IReadDbContext
 
     public IQueryable<User> UsersRead => Set<User>().AsNoTracking();
 
-    public IQueryable<Busket> BusketsRead => Set<Busket>().AsNoTracking();
+    public IQueryable<Basket> BusketsRead => Set<Basket>().AsNoTracking();
 
-    public IQueryable<BusketItem> BusketsItemsRead => Set<BusketItem>().AsNoTracking();
+    public IQueryable<BasketItem> BusketsItemsRead => Set<BasketItem>().AsNoTracking();
 }

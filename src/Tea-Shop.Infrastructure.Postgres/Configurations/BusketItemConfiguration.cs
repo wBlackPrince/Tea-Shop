@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tea_Shop.Domain.Buskets;
+using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class BusketItemConfiguration: IEntityTypeConfiguration<BusketItem>
+public class BusketItemConfiguration: IEntityTypeConfiguration<BasketItem>
 {
-    public void Configure(EntityTypeBuilder<BusketItem> builder)
+    public void Configure(EntityTypeBuilder<BasketItem> builder)
     {
         builder.ToTable("buskets_items");
 
@@ -17,12 +17,12 @@ public class BusketItemConfiguration: IEntityTypeConfiguration<BusketItem>
 
         builder
             .Property(bi => bi.Id)
-            .HasConversion(bii => bii.Value, id => new BusketItemId(id))
+            .HasConversion(bii => bii.Value, id => new BasketItemId(id))
             .HasColumnName("id");
 
         builder
-            .Property(bi => bi.BusketId)
-            .HasConversion(bii => bii.Value, id => new BusketId(id))
+            .Property(bi => bi.BasketId)
+            .HasConversion(bii => bii.Value, id => new BasketId(id))
             .HasColumnName("busket_id");
 
         builder
@@ -36,12 +36,6 @@ public class BusketItemConfiguration: IEntityTypeConfiguration<BusketItem>
 
         builder
             .HasOne<Product>()
-            .WithMany()
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasOne<Busket>()
             .WithMany()
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);

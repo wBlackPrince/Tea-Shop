@@ -3,11 +3,11 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Buskets;
+using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Domain.Buskets;
+using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -18,7 +18,7 @@ public class CreateUserHandler: ICommandHandler<
     CreateUserCommand>
 {
     private readonly IUsersRepository _usersRepository;
-    private readonly IBusketsRepository _busketsRepository;
+    private readonly IBasketsRepository _basketsRepository;
     private readonly ILogger<CreateUserHandler> _logger;
     private readonly IValidator<CreateUserRequestDto> _validator;
     private readonly IFileProvider _fileProvider;
@@ -28,14 +28,14 @@ public class CreateUserHandler: ICommandHandler<
 
     public CreateUserHandler(
         IUsersRepository usersRepository,
-        IBusketsRepository busketsRepository,
+        IBasketsRepository basketsRepository,
         ILogger<CreateUserHandler> logger,
         IFileProvider fileProvider,
         IValidator<CreateUserRequestDto> validator,
         ITransactionManager transactionManager)
     {
         _usersRepository = usersRepository;
-        _busketsRepository = busketsRepository;
+        _basketsRepository = basketsRepository;
         _logger = logger;
         _fileProvider = fileProvider;
         _validator = validator;
@@ -103,10 +103,10 @@ public class CreateUserHandler: ICommandHandler<
 
 
         // создание корзины для пользователя
-        BusketId busketId = new BusketId(Guid.NewGuid());
-        Busket busket = new Busket(busketId, user.Id);
+        BasketId basketId = new BasketId(Guid.NewGuid());
+        Basket basket = new Basket(basketId, user.Id);
 
-        await _busketsRepository.Create(busket, cancellationToken);
+        await _basketsRepository.Create(basket, cancellationToken);
 
 
 

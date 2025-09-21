@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Auth;
-using Tea_Shop.Application.Buskets;
+using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Orders;
@@ -31,7 +31,7 @@ public static class DependencyInjection
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
         services.AddScoped<ICommentsRepository, CommentsRepository>();
-        services.AddScoped<IBusketsRepository, BusketsRepository>();
+        services.AddScoped<IBasketsRepository, BasketsRepository>();
         services.AddScoped<ISeeder, ProductsSeeders>();
 
         services.AddSingleton<IDbConnectionFactory, NpgSqlConnectionFactory>();

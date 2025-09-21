@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Auth;
+using Tea_Shop.Application.Baskets.Commands.AddBasketItemCommand;
+using Tea_Shop.Application.Baskets.Commands.RemoveBasketItemCommand;
 using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
@@ -38,6 +40,7 @@ using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
 using Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
+using Tea_Shop.Contract.Baskets;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Products;
@@ -102,6 +105,10 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<DeleteOrderDto, DeleteOrderCommand>,
             DeleteOrderHandler>();
+
+        // handlers для корзин
+        services.AddScoped<ICommandHandler<AddBasketItemDto?, AddBasketItemCommand>, AddBasketItemHandler>();
+        services.AddScoped<ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand>, RemoveBasketItemHandler>();
 
         // handlers для комментов
         services.AddScoped<
