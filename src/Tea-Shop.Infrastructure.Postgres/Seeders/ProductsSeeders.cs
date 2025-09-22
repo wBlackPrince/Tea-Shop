@@ -857,7 +857,8 @@ public class ProductsSeeders: ISeeder
                 lastName,
                 email,
                 phoneNumber,
-                (Role)Enum.Parse(typeof(Role), role));
+                (Role)Enum.Parse(typeof(Role), role),
+                new BasketId(Guid.NewGuid()));
 
             busket = new Basket(
                 new BasketId(Guid.NewGuid()),

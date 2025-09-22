@@ -88,6 +88,10 @@ public class CreateUserHandler: ICommandHandler<
 
         Guid? avatarId = Guid.NewGuid();
 
+        // создание корзины для пользователя
+        BasketId basketId = new BasketId(Guid.NewGuid());
+        Basket basket = new Basket(basketId, userId);
+
         User user = new User(
             userId,
             command.Request.Password,
@@ -96,21 +100,23 @@ public class CreateUserHandler: ICommandHandler<
             command.Request.Email,
             command.Request.PhoneNumber,
             (Role)Enum.Parse(typeof(Role), command.Request.Role),
+            basketId,
             avatarId,
             command.Request.MiddleName);
 
         await _usersRepository.CreateUser(user, cancellationToken);
 
-
-        // создание корзины для пользователя
-        BasketId basketId = new BasketId(Guid.NewGuid());
-        Basket basket = new Basket(basketId, user.Id);
-
         await _basketsRepository.Create(basket, cancellationToken);
 
+        var saveResult = await _transactionManager.SaveChangesAsync(cancellationToken);
 
+        if (saveResult.IsFailure)
+        {
+            _logger.LogError(saveResult.Error.ToString());
+            transactionScope.Rollback();
+            return saveResult.Error;
+        }
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 

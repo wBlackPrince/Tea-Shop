@@ -23,7 +23,7 @@ public class DeleteUserHandler:
     {
         _usersRepository = usersRepository;
         _logger = logger;
-        _transactionManager =  transactionManager;
+        _transactionManager = transactionManager;
     }
 
     public async Task<Result<UserWithOnlyIdDto, Error>> Handle(

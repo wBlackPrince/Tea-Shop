@@ -20,9 +20,8 @@ public class UsersRepository : IUsersRepository
         UserId userId,
         CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users.FirstOrDefaultAsync(
-            u => u.Id == userId,
-            cancellationToken);
+        User? user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         return user;
     }
@@ -31,9 +30,8 @@ public class UsersRepository : IUsersRepository
         string email,
         CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users.FirstOrDefaultAsync(
-            u => u.Email == email,
-            cancellationToken);
+        User? user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user;
     }
@@ -50,35 +48,6 @@ public class UsersRepository : IUsersRepository
     }
 
 
-    public async Task<Result<IReadOnlyList<User>, Error>> GetActiveUsers(CancellationToken cancellationToken)
-    {
-        var users = await _dbContext.Users
-            .Where(u => u.IsActive)
-            .ToListAsync(cancellationToken);
-
-        if (users.Count == 0)
-        {
-            return Error.Failure("get.active_users", "users not found");
-        }
-
-        return users;
-    }
-
-    public async Task<Result<IReadOnlyList<User>, Error>> GetBannedUsers(CancellationToken cancellationToken)
-    {
-        var users = await _dbContext.Users
-            .Where(u => !u.IsActive)
-            .ToListAsync(cancellationToken);
-
-        if (users.Count == 0)
-        {
-            return Error.Failure("get.banned_users", "users not found");
-        }
-
-        return users;
-    }
-
-
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)
     {
         await _dbContext.Users.AddAsync(user, cancellationToken);
@@ -88,10 +57,11 @@ public class UsersRepository : IUsersRepository
 
     public async Task<Result<Guid, Error>> DeleteUser(UserId userId, CancellationToken cancellationToken)
     {
-        var id = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Id == userId);
+        var user = await _dbContext.Users.FirstOrDefaultAsync(
+            u => u.Id == userId,
+            cancellationToken);
 
-        if (id is null)
+        if (user is null)
         {
             return Error.Failure("DeleteUser", "User not found");
         }

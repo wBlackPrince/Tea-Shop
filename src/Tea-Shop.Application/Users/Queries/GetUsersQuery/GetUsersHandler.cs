@@ -77,6 +77,7 @@ public class GetUsersHandler:
                 u.FirstName,
                 u.LastName,
                 u.Role.ToString(),
+                u.BasketId.Value,
                 u.AvatarId,
                 u.MiddleName))
             .ToArrayAsync(cancellationToken);

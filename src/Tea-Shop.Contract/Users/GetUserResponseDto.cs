@@ -5,5 +5,6 @@ public record GetUserResponseDto(
     string FirstName,
     string LastName,
     string Role,
+    Guid BasketId,
     Guid? AvatarId,
     string MiddleName);

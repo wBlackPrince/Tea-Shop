@@ -42,6 +42,7 @@ public class GetUserByIdHandler:
             user.FirstName,
             user.LastName,
             user.Role.ToString(),
+            user.BasketId.Value,
             user.AvatarId,
             user.MiddleName);
 

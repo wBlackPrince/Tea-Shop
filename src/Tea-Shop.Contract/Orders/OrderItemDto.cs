@@ -1,5 +1,5 @@
 ﻿namespace Tea_Shop.Contract.Orders;
 
 public record OrderItemDto(
-    Guid ProductId,
+    Guid BasketItemId,
     int Quantity);

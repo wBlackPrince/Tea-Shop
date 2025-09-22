@@ -4,8 +4,11 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.Users;
 using Tea_Shop.Contract.Orders;
+using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
@@ -16,6 +19,8 @@ namespace Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>
 {
     private readonly IOrdersRepository _ordersRepository;
+    private readonly IUsersRepository _usersRepository;
+    private readonly IBasketsRepository _basketsRepository;
     private readonly IReadDbContext _readDbContext;
     private readonly ILogger<CreateOrderHandler> _logger;
     private readonly IValidator<CreateOrderRequestDto> _validator;
@@ -23,12 +28,16 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
 
     public CreateOrderHandler(
         IOrdersRepository ordersRepository,
+        IUsersRepository usersRepository,
+        IBasketsRepository basketsRepository,
         IReadDbContext readDbContext,
         ILogger<CreateOrderHandler> logger,
         IValidator<CreateOrderRequestDto> validator,
         ITransactionManager transactionManager)
     {
         _ordersRepository = ordersRepository;
+        _usersRepository = usersRepository;
+        _basketsRepository = basketsRepository;
         _readDbContext = readDbContext;
         _logger = logger;
         _validator = validator;
@@ -53,6 +62,7 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
                 $"Validation failed {validationResult.Errors.First().ErrorMessage}");
         }
 
+
         var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
@@ -68,30 +78,70 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
         // валидация бизнес-логики
         // проверка того что все товары заказа доступны для покупки
         Product? product = null;
-        ProductId? productId = null;
+        BasketItem? basketItem = null;
+        BasketItemId? basketItemId = null;
+        User? user = await _usersRepository.GetUserById(
+            new UserId(command.Request.UserId),
+            cancellationToken);
+        Result<OrderItem, Error> orderItem;
+        Basket? basket = await _basketsRepository.GetById(
+            user?.BasketId,
+            cancellationToken);
+
+        List<OrderItem> orderItems = new List<OrderItem>();
 
         for (int i = 0; i < command.Request.Items.Length; i++)
         {
-            productId = new ProductId(command.Request.Items[i].ProductId);
-            product = await _readDbContext.ProductsRead
-                .FirstOrDefaultAsync(
-                    p => p.Id == productId,
-                    cancellationToken);
+            basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
+            basketItem = await _readDbContext.BusketsItemsRead
+                .FirstOrDefaultAsync(bi => bi.Id == basketItemId, cancellationToken);
+
+
+            // если такого продукта не существует
             if (product is null)
             {
-                _logger.LogError("No product with id {productId} found", productId.Value);
+                _logger.LogError("No product with id {productId} found", product?.Id.Value);
                 transactionScope.Rollback();
                 return Error.NotFound(
                     "create.order",
                     "product not found");
             }
 
-            if (product.StockQuantity < command.Request.Items[i].Quantity)
+            // если такого товара в корзине не существует
+            if (basketItem is null)
+            {
+                _logger.LogError("No basket item with id {basketItemId} found", basketItemId?.Value);
+                transactionScope.Rollback();
+                return Error.NotFound(
+                    "create.order",
+                    "basket item not found");
+            }
+
+
+            product = await _readDbContext.ProductsRead
+                .FirstOrDefaultAsync(
+                    p => p.Id == basketItem.ProductId,
+                    cancellationToken);
+
+            // если число товаров в корзине меньше чем в запросе
+            if (basketItem.Quantity < command.Request.Items[i].Quantity)
+            {
+                _logger.LogError("There are too low count of basket items");
+
+                transactionScope.Rollback();
+
+                return Error.Failure(
+                    "create.order",
+                    "There are too low count of basket items");
+            }
+
+            // если число товаров на складе меньше чем в запросе
+            if (product?.StockQuantity < command.Request.Items[i].Quantity)
             {
                 _logger.LogError(
                     "Product with id {productId} doesn't have enough stock quantity",
-                    productId.Value);
+                    product?.Id.Value);
 
                 transactionScope.Rollback();
 
@@ -100,6 +150,7 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
                     "There is not enough stock to order item");
             }
 
+            // Если превышано ограничение на число товаров
             if (command.Request.Items[i].Quantity > 15 && command.Request.PaymentMethod == "CashOnDelivery")
             {
                 _logger.LogError("Order with more than 15 items and with pay after delivery cannot be created");
@@ -111,7 +162,27 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
                     "You cannot order 15 or more items and pay after delivery");
             }
 
+
             product.StockQuantity -= command.Request.Items[i].Quantity;
+
+            orderItem = OrderItem.Create(
+                new OrderItemId(Guid.NewGuid()),
+                product.Id,
+                command.Request.Items[i].Quantity);
+
+            if (orderItem.IsSuccess)
+            {
+                orderItems.Add(orderItem.Value);
+                basketItem.Quantity -= command.Request.Items[i].Quantity;
+                if (basketItem.Quantity <= 0)
+                {
+                    basket?.RemoveItem(basketItem);
+                }
+            }
+            else
+            {
+                return orderItem.Error;
+            }
         }
 
         // проверка ограничения числа товаров в заказа
@@ -125,13 +196,6 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
                 "create.order",
                 "Too many order items");
         }
-
-        var orderItems = command.Request.Items.Select(i =>
-                OrderItem.Create(
-                    new OrderItemId(Guid.NewGuid()),
-                    new ProductId(i.ProductId),
-                    i.Quantity).Value)
-            .ToList();
 
         var order = new Order(
             new OrderId(Guid.NewGuid()),

@@ -94,7 +94,6 @@ public class UsersController: ControllerBase
         return Ok(userReviews);
     }
 
-    [Authorize]
     [HttpPost]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(10_000_000)]

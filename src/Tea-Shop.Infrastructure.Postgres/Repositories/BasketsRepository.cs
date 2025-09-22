@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Baskets;
 using Tea_Shop.Domain.Baskets;
 
@@ -25,7 +26,9 @@ public class BasketsRepository : IBasketsRepository
 
     public async Task<Guid> Create(Basket basket, CancellationToken cancellationToken)
     {
-        await _dbContext.Buskets.AddAsync(basket, cancellationToken);
+        var entry = await _dbContext.Buskets.AddAsync(basket, cancellationToken);
+
+        Debug.Assert(entry.State == EntityState.Added);
 
         return basket.Id.Value;
     }

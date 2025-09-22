@@ -25,6 +25,7 @@ public class User: Entity
     /// <param name="email">Электронная почта.</param>
     /// <param name="phoneNumber">Номер телефона.</param>
     /// <param name="role">Роль в системе.</param>
+    /// <param name="basketId"> Идентификатор коризны.</param>
     /// <param name="avatarId">Идентификатор аватара.</param>
     /// <param name="middleName">Отчество.</param>
     public User(
@@ -35,6 +36,7 @@ public class User: Entity
         string email,
         string phoneNumber,
         Role role,
+        BasketId basketId,
         Guid? avatarId = null,
         string middleName = "")
     {
@@ -46,6 +48,7 @@ public class User: Entity
         EmailVerified = false;
         PhoneNumber = phoneNumber;
         Role = role;
+        BasketId = basketId;
         AvatarId = avatarId;
         IsActive = true;
         MiddleName = middleName;
