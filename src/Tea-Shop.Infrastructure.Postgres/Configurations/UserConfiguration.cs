@@ -25,7 +25,7 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder
             .Property(u => u.BasketId)
             .HasConversion(bi => bi.Value, id => new BasketId(id))
-            .HasColumnName("busket_id");
+            .HasColumnName("basket_id");
 
         builder.Property(u => u.Password)
             .HasColumnName("password");
@@ -44,6 +44,9 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
 
         builder.Property(u => u.EmailVerified)
             .HasColumnName("email_verified");
+
+        builder.Property(u => u.BonusPoints)
+            .HasColumnName("bonus_points");
 
         builder.Property(u => u.PhoneNumber)
             .HasColumnName("phone_number");

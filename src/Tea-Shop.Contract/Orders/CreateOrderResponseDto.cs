@@ -14,5 +14,7 @@ public record CreateOrderResponseDto
 
     public DateTime ExpectedTimeDelivery { get; init; }
 
+    public float OrderSum { get; init; }
+
     public OrderItemResponseDto[] Items { get; init; } = [];
 }

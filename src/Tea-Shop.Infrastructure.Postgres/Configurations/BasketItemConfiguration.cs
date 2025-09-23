@@ -5,15 +5,15 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class BusketItemConfiguration: IEntityTypeConfiguration<BasketItem>
+public class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
 {
     public void Configure(EntityTypeBuilder<BasketItem> builder)
     {
-        builder.ToTable("buskets_items");
+        builder.ToTable("baskets_items");
 
         builder
             .HasKey(bi => bi.Id)
-            .HasName("pk_buskets_items");
+            .HasName("pk_baskets_items");
 
         builder
             .Property(bi => bi.Id)
@@ -23,7 +23,7 @@ public class BusketItemConfiguration: IEntityTypeConfiguration<BasketItem>
         builder
             .Property(bi => bi.BasketId)
             .HasConversion(bii => bii.Value, id => new BasketId(id))
-            .HasColumnName("busket_id");
+            .HasColumnName("basket_id");
 
         builder
             .Property(bi => bi.ProductId)

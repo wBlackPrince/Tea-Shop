@@ -52,13 +52,14 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    busket_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    basket_id = table.Column<Guid>(type: "uuid", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     middle_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     email_verified = table.Column<bool>(type: "boolean", nullable: false),
+                    bonus_points = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     avatar_id = table.Column<Guid>(type: "uuid", nullable: true),
                     role = table.Column<string>(type: "text", nullable: false),
@@ -95,7 +96,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "buskets",
+                name: "baskets",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -103,9 +104,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_buskets", x => x.id);
+                    table.PrimaryKey("pk_baskets", x => x.id);
                     table.ForeignKey(
-                        name: "FK_buskets_users_user_id",
+                        name: "FK_baskets_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
@@ -192,25 +193,25 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "buskets_items",
+                name: "baskets_items",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    busket_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    basket_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_id = table.Column<Guid>(type: "uuid", nullable: false),
                     quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_buskets_items", x => x.id);
+                    table.PrimaryKey("pk_baskets_items", x => x.id);
                     table.ForeignKey(
-                        name: "FK_buskets_items_buskets_busket_id",
-                        column: x => x.busket_id,
-                        principalTable: "buskets",
+                        name: "FK_baskets_items_baskets_basket_id",
+                        column: x => x.basket_id,
+                        principalTable: "baskets",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_buskets_items_products_product_id",
+                        name: "FK_baskets_items_products_product_id",
                         column: x => x.product_id,
                         principalTable: "products",
                         principalColumn: "id",
@@ -244,19 +245,19 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_buskets_user_id",
-                table: "buskets",
+                name: "IX_baskets_user_id",
+                table: "baskets",
                 column: "user_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_buskets_items_busket_id",
-                table: "buskets_items",
-                column: "busket_id");
+                name: "IX_baskets_items_basket_id",
+                table: "baskets_items",
+                column: "basket_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_buskets_items_product_id",
-                table: "buskets_items",
+                name: "IX_baskets_items_product_id",
+                table: "baskets_items",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
@@ -304,7 +305,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "buskets_items");
+                name: "baskets_items");
 
             migrationBuilder.DropTable(
                 name: "comments");
@@ -319,7 +320,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "reviews");
 
             migrationBuilder.DropTable(
-                name: "buskets");
+                name: "baskets");
 
             migrationBuilder.DropTable(
                 name: "orders");

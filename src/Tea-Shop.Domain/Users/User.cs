@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Baskets;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Users;
 
@@ -12,6 +14,7 @@ public class User: Entity
     private string _firstName;
     private string _lastName;
     private string _email;
+    private int _bonusPoints;
     private string _middleName;
     private string _phoneNumber;
 
@@ -46,6 +49,7 @@ public class User: Entity
         LastName = lastName;
         Email = email;
         EmailVerified = false;
+        _bonusPoints = 0;
         PhoneNumber = phoneNumber;
         Role = role;
         BasketId = basketId;
@@ -120,6 +124,11 @@ public class User: Entity
     public bool EmailVerified { get; set; }
 
     /// <summary>
+    /// Gets бонусные баллы пользователя
+    /// </summary>
+    public int BonusPoints => _bonusPoints;
+
+    /// <summary>
     /// Gets or sets Номер телефона пользователя
     /// </summary>
     public string PhoneNumber
@@ -191,6 +200,25 @@ public class User: Entity
         }
 
         _email = email;
+    }
+
+    public void AddBonusPoints(int points)
+    {
+        _bonusPoints += points;
+    }
+
+    public UnitResult<Error> RemoveBonusPoints(int points)
+    {
+        if (points > _bonusPoints)
+        {
+            return Error.Validation(
+                "remove.bonus_points",
+                "There are too little bonuses to remove");
+        }
+
+        _bonusPoints -= points;
+
+        return UnitResult.Success<Error>();
     }
 
     public void UpdatePhoneNumber(string phoneNumber)

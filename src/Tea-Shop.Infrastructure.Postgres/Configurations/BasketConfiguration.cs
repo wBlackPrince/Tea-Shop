@@ -6,15 +6,15 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class BusketConfiguration: IEntityTypeConfiguration<Basket>
+public class BasketConfiguration: IEntityTypeConfiguration<Basket>
 {
     public void Configure(EntityTypeBuilder<Basket> builder)
     {
-        builder.ToTable("buskets");
+        builder.ToTable("baskets");
 
         builder
             .HasKey(b => b.Id)
-            .HasName("pk_buskets");
+            .HasName("pk_baskets");
 
         builder
             .Property(b => b.Id)

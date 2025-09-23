@@ -33,12 +33,12 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_buskets");
+                        .HasName("pk_baskets");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("buskets", (string)null);
+                    b.ToTable("baskets", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Baskets.BasketItem", b =>
@@ -49,7 +49,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.Property<Guid>("BasketId")
                         .HasColumnType("uuid")
-                        .HasColumnName("busket_id");
+                        .HasColumnName("basket_id");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
@@ -60,13 +60,13 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("quantity");
 
                     b.HasKey("Id")
-                        .HasName("pk_buskets_items");
+                        .HasName("pk_baskets_items");
 
                     b.HasIndex("BasketId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("buskets_items", (string)null);
+                    b.ToTable("baskets_items", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
@@ -359,7 +359,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.Property<Guid>("BasketId")
                         .HasColumnType("uuid")
-                        .HasColumnName("busket_id");
+                        .HasColumnName("basket_id");
+
+                    b.Property<int>("BonusPoints")
+                        .HasColumnType("integer")
+                        .HasColumnName("bonus_points");
 
                     b.Property<string>("Email")
                         .IsRequired()

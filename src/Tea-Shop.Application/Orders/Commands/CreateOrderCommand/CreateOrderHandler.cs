@@ -88,13 +88,35 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
             user?.BasketId,
             cancellationToken);
 
+        // если такой корзины не существует
+        if (basket is null)
+        {
+            _logger.LogError("No basket with id {basketId} found", basket?.Id.Value);
+            transactionScope.Rollback();
+            return Error.NotFound(
+                "create.order",
+                "basket not found");
+        }
+
         List<OrderItem> orderItems = new List<OrderItem>();
+        float orderSum = 0;
+        int newBonuses = 0;
 
         for (int i = 0; i < command.Request.Items.Length; i++)
         {
             basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
             basketItem = await _basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
+
+            // если такой вещи корзины не существует
+            if (basketItem is null)
+            {
+                _logger.LogError("No basket item with id {basketItemId} found", basketItem?.Id.Value);
+                transactionScope.Rollback();
+                return Error.NotFound(
+                    "create.order",
+                    "basket item not found");
+            }
 
             product = await _readDbContext.ProductsRead.FirstOrDefaultAsync(
                 p => p.Id == basketItem.ProductId,
@@ -166,6 +188,8 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
 
 
             product.StockQuantity -= command.Request.Items[i].Quantity;
+            newBonuses += (int)(product.Price * 0.15f * command.Request.Items[i].Quantity);
+            orderSum += product.Price;
 
             orderItem = OrderItem.Create(
                 new OrderItemId(Guid.NewGuid()),
@@ -212,6 +236,19 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
         await _ordersRepository.CreateOrder(order, cancellationToken);
 
 
+        if (command.Request.UsedBonuses > orderSum)
+        {
+            orderSum = 0;
+        }
+        else
+        {
+            orderSum = orderSum - command.Request.UsedBonuses;
+        }
+
+        user.RemoveBonusPoints(command.Request.UsedBonuses);
+
+        user.AddBonusPoints(newBonuses);
+
         await _transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
@@ -234,6 +271,7 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
             PaymentMethod = order.PaymentWay.ToString(),
             Status = order.OrderStatus.ToString(),
             ExpectedTimeDelivery = order.ExpectedDeliveryTime,
+            OrderSum = orderSum,
             Items = order.OrderItems
                 .Select(o =>
                     new OrderItemResponseDto(o.ProductId.Value, o.Quantity))
