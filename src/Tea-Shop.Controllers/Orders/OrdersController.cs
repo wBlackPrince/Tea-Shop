@@ -32,9 +32,9 @@ public class OrdersController: ControllerBase
 
     [Authorize]
     [HttpGet("{orderId:guid}/items")]
-    public async Task<ActionResult<OrderItemDto[]>> GetOrderItems(
+    public async Task<ActionResult<OrderItemResponseDto[]>> GetOrderItems(
         [FromRoute] Guid orderId,
-        [FromServices] IQueryHandler<OrderItemDto[], GetOrderItemQuery> handler,
+        [FromServices] IQueryHandler<OrderItemResponseDto[], GetOrderItemQuery> handler,
         CancellationToken cancellationToken)
     {
         var query = new GetOrderItemQuery(new GetOrderItemsRequestDto(orderId));
@@ -103,7 +103,7 @@ public class OrdersController: ControllerBase
     [Authorize]
     [HttpPost("{orderId:guid}/items")]
     public async Task<IActionResult> AddOrderItemById(
-        [FromBody] OrderItemDto orderItem,
+        [FromBody] OrderItemResponseDto orderItemResponse,
         [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
         CancellationToken cancellationToken)
     {
@@ -113,7 +113,7 @@ public class OrdersController: ControllerBase
     [Authorize]
     [HttpDelete("{orderId:guid}/items")]
     public async Task<IActionResult> DeleteOrderItemById(
-        [FromBody] OrderItemDto orderItem,
+        [FromBody] OrderItemResponseDto orderItemResponse,
         [FromServices] ICommandHandler<DeleteOrderDto, DeleteOrderCommand> handler,
         CancellationToken cancellationToken)
     {

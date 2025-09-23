@@ -94,9 +94,11 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
         {
             basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
-            basketItem = await _readDbContext.BusketsItemsRead
-                .FirstOrDefaultAsync(bi => bi.Id == basketItemId, cancellationToken);
+            basketItem = await _basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
 
+            product = await _readDbContext.ProductsRead.FirstOrDefaultAsync(
+                p => p.Id == basketItem.ProductId,
+                cancellationToken);
 
             // если такого продукта не существует
             if (product is null)
@@ -234,7 +236,7 @@ public class CreateOrderHandler: ICommandHandler<CreateOrderResponseDto, CreateO
             ExpectedTimeDelivery = order.ExpectedDeliveryTime,
             Items = order.OrderItems
                 .Select(o =>
-                    new OrderItemDto(o.ProductId.Value, o.Quantity))
+                    new OrderItemResponseDto(o.ProductId.Value, o.Quantity))
                 .ToArray(),
         };
 

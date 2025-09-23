@@ -16,7 +16,7 @@ public record GetOrderResponseDto
 
     public string OrderStatus { get; init; }
 
-    public List<OrderItemDto> OrderItems { get; set; } = new List<OrderItemDto>();
+    public List<OrderItemResponseDto> OrderItems { get; set; } = new List<OrderItemResponseDto>();
 
     public DateTime CreatedAt { get; init; }
 

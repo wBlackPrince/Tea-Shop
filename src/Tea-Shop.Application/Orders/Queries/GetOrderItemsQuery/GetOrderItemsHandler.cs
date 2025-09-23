@@ -7,7 +7,7 @@ using Tea_Shop.Contract.Orders;
 namespace Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 
 public class GetOrderItemsHandler: IQueryHandler<
-    OrderItemDto[], GetOrderItemQuery>
+    OrderItemResponseDto[], GetOrderItemQuery>
 {
     private readonly IDbConnectionFactory _connectionFactory;
     private readonly ILogger<GetOrderItemsHandler> _logger;
@@ -20,7 +20,7 @@ public class GetOrderItemsHandler: IQueryHandler<
         _logger = logger;
     }
 
-    public async Task<OrderItemDto[]> Handle(
+    public async Task<OrderItemResponseDto[]> Handle(
         GetOrderItemQuery query,
         CancellationToken cancellationToken)
     {
@@ -28,7 +28,7 @@ public class GetOrderItemsHandler: IQueryHandler<
 
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var orderItems = (await connection.QueryAsync<OrderItemDto>(
+        var orderItems = (await connection.QueryAsync<OrderItemResponseDto>(
             """
             select
                 oi.product_id,

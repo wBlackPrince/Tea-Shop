@@ -30,7 +30,7 @@ public class GetOrderByIdHandler: IQueryHandler<
 
         GetOrderResponseDto? orderDto = null;
 
-        await connection.QueryAsync<GetOrderResponseDto, OrderItemDto, GetOrderResponseDto>(
+        await connection.QueryAsync<GetOrderResponseDto, OrderItemResponseDto, GetOrderResponseDto>(
             """
             select
                 o.id,

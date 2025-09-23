@@ -5,4 +5,4 @@ public record CreateOrderRequestDto(
     string DeliveryAddress,
     string PaymentMethod,
     DateTime ExpectedTimeDelivery,
-    OrderItemDto[] Items);
+    OrderItemRequestDto[] Items);

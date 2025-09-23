@@ -14,5 +14,5 @@ public record CreateOrderResponseDto
 
     public DateTime ExpectedTimeDelivery { get; init; }
 
-    public OrderItemDto[] Items { get; init; } = [];
+    public OrderItemResponseDto[] Items { get; init; } = [];
 }

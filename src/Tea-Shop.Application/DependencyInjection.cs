@@ -96,7 +96,7 @@ public static class DependencyInjection
             IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery>,
             GetOrderByIdHandler>();
         services.AddScoped<
-            IQueryHandler<OrderItemDto[], GetOrderItemQuery>,
+            IQueryHandler<OrderItemResponseDto[], GetOrderItemQuery>,
             GetOrderItemsHandler>();
         services.AddScoped<
             ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>,
