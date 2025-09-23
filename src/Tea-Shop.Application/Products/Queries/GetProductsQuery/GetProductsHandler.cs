@@ -66,10 +66,24 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
             "WHERE " + string.Join(" AND ", conditions) :
             string.Empty;
 
-        parameters.Add("limit", query.Request.Pagination.PageSize, DbType.Int32);
+        string orderByField = query.Request?.OrderBy?.ToLower() switch
+        {
+            "season" => "p.season",
+            "price" => "p.price",
+            "created_at" => "p.created_at",
+            "rating" => "rating",
+            _ => "p.created_at",
+        };
+
+        string orderByDirection = (query.Request?.OrderDirection?.ToLower() == "asc") ? "ASC" : "DESC";
+
+        var orderClause = $"ORDER BY {orderByField} {orderByDirection}";
+
+
+        parameters.Add("limit", query.Request?.Pagination.PageSize, DbType.Int32);
         parameters.Add(
             "offset",
-            (query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize,
+            (query.Request?.Pagination.Page - 1) * query.Request?.Pagination.PageSize,
             DbType.Int32);
 
 
@@ -81,6 +95,13 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
         await connection
             .QueryAsync<ProductDto, long, GetProductsResponseDto>(
             $"""
+                 WITH reviews_count as(
+                 SELECT 
+                     p.id as product_id, 
+                     count(*) as reviews_count
+                 FROM reviews as r join products as p ON r.product_id = p.id
+                 GROUP BY p.id)
+                 
                  SELECT
                     p.id,
                     p.title,
@@ -89,12 +110,11 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
                     p.stock_quantity,
                     p.description,
                     p.season,
-                    (SELECT round(avg(r1.product_rating), 2)
-                         FROM reviews AS r1
-                         WHERE r1.product_id = p.id) AS rating,
-                    (SELECT count(*)
-                         FROM reviews AS r2
-                          WHERE r2.product_id = p.id) AS reviews_count,
+                    CASE 
+                        WHEN p.count_ratings > 0 THEN p.sum_ratings / p.count_ratings
+                        ELSE 0 
+                    END AS rating,
+                    rc.reviews_count,
                     p.created_at,
                     p.updated_at,
                     array_agg(pt.tag_id) as tags_ids,
@@ -103,8 +123,10 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
                     count(*) OVER () AS total_count
                  FROM products AS p
                       JOIN products_tags AS pt ON p.id = pt.product_id
+                      JOIN reviews_count AS rc ON rc.product_id = p.id
                  {whereClause}
-                 GROUP BY p.id, p.title, p.price, p.amount, p.stock_quantity, p.description, p.season, p.created_at, p.updated_at
+                 GROUP BY p.id, p.title, p.price, p.amount, p.stock_quantity, p.description, p.season, p.created_at, p.updated_at, rc.reviews_count
+                 {orderClause}
                  LIMIT @limit
                  OFFSET @offset
                  """,

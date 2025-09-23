@@ -6,4 +6,6 @@ public record GetProductsRequestDto(
     string? Season,
     float? MinPrice,
     float? MaxPrice,
-    PaginationRequest Pagination);
+    PaginationRequest Pagination,
+    string? OrderBy,
+    string? OrderDirection);
