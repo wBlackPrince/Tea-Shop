@@ -4,8 +4,10 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
+using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Shared;
 
@@ -31,7 +33,6 @@ public class CreateProductCommandTests
             },
             "prepaation descpription",
             10,
-            new Guid[] { Guid.NewGuid(), Guid.NewGuid() },
             new Guid[] { Guid.NewGuid(), Guid.NewGuid() }));
 
     private readonly CreateProductHandler _handler;
@@ -43,6 +44,8 @@ public class CreateProductCommandTests
     private readonly IValidator<CreateProductRequestDto> _validatorMock;
 
     private readonly ITransactionManager _transactionManagerMock;
+
+    private readonly IFileProvider _fileproviderMock;
 
     public CreateProductCommandTests()
     {

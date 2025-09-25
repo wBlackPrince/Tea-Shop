@@ -15,11 +15,11 @@ public class Basket
     /// Initializes a new instance of the <see cref="Basket"/> class.
     /// </summary>
     /// <param name="id">Идентификатор корзины.</param>
-    /// /// <param name="userId">Идентификатор пользователя.</param>
-    public Basket(BasketId id, UserId userId)
+    /// /// <param name="entityId">Идентификатор сущности.</param>
+    public Basket(BasketId id, UserId entityId)
     {
         Id = id;
-        UserId = userId;
+        UserId = entityId;
     }
 
     // для EF Core

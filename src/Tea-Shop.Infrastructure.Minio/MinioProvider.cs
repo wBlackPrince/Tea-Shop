@@ -61,6 +61,21 @@ public class MinioProvider: Tea_Shop.Application.FilesStorage.IFileProvider
         return Media.Create(bucket, key);
     }
 
+    // public Task DeleteFile()
+    // {
+    //     
+    // }
+
+    // public Task DownloadFile()
+    // {
+    //     
+    // }
+
+    // public Task GetFilePresignedPath()
+    // {
+    //     
+    // }
+
     private async Task<Result<string, Error>> CheckIsExistsBucket(
         string bucketName,
         CancellationToken cancellationToken)

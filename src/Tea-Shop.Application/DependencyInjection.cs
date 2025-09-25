@@ -20,6 +20,7 @@ using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
+using Tea_Shop.Application.Products.Commands.UploadProductsPhotosCommand;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
@@ -62,6 +63,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<CreateProductResponseDto, CreateProductCommand>,
             CreateProductHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid, UploadProductsPhotosCommand>,
+            UploadProductsPhotosHandler>();
         services.AddScoped<
             ICommandHandler<ProductWithOnlyIdDto, UpdateProductIngredientsCommand>,
             UpdateProductIngredientsHandler>();

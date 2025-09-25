@@ -13,4 +13,10 @@ public interface IFileProvider
         string fileName,
         bool createBucketIfNotExists,
         CancellationToken cancellationToken);
+
+    //Task DeleteFile();
+
+    //Task DownloadFile();
+
+    //Task GetFilePresignedPath();
 }

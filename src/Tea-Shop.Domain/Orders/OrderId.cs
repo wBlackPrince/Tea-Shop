@@ -1,3 +1,3 @@
 ﻿namespace Tea_Shop.Domain.Orders;
 
-public record OrderId(Guid Value);
+public record OrderId(Guid Value): EntityId;

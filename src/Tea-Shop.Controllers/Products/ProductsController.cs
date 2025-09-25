@@ -8,12 +8,14 @@ using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 using Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
+using Tea_Shop.Application.Products.Commands.UploadProductsPhotosCommand;
 using Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
+using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
@@ -133,6 +135,29 @@ public class ProductsController : ControllerBase
 
         return Ok(result);
     }
+
+    [Authorize]
+    [HttpPost("{productId:guid}/photos")]
+    public async Task<ActionResult<Guid>> UploadPhotos(
+        [FromServices] ICommandHandler<Guid, UploadProductsPhotosCommand> handler,
+        [FromRoute] Guid productId,
+        [FromForm] UploadProductPhotosHttpRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        var fileDtos = request.ProductsFiles
+            .Select(f => new UploadFileDto(f.OpenReadStream(), f.FileName, f.ContentType));
+        var command = new UploadProductsPhotosCommand(new UploadProductsPhotosRequestDto(productId, fileDtos.ToArray()));
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result);
+    }
+
 
     [Authorize]
     [HttpPatch("{productId:guid}")]

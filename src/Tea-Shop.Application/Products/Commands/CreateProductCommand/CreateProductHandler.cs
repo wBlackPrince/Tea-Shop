@@ -4,13 +4,15 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.CreateProductCommand;
 
-public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, CreateProductCommand>
+public class CreateProductHandler:
+    ICommandHandler<CreateProductResponseDto, CreateProductCommand>
 {
     private readonly IProductsRepository _productsRepository;
     private readonly ILogger<CreateProductHandler> _logger;
@@ -60,7 +62,6 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
         using var transactionScope = transactionScopeResult.Value;
 
 
-
         ProductId productId = new ProductId(Guid.NewGuid());
 
         Ingrendient[] ingrindients = command.Request.Ingridients
@@ -82,7 +83,7 @@ public class CreateProductHandler: ICommandHandler<CreateProductResponseDto, Cre
             command.Request.TagsIds,
             command.Request.PreparationDescription,
             command.Request.PreparationTime,
-            command.Request.PhotosIds);
+            []);
 
 
         var createResult = await _productsRepository.CreateProduct(product, cancellationToken);

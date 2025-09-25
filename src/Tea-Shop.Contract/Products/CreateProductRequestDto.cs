@@ -10,5 +10,4 @@ public record CreateProductRequestDto(
     CreateIngrindientRequestDto[] Ingridients,
     string PreparationDescription,
     int PreparationTime,
-    Guid[] TagsIds,
-    Guid[] PhotosIds);
+    Guid[] TagsIds);
