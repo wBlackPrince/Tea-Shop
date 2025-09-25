@@ -1,11 +1,13 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 
-public class GetSimilarProductsHandler
+public class GetSimilarProductsHandler:
+    IQueryHandler<GetSimilarProductResponseDto[], GetSimilarProductsQuery>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
     private readonly ILogger<GetSimilarProductsHandler> _logger;
@@ -18,13 +20,13 @@ public class GetSimilarProductsHandler
         _logger = logger;
     }
 
-    public async Task<GetProductsResponseDto> GetSimilarProducts(
+    public async Task<GetSimilarProductResponseDto[]> Handle(
         GetSimilarProductsQuery query,
         CancellationToken cancellationToken)
     {
         var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var similarProducts = await connection.QueryAsync("""
+        var similarProducts = await connection.QueryAsync<GetSimilarProductResponseDto>("""
                                                           with chosen_product as (
                                                               select p.id,
                                                                      p.price,
@@ -49,8 +51,9 @@ public class GetSimilarProductsHandler
                                                                  ((round(cp.price / p.price) < 2) or (round(p.price / cp.price) < 2)) and
                                                                  pt.tag_id = cp.tag_id
                                                           limit 10
-                                                          """);
+                                                          """,
+            param: new { productId = query.Request.ProductId });
 
-        throw new NotImplementedException();
+        return similarProducts.ToArray();
     }
 }

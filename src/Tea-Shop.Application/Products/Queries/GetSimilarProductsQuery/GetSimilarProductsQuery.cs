@@ -1,5 +1,6 @@
-﻿using Tea_Shop.Contract.Products;
+﻿using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 
-public record GetSimilarProductsQuery(ProductWithOnlyIdDto Request);
+public record GetSimilarProductsQuery(ProductWithOnlyIdDto Request): IQuery;

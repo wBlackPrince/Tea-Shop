@@ -13,6 +13,7 @@ using Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsQuery;
+using Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
@@ -93,6 +94,21 @@ public class ProductsController : ControllerBase
         };
 
         var query = new GetPopularProductsQuery(request);
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{productId:guid}/similar")]
+    public async Task<ActionResult<GetReviewResponseDto[]>> GetSimilarProducts(
+        [FromRoute] Guid productId,
+        [FromServices] IQueryHandler<
+            GetSimilarProductResponseDto[],
+            GetSimilarProductsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetSimilarProductsQuery(new ProductWithOnlyIdDto(productId));
 
         var result = await handler.Handle(query, cancellationToken);
 
