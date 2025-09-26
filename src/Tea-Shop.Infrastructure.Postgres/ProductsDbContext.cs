@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Domain;
 using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
@@ -50,6 +51,8 @@ public class ProductsDbContext: DbContext, IReadDbContext
     public DbSet<Tag> Tags { get; set; }
 
     public DbSet<ProductsTags> ProductsTags { get; set; }
+
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
     public IQueryable<Product> ProductsRead => Set<Product>().AsNoTracking();

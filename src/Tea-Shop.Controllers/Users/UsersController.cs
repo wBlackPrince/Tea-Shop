@@ -5,6 +5,8 @@ using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserCommand;
+using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
+using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
@@ -134,9 +136,9 @@ public class UsersController: ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<string>> LoginUser(
+    public async Task<ActionResult<LoginResponseDto>> LoginUser(
         [FromBody] LoginRequestDto request,
-        [FromServices] ICommandHandler<string, LoginUserCommand> handler,
+        [FromServices] ICommandHandler<LoginResponseDto, LoginUserCommand> handler,
         CancellationToken cancellationToken)
     {
         var command = new LoginUserCommand(request);
@@ -150,6 +152,42 @@ public class UsersController: ControllerBase
 
         return Ok(result.Value);
     }
+
+    [HttpPost("login-with-refresh-token")]
+    public async Task<ActionResult<LoginResponseDto>> LoginWithRefreshToken(
+        [FromBody] LoginWithRefreshTokenRequestDto request,
+        [FromServices] ICommandHandler<LoginResponseDto, LoginUserWithRefreshTokenCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new LoginUserWithRefreshTokenCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{userId:guid}/revoke-refresh-tokens")]
+    public async Task<ActionResult<bool>> RevokeRefreshToken(
+        [FromRoute] Guid userId,
+        [FromServices] RevokeRefreshTokensHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(userId, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+
 
     [Authorize]
     [HttpPatch("{userId:guid}")]

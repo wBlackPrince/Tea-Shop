@@ -24,6 +24,8 @@ builder.Services
         };
     });
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddProgramDependencies();
 
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;

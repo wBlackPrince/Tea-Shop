@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -10,7 +11,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Auth;
 
 public sealed class TokenProvider(IConfiguration configuration): ITokenProvider
 {
-    public string CreateUser(User user)
+    public string Create(User user)
     {
         string secretKeyValue = configuration["Jwt:Secret"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKeyValue));
@@ -34,5 +35,10 @@ public sealed class TokenProvider(IConfiguration configuration): ITokenProvider
         string token = handler.CreateToken(tokenDescriptor);
 
         return token;
+    }
+
+    public string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 }

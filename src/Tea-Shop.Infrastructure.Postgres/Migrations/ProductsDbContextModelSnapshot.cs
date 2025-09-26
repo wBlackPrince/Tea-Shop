@@ -271,6 +271,33 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("products_tags", (string)null);
                 });
 
+            modelBuilder.Entity("Tea_Shop.Domain.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpireOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -555,6 +582,17 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.RefreshToken", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>

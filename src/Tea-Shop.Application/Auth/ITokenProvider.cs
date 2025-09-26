@@ -4,5 +4,7 @@ namespace Tea_Shop.Application.Auth;
 
 public interface ITokenProvider
 {
-    string CreateUser(User user);
+    string Create(User user);
+
+    string GenerateRefreshToken();
 }

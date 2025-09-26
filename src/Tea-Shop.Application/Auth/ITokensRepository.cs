@@ -1,0 +1,13 @@
+﻿using Tea_Shop.Domain;
+using Tea_Shop.Domain.Users;
+
+namespace Tea_Shop.Application.Auth;
+
+public interface ITokensRepository
+{
+    Task<RefreshToken?> GetRefreshToken(string refreshToken, CancellationToken cancellationToken);
+
+    Task CreateRefreshToken(RefreshToken refreshToken, CancellationToken cancellationToken);
+
+    Task RevokeRefreshTokens(UserId userId, CancellationToken cancellationToken);
+}

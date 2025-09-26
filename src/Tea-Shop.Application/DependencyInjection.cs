@@ -36,6 +36,8 @@ using Tea_Shop.Application.Tags;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserCommand;
+using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
+using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
@@ -172,8 +174,12 @@ public static class DependencyInjection
             GetUserReviewsHandler>();
         services.AddScoped<UpdateUserHandler>();
         services.AddScoped<
-            ICommandHandler<string, LoginUserCommand>,
+            ICommandHandler<LoginResponseDto, LoginUserCommand>,
             LoginUserHandler>();
+        services.AddScoped<
+            ICommandHandler<LoginResponseDto, LoginUserWithRefreshTokenCommand>,
+            LoginUserWithRefreshTokenHandler>();
+        services.AddScoped<RevokeRefreshTokensHandler>();
 
         return services;
     }
