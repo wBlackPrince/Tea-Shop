@@ -25,6 +25,11 @@ builder.Services
     });
 
 builder.Services.AddHttpContextAccessor();
+builder.Services
+    .AddFluentEmail(builder.Configuration["Email:SenderEmail"], builder.Configuration["Email:Sender"])
+    .AddSmtpSender(builder.Configuration["Email:Host"], builder.Configuration.GetValue<int>("Email:Port"));
+Console.WriteLine($"SMTP Host: {builder.Configuration["Email:Host"]}");
+Console.WriteLine($"SMTP Port: {builder.Configuration["Email:Port"]}");
 
 builder.Services.AddProgramDependencies();
 

@@ -179,3 +179,5 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Identi
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\FluentEmail.Core.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\FluentEmail.Smtp.dll

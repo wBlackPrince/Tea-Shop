@@ -55,6 +55,13 @@ services:
     volumes:
     - minio_data:/data
     command: server /data --console-address ":9001"
+
+  papercut:
+    image: changemakerstudiosus/papercut-smtp:latest
+    container_name: teashop.papercut
+    ports:
+    - "8090:80"
+    - 25:25
     
 volumes:
   postgres-tea-shop-data:
