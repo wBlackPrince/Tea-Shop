@@ -10,51 +10,38 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.DeleteProductCommand;
 
-public class DeleteProductHandler: ICommandHandler<
-    DeleteProductDto,
-    DeleteProductQuery>
+public class DeleteProductHandler(
+    IProductsRepository productsRepository,
+    ILogger<UpdateProductHandler> logger,
+    ITransactionManager transactionManager): ICommandHandler<DeleteProductDto, DeleteProductQuery>
 {
-    private readonly IProductsRepository _productsRepository;
-    private readonly ILogger<UpdateProductHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public DeleteProductHandler(
-        IProductsRepository productsRepository,
-        ILogger<UpdateProductHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _productsRepository = productsRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<DeleteProductDto, Error>> Handle(
         DeleteProductQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(DeleteProductHandler));
+        logger.LogDebug("Handling {handler}", nameof(DeleteProductHandler));
 
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while deleting product");
+            logger.LogError("Failed to begin transaction while deleting product");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
 
-        var deleteResult = await _productsRepository.DeleteProduct(
+        var deleteResult = await productsRepository.DeleteProduct(
             new ProductId(query.Request.ProductId),
             cancellationToken);
 
         if (deleteResult.IsFailure)
         {
-            _logger.LogError(
+            logger.LogError(
                 "Failed to delete product {productId}",
                 query.Request.ProductId);
             transactionScope.Rollback();
@@ -64,18 +51,18 @@ public class DeleteProductHandler: ICommandHandler<
 
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while deleting product");
+            logger.LogError("Failed to commit result while deleting product");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogError("Delete product {productId}", query.Request.ProductId);
+        logger.LogError("Delete product {productId}", query.Request.ProductId);
 
         return query.Request;
     }

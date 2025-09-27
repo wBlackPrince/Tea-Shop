@@ -8,47 +8,36 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 
-public class UpdateCommentHandler
+public class UpdateCommentHandler(
+    ICommentsRepository commentsRepository,
+    ILogger<UpdateCommentHandler> logger,
+    ITransactionManager transactionManager)
 {
-    private readonly ICommentsRepository _commentsRepository;
-    private readonly ILogger<UpdateCommentHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public UpdateCommentHandler(
-        ICommentsRepository commentsRepository,
-        ILogger<UpdateCommentHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _commentsRepository = commentsRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<Guid?, Error>> Handle(
         Guid commentId,
         JsonPatchDocument<Comment> commentUpdates,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handlerName}", nameof(UpdateCommentHandler));
+        logger.LogDebug("Handling {handlerName}", nameof(UpdateCommentHandler));
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while creating product");
+            logger.LogError("Failed to begin transaction while creating product");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
 
-        Comment? comment = await _commentsRepository.GetCommentById(commentId, cancellationToken);
+        Comment? comment = await commentsRepository.GetCommentById(commentId, cancellationToken);
 
         if (comment is null)
         {
-            _logger.LogError("Comment with id {commentId} does not exist", commentId);
+            logger.LogError("Comment with id {commentId} does not exist", commentId);
             transactionScope.Rollback();
             return Error.NotFound("comment.update", "comment not found");
         }
@@ -59,7 +48,7 @@ public class UpdateCommentHandler
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "validation error while updating comment");
+            logger.LogError(e, "validation error while updating comment");
             transactionScope.Rollback();
             return Error.Validation("comment.update", e.Message);
         }
@@ -70,12 +59,12 @@ public class UpdateCommentHandler
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while updating comment");
+            logger.LogError("Failed to commit result while updating comment");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Updated comment with id {commentId}", commentId);
+        logger.LogDebug("Updated comment with id {commentId}", commentId);
 
         return comment.Id.Value;
     }

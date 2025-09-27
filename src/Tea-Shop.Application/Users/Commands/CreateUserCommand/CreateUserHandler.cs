@@ -13,44 +13,25 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Users.Commands.CreateUserCommand;
 
-public class CreateUserHandler: ICommandHandler<
-    CreateUserResponseDto,
-    CreateUserCommand>
+public class CreateUserHandler(
+    IUsersRepository usersRepository,
+    IBasketsRepository basketsRepository,
+    ILogger<CreateUserHandler> logger,
+    IFileProvider fileProvider,
+    IValidator<CreateUserRequestDto> validator,
+    ITransactionManager transactionManager): ICommandHandler<CreateUserResponseDto, CreateUserCommand>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly IBasketsRepository _basketsRepository;
-    private readonly ILogger<CreateUserHandler> _logger;
-    private readonly IValidator<CreateUserRequestDto> _validator;
-    private readonly IFileProvider _fileProvider;
-    private readonly ITransactionManager _transactionManager;
-
-    private const string _avatarBucket = "media";
-
-    public CreateUserHandler(
-        IUsersRepository usersRepository,
-        IBasketsRepository basketsRepository,
-        ILogger<CreateUserHandler> logger,
-        IFileProvider fileProvider,
-        IValidator<CreateUserRequestDto> validator,
-        ITransactionManager transactionManager)
-    {
-        _usersRepository = usersRepository;
-        _basketsRepository = basketsRepository;
-        _logger = logger;
-        _fileProvider = fileProvider;
-        _validator = validator;
-        _transactionManager = transactionManager;
-    }
+    const string _avatarBucket = "media";
 
     public async Task<Result<CreateUserResponseDto, Error>> Handle(
         CreateUserCommand command,
         CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(command.Request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command.Request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            _logger.LogError(validationResult.Errors.ToString());
+            logger.LogError(validationResult.Errors.ToString());
 
             return Error.Validation(
                 "create.user",
@@ -60,13 +41,13 @@ public class CreateUserHandler: ICommandHandler<
 
 
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while creating user");
+            logger.LogError("Failed to begin transaction while creating user");
             return transactionScopeResult.Error;
         }
 
@@ -74,11 +55,11 @@ public class CreateUserHandler: ICommandHandler<
 
 
 
-        bool isEmailUnique = await _usersRepository.IsEmailUnique(command.Request.Email, cancellationToken);
+        bool isEmailUnique = await usersRepository.IsEmailUnique(command.Request.Email, cancellationToken);
 
         if (!isEmailUnique)
         {
-            _logger.LogError($"email {command.Request.Email} already exists");
+            logger.LogError($"email {command.Request.Email} already exists");
             transactionScope.Rollback();
             return Error.Failure("create.user", "email is already taken");
         }
@@ -104,15 +85,15 @@ public class CreateUserHandler: ICommandHandler<
             avatarId,
             command.Request.MiddleName);
 
-        await _usersRepository.CreateUser(user, cancellationToken);
+        await usersRepository.CreateUser(user, cancellationToken);
 
-        await _basketsRepository.Create(basket, cancellationToken);
+        await basketsRepository.Create(basket, cancellationToken);
 
-        var saveResult = await _transactionManager.SaveChangesAsync(cancellationToken);
+        var saveResult = await transactionManager.SaveChangesAsync(cancellationToken);
 
         if (saveResult.IsFailure)
         {
-            _logger.LogError(saveResult.Error.ToString());
+            logger.LogError(saveResult.Error.ToString());
             transactionScope.Rollback();
             return saveResult.Error;
         }
@@ -122,7 +103,7 @@ public class CreateUserHandler: ICommandHandler<
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while creating user");
+            logger.LogError("Failed to commit result while creating user");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
@@ -138,7 +119,7 @@ public class CreateUserHandler: ICommandHandler<
 
             await using var s = command.Request.FileDto.Stream;
 
-            var upload = await _fileProvider.UploadAsync(
+            var upload = await fileProvider.UploadAsync(
                 stream: s,
                 key: key,
                 bucket: _avatarBucket,
@@ -148,12 +129,12 @@ public class CreateUserHandler: ICommandHandler<
 
             if (upload.IsFailure)
             {
-                _logger.LogError($"avatar upload failed: {upload.Error.Message}");
+                logger.LogError($"avatar upload failed: {upload.Error.Message}");
                 return Error.Failure("create.user", $"avatar upload failed: {upload.Error.Message}");
             }
         }
 
-        _logger.LogDebug("User with id {UserId} created a new account.", user.Id.Value);
+        logger.LogDebug("User with id {UserId} created a new account.", user.Id.Value);
 
         var response = new CreateUserResponseDto()
         {

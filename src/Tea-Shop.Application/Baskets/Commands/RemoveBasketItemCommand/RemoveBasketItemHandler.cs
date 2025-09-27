@@ -10,33 +10,22 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Baskets.Commands.RemoveBasketItemCommand;
 
-public class RemoveBasketItemHandler: ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand>
+public class RemoveBasketItemHandler(
+    IBasketsRepository basketsRepository,
+    ILogger<RemoveBasketItemHandler> logger,
+    ITransactionManager transactionManager): ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand>
 {
-    private readonly IBasketsRepository _basketsRepository;
-    private readonly ILogger<RemoveBasketItemHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public RemoveBasketItemHandler(
-        IBasketsRepository basketsRepository,
-        ILogger<RemoveBasketItemHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _basketsRepository = basketsRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<RemoveBasketItemDto?, Error>> Handle(
         RemoveBasketItemCommand command,
         CancellationToken cancellationToken)
     {
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while removing product from basket");
+            logger.LogError("Failed to begin transaction while removing product from basket");
             return transactionScopeResult.Error;
         }
 
@@ -46,22 +35,22 @@ public class RemoveBasketItemHandler: ICommandHandler<RemoveBasketItemDto?, Remo
 
 
         var basketId = new BasketId(command.BasketItemDto.BusketId);
-        var basket = await _basketsRepository.GetById(basketId, cancellationToken);
+        var basket = await basketsRepository.GetById(basketId, cancellationToken);
 
         if (basket is null)
         {
-            _logger.LogError("Basket {basketId} not found", basketId.Value);
+            logger.LogError("Basket {basketId} not found", basketId.Value);
             transactionScope.Rollback();
             return Error.NotFound("remove.basket_item", $"Basket {basketId.Value} not found");
         }
 
-        var basketItem = await _basketsRepository.GetBasketItemById(
+        var basketItem = await basketsRepository.GetBasketItemById(
             new BasketItemId(command.BasketItemDto.BasketItemId),
             cancellationToken);
 
         if (basketItem is null)
         {
-            _logger.LogError("Basket item {basketItemId} not found", basketItem?.Id.Value);
+            logger.LogError("Basket item {basketItemId} not found", basketItem?.Id.Value);
             transactionScope.Rollback();
             return Error.NotFound(
                 "remove.basket_item",
@@ -72,24 +61,24 @@ public class RemoveBasketItemHandler: ICommandHandler<RemoveBasketItemDto?, Remo
 
         if (addResult.IsFailure)
         {
-            _logger.LogError("Basket {basketId} not found", basketId.Value);
+            logger.LogError("Basket {basketId} not found", basketId.Value);
             transactionScope.Rollback();
             return addResult.Error;
         }
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while removing product from basket");
+            logger.LogError("Failed to commit result while removing product from basket");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Basket item {basketItemId} successfully added", basketItem.Id.Value);
+        logger.LogDebug("Basket item {basketItemId} successfully added", basketItem.Id.Value);
 
         return command.BasketItemDto;
     }

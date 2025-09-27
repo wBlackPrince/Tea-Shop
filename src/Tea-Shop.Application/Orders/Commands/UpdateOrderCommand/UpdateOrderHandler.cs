@@ -8,36 +8,25 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 
-public class UpdateOrderHandler
+public class UpdateOrderHandler(
+    IOrdersRepository ordersRepository,
+    ILogger<UpdateOrderHandler> logger,
+    ITransactionManager transactionManager)
 {
-    private readonly IOrdersRepository _ordersRepository;
-    private readonly ILogger<UpdateOrderHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public UpdateOrderHandler(
-        IOrdersRepository ordersRepository,
-        ILogger<UpdateOrderHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _ordersRepository = ordersRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<Guid, Error>> Handle(
         Guid orderId,
         JsonPatchDocument<Order> orderUpdates,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handleName}", nameof(UpdateOrderHandler));
+        logger.LogDebug("Handling {handleName}", nameof(UpdateOrderHandler));
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while updating order");
+            logger.LogError("Failed to begin transaction while updating order");
             return transactionScopeResult.Error;
         }
 
@@ -45,13 +34,13 @@ public class UpdateOrderHandler
 
 
 
-        Order? order = await _ordersRepository.GetOrderById(
+        Order? order = await ordersRepository.GetOrderById(
             new OrderId(orderId),
             cancellationToken);
 
         if (order is null)
         {
-            _logger.LogError("Not found order with id {orderId}", orderId);
+            logger.LogError("Not found order with id {orderId}", orderId);
             return Error.NotFound("update order", "order not found");
         }
 
@@ -61,7 +50,7 @@ public class UpdateOrderHandler
         }
         catch (Exception e)
         {
-            _logger.LogError("Validation error while updating order with id {orderId}", orderId);
+            logger.LogError("Validation error while updating order with id {orderId}", orderId);
             return Error.Validation("update.order", e.Message);
         }
 
@@ -69,19 +58,19 @@ public class UpdateOrderHandler
 
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while updating order");
+            logger.LogError("Failed to commit result while updating order");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
 
-        _logger.LogDebug("Update order {orderId}", orderId);
+        logger.LogDebug("Update order {orderId}", orderId);
 
         return order.Id.Value;
     }

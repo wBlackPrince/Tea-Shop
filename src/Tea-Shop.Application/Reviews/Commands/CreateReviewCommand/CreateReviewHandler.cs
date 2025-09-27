@@ -13,39 +13,24 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
 
-public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>
+public class CreateReviewHandler(
+    IReviewsRepository reviewsRepository,
+    IProductsRepository productsRepository,
+    IValidator<CreateReviewRequestDto> validator,
+    ILogger<CreateReviewHandler> logger,
+    ITransactionManager transactionManager): ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>
 {
-    private readonly IReviewsRepository _reviewsRepository;
-    private readonly IProductsRepository _productsRepository;
-    private readonly IValidator<CreateReviewRequestDto> _validator;
-    private readonly ILogger<CreateReviewHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public CreateReviewHandler(
-        IReviewsRepository reviewsRepository,
-        IProductsRepository productsRepository,
-        IValidator<CreateReviewRequestDto> validator,
-        ILogger<CreateReviewHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _reviewsRepository = reviewsRepository;
-        _productsRepository = productsRepository;
-        _validator = validator;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<CreateReviewResponseDto, Error>> Handle(
         CreateReviewCommand command,
         CancellationToken cancellationToken)
     {
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while creating review");
+            logger.LogError("Failed to begin transaction while creating review");
             return transactionScopeResult.Error;
         }
 
@@ -53,7 +38,7 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
 
 
         // валидация входных параметров
-        var validationResult = await _validator.ValidateAsync(command.Request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command.Request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
@@ -73,7 +58,7 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
 
 
         // обновляем количество отзывов и сумму рейтинга у продукта
-        Product? product = await _productsRepository.GetProductById(review.ProductId.Value, cancellationToken);
+        Product? product = await productsRepository.GetProductById(review.ProductId.Value, cancellationToken);
 
         if (product is null)
         {
@@ -85,23 +70,23 @@ public class CreateReviewHandler: ICommandHandler<CreateReviewResponseDto, Creat
         product.CountRatings += 1;
 
 
-        await _reviewsRepository.CreateReview(review, cancellationToken);
+        await reviewsRepository.CreateReview(review, cancellationToken);
 
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while creating review");
+            logger.LogError("Failed to commit result while creating review");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
 
-        _logger.LogDebug("Created review {review.Id}", review.Id);
+        logger.LogDebug("Created review {review.Id}", review.Id);
 
         var response = new CreateReviewResponseDto
         {

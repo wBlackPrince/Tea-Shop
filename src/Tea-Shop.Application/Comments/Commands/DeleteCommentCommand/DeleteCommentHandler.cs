@@ -10,67 +10,54 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 
-public class DeleteCommentHandler:
+public class DeleteCommentHandler(
+    ICommentsRepository commentsRepository,
+    IReadDbContext readDbContext,
+    ILogger<DeleteCommentHandler> logger,
+    ITransactionManager transactionManager):
     ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand>
 {
-    private readonly ICommentsRepository _commentsRepository;
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<DeleteCommentHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public DeleteCommentHandler(
-        ICommentsRepository commentsRepository,
-        IReadDbContext readDbContext,
-        ILogger<DeleteCommentHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _commentsRepository = commentsRepository;
-        _readDbContext = readDbContext;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<CommentWithOnlyIdDto, Error>> Handle(
         DeleteCommentCommand command,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(DeleteCommentHandler));
+        logger.LogDebug("Handling {handler}", nameof(DeleteCommentHandler));
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while creating product");
+            logger.LogError("Failed to begin transaction while creating product");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
-        var comment = await _readDbContext.CommentsRead.FirstOrDefaultAsync(
+        var comment = await readDbContext.CommentsRead.FirstOrDefaultAsync(
             c => c.Id == new CommentId(command.Request.CommentId),
             cancellationToken);
 
         if (comment is null)
         {
-            _logger.LogError("Comment with id {commentId} not flund", command.Request.CommentId);
+            logger.LogError("Comment with id {commentId} not flund", command.Request.CommentId);
             transactionScope.Rollback();
             return Error.Failure("delete.comment", "Comment not found");
         }
 
-        await _commentsRepository.DeleteComment(new CommentId(command.Request.CommentId), cancellationToken);
+        await commentsRepository.DeleteComment(new CommentId(command.Request.CommentId), cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while deleting comment");
+            logger.LogError("Failed to commit result while deleting comment");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Deleted comment with id {commentId}", command.Request.CommentId);
+        logger.LogDebug("Deleted comment with id {commentId}", command.Request.CommentId);
 
         return command.Request;
     }

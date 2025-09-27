@@ -10,49 +10,36 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.UpdateProductIngredients;
 
-public class UpdateProductIngredientsHandler:
+public class UpdateProductIngredientsHandler(
+    IProductsRepository productsRepository,
+    ILogger<UpdateProductIngredientsHandler> logger,
+    ITransactionManager transactionManager,
+    IValidator<UpdateProductIngredientsCommand> validator):
     ICommandHandler<ProductWithOnlyIdDto, UpdateProductIngredientsCommand>
 {
-    private readonly IProductsRepository _productsRepository;
-    private readonly ITransactionManager _transactionManager;
-    private readonly ILogger<UpdateProductIngredientsHandler> _logger;
-    private readonly IValidator<UpdateProductIngredientsCommand> _validator;
-
-    public UpdateProductIngredientsHandler(
-        IProductsRepository productsRepository,
-        ILogger<UpdateProductIngredientsHandler> logger,
-        ITransactionManager transactionManager,
-        IValidator<UpdateProductIngredientsCommand> validator)
-    {
-        _productsRepository = productsRepository;
-        _transactionManager = transactionManager;
-        _logger = logger;
-        _validator = validator;
-    }
-
     public async Task<Result<ProductWithOnlyIdDto, Error>> Handle(
         UpdateProductIngredientsCommand request,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handleName}", nameof(UpdateProductIngredientsHandler));
+        logger.LogDebug("Handling {handleName}", nameof(UpdateProductIngredientsHandler));
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction");
+            logger.LogError("Failed to begin transaction");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            _logger.LogError("Failed to update product's ingredients with id {productId}", request.ProductId);
+            logger.LogError("Failed to update product's ingredients with id {productId}", request.ProductId);
             transactionScope.Rollback();
             return Error.Validation(
                 "update.ingridients",
@@ -60,13 +47,13 @@ public class UpdateProductIngredientsHandler:
                 validationResult.Errors.First().ErrorMessage);
         }
 
-        var product = await _productsRepository.GetProductById(
+        var product = await productsRepository.GetProductById(
             request.ProductId,
             cancellationToken);
 
         if (product is null)
         {
-            _logger.LogError("Product with id {productId} not found", request.ProductId);
+            logger.LogError("Product with id {productId} not found", request.ProductId);
             transactionScope.Rollback();
             return Error.NotFound("product.get", "Product not found");
         }
@@ -80,18 +67,18 @@ public class UpdateProductIngredientsHandler:
 
         product.UpdateIngredients(newIngrendients);
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Fail to commit transaction");
+            logger.LogError("Fail to commit transaction");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Updated product's ingrendients with id {productId}", request.ProductId);
+        logger.LogDebug("Updated product's ingrendients with id {productId}", request.ProductId);
 
 
         return new ProductWithOnlyIdDto(request.ProductId);

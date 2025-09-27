@@ -9,41 +9,30 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 
-public class UpdateProductHandler
+public class UpdateProductHandler(
+    IProductsRepository productsRepository,
+    ILogger<CreateProductHandler> logger,
+    ITransactionManager transactionManager)
 {
-    private readonly IProductsRepository _productsRepository;
-    private readonly ILogger<CreateProductHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public UpdateProductHandler(
-        IProductsRepository productsRepository,
-        ILogger<CreateProductHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _productsRepository = productsRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<Guid, Error>> Handle(
         Guid productId,
         JsonPatchDocument<Product> productUpdates,
         CancellationToken cancellationToken)
     {
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while updating product");
+            logger.LogError("Failed to begin transaction while updating product");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
 
-        Product? product = await _productsRepository.GetProductById(
+        Product? product = await productsRepository.GetProductById(
             productId,
             cancellationToken);
 
@@ -59,7 +48,7 @@ public class UpdateProductHandler
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            logger.LogError(e, e.Message);
             transactionScope.Rollback();
             return Error.Validation("update.product", e.Message);
         }
@@ -68,20 +57,20 @@ public class UpdateProductHandler
 
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while updating product");
+            logger.LogError("Failed to commit result while updating product");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
 
 
-        _logger.LogInformation("Update product {productId}", productId);
+        logger.LogInformation("Update product {productId}", productId);
 
         return product.Id.Value;
     }

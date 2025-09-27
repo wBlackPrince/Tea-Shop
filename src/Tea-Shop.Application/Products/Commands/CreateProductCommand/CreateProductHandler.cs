@@ -11,37 +11,23 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.CreateProductCommand;
 
-public class CreateProductHandler:
-    ICommandHandler<CreateProductResponseDto, CreateProductCommand>
+public class CreateProductHandler(
+    IProductsRepository productsRepository,
+    ILogger<CreateProductHandler> logger,
+    IValidator<CreateProductRequestDto> validator,
+    ITransactionManager transactionManager): ICommandHandler<CreateProductResponseDto, CreateProductCommand>
 {
-    private readonly IProductsRepository _productsRepository;
-    private readonly ILogger<CreateProductHandler> _logger;
-    private readonly IValidator<CreateProductRequestDto> _validator;
-    private readonly ITransactionManager _transactionManager;
-
-    public CreateProductHandler(
-        IProductsRepository productsRepository,
-        ILogger<CreateProductHandler> logger,
-        IValidator<CreateProductRequestDto> validator,
-        ITransactionManager transactionManager)
-    {
-        _productsRepository = productsRepository;
-        _validator = validator;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<CreateProductResponseDto, Error>> Handle(
         CreateProductCommand command,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(CreateProductHandler));
+        logger.LogDebug("Handling {handler}", nameof(CreateProductHandler));
 
-        var validationResult = await _validator.ValidateAsync(command.Request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command.Request, cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            _logger.LogError("Failed validation while creating product");
+            logger.LogError("Failed validation while creating product");
             return Error.Validation(
                 "product.create",
                 "validation errors",
@@ -49,13 +35,13 @@ public class CreateProductHandler:
         }
 
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while creating product");
+            logger.LogError("Failed to begin transaction while creating product");
             return transactionScopeResult.Error;
         }
 
@@ -86,28 +72,28 @@ public class CreateProductHandler:
             []);
 
 
-        var createResult = await _productsRepository.CreateProduct(product, cancellationToken);
+        var createResult = await productsRepository.CreateProduct(product, cancellationToken);
 
         if (createResult.IsFailure)
         {
-            _logger.LogError("Failed to create product");
+            logger.LogError("Failed to create product");
             transactionScope.Rollback();
             return createResult.Error;
         }
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while creating product");
+            logger.LogError("Failed to commit result while creating product");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
-        _logger.LogDebug("Created product with id {productId}", productId);
+        logger.LogDebug("Created product with id {productId}", productId);
 
         var productDto = new CreateProductResponseDto(
             product.Id.Value,

@@ -8,7 +8,6 @@ using Tea_Shop.Shared;
 namespace Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 
 public class RevokeRefreshTokensHandler(
-    ITokenProvider _tokenProvider,
     ITokensRepository _tokensRepository,
     IHttpContextAccessor _httpContextAccessor)
 {

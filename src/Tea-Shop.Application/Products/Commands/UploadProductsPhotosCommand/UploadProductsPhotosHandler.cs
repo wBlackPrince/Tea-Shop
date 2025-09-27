@@ -10,39 +10,26 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Products.Commands.UploadProductsPhotosCommand;
 
-public class UploadProductsPhotosHandler:
+public class UploadProductsPhotosHandler(
+    ILogger<CreateProductHandler> logger,
+    IProductsRepository productsRepository,
+    IValidator<CreateProductRequestDto> validator,
+    IFileProvider fileProvider):
     ICommandHandler<Guid, UploadProductsPhotosCommand>
 {
-    private readonly ILogger<CreateProductHandler> _logger;
-    private readonly IProductsRepository _productsRepository;
-    private readonly IValidator<CreateProductRequestDto> _validator;
-    private readonly IFileProvider _fileProvider;
-
     private const string _avatarBucket = "media";
-
-    public UploadProductsPhotosHandler(
-        ILogger<CreateProductHandler> logger,
-        IProductsRepository productsRepository,
-        IValidator<CreateProductRequestDto> validator,
-        IFileProvider fileProvider)
-    {
-        _validator = validator;
-        _productsRepository = productsRepository;
-        _logger = logger;
-        _fileProvider = fileProvider;
-    }
 
     public async Task<Result<Guid, Error>> Handle(
         UploadProductsPhotosCommand command,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(UploadProductsPhotosHandler));
+        logger.LogDebug("Handling {handler}", nameof(UploadProductsPhotosHandler));
 
-        var product = await _productsRepository.GetProductById(command.Request.ProductId, cancellationToken);
+        var product = await productsRepository.GetProductById(command.Request.ProductId, cancellationToken);
 
         if (product is null)
         {
-            _logger.LogDebug("Product with id {productId} does not exist", command.Request.ProductId);
+            logger.LogDebug("Product with id {productId} does not exist", command.Request.ProductId);
             return Error.Failure(
                 "upload.product_photos",
                 $"product with id {command.Request.ProductId} not found");
@@ -79,7 +66,7 @@ public class UploadProductsPhotosHandler:
                 // открываем поток
                 //await using var stream = command.Request.FileDtos[i].Stream;
                 //streams[i] = stream;
-                var upload = await _fileProvider
+                var upload = await fileProvider
                     .UploadAsync(
                         stream: command.Request.FileDtos[i].Stream,
                         key: keys[i],
@@ -90,7 +77,7 @@ public class UploadProductsPhotosHandler:
 
                 if (upload.IsFailure)
                 {
-                    _logger.LogError($"avatar upload failed: {upload.Error.Message}");
+                    logger.LogError($"avatar upload failed: {upload.Error.Message}");
                     return Error.Failure("create.product", $"photo upload failed: {upload.Error.Message}");
                 }
             }
@@ -111,7 +98,7 @@ public class UploadProductsPhotosHandler:
             // }
         }
 
-        _logger.LogDebug("Created product with id {productId}", command.Request.ProductId);
+        logger.LogDebug("Created product with id {productId}", command.Request.ProductId);
 
         return command.Request.ProductId;
     }

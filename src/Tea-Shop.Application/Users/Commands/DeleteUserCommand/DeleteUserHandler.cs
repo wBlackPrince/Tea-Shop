@@ -9,50 +9,39 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 
-public class DeleteUserHandler:
+public class DeleteUserHandler(
+    IUsersRepository usersRepository,
+    ILogger<DeleteUserHandler> logger,
+    ITransactionManager transactionManager):
     ICommandHandler<UserWithOnlyIdDto, DeleteUserCommand>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly ILogger<DeleteUserHandler> _logger;
-    private readonly ITransactionManager _transactionManager;
-
-    public DeleteUserHandler(
-        IUsersRepository usersRepository,
-        ILogger<DeleteUserHandler> logger,
-        ITransactionManager transactionManager)
-    {
-        _usersRepository = usersRepository;
-        _logger = logger;
-        _transactionManager = transactionManager;
-    }
-
     public async Task<Result<UserWithOnlyIdDto, Error>> Handle(
         DeleteUserCommand command,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(DeleteUserHandler));
+        logger.LogDebug("Handling {handler}", nameof(DeleteUserHandler));
 
 
-        var transactionScopeResult = await _transactionManager.BeginTransactionAsync(
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
             IsolationLevel.RepeatableRead,
             cancellationToken);
 
         if (transactionScopeResult.IsFailure)
         {
-            _logger.LogError("Failed to begin transaction while deleting user");
+            logger.LogError("Failed to begin transaction while deleting user");
             return transactionScopeResult.Error;
         }
 
         using var transactionScope = transactionScopeResult.Value;
 
 
-        var deleteResult = await _usersRepository.DeleteUser(
+        var deleteResult = await usersRepository.DeleteUser(
             new UserId(command.Request.UserId),
             cancellationToken);
 
         if (deleteResult.IsFailure)
         {
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Failed to delete user {productId}",
                 command.Request.UserId);
 
@@ -62,21 +51,19 @@ public class DeleteUserHandler:
         }
 
 
-        await _transactionManager.SaveChangesAsync(cancellationToken);
+        await transactionManager.SaveChangesAsync(cancellationToken);
 
         var commitedResult = transactionScope.Commit();
 
         if (commitedResult.IsFailure)
         {
-            _logger.LogError("Failed to commit result while deleting user");
+            logger.LogError("Failed to commit result while deleting user");
             transactionScope.Rollback();
             return commitedResult.Error;
         }
 
 
-        _logger.LogDebug(
-            "User with id {UserId} deleted.",
-            command.Request.UserId);
+        logger.LogDebug("User with id {UserId} deleted.", command.Request.UserId);
 
         return command.Request;
     }
