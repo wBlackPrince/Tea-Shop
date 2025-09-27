@@ -54,6 +54,8 @@ public class ProductsDbContext: DbContext, IReadDbContext
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public DbSet<EmailVerificationToken> EmailVerificationTokens { get; set; }
+
 
     public IQueryable<Product> ProductsRead => Set<Product>().AsNoTracking();
 

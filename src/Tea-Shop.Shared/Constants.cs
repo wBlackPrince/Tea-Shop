@@ -19,4 +19,6 @@ public readonly struct Constants
     public static readonly int Limit1000 = 1000;
 
     public static readonly int Limit2000 = 2000;
+
+    public const string VerifyEmail = "VerifyEmail";
 }

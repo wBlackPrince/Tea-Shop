@@ -8,6 +8,7 @@ using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
 using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
+using Tea_Shop.Application.Users.Commands.VerifyEmailCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
@@ -17,6 +18,7 @@ using Tea_Shop.Contract;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Users;
 
@@ -169,6 +171,22 @@ public class UsersController: ControllerBase
         }
 
         return Ok(result.Value);
+    }
+
+    [HttpGet("verify-email", Name = Constants.VerifyEmail)]
+    public async Task<IActionResult> VerifyUserEmail(
+        [FromQuery] Guid token,
+        [FromServices] VerifyEmail handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Handle(token, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
     }
 
     [HttpDelete("{userId:guid}/revoke-refresh-tokens")]

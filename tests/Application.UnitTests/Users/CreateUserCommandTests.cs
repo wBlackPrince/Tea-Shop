@@ -1,12 +1,15 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
+using FluentEmail.Core;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
+using Tea_Shop.Application.Auth;
 using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
@@ -35,6 +38,8 @@ public class CreateUserCommandTests
 
     private readonly IBasketsRepository _basketsRepositoryMock;
 
+    private readonly ITokensRepository _tokensRepositoryMock;
+
     private readonly ILogger<CreateUserHandler> _loggerMock;
 
     private readonly IValidator<CreateUserRequestDto> _validatorMock;
@@ -43,22 +48,32 @@ public class CreateUserCommandTests
 
     private readonly ITransactionManager _transactionManagerMock;
 
+    private readonly IFluentEmail _fluentEmail;
+
+    private readonly EmailVerificationLinkFactory _verificationLinkFactory;
+
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
         _basketsRepositoryMock = Substitute.For<IBasketsRepository>();
+        _tokensRepositoryMock = Substitute.For<ITokensRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
         _filesProviderMock = Substitute.For<IFileProvider>();
         _transactionManagerMock = Substitute.For<ITransactionManager>();
+        _fluentEmail = Substitute.For<IFluentEmail>();
+        _verificationLinkFactory = Substitute.For<EmailVerificationLinkFactory>();
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
             _basketsRepositoryMock,
+            _tokensRepositoryMock,
             _loggerMock,
             _filesProviderMock,
             _validatorMock,
-            _transactionManagerMock);
+            _transactionManagerMock,
+            _fluentEmail,
+            _verificationLinkFactory);
     }
 
     [Fact]

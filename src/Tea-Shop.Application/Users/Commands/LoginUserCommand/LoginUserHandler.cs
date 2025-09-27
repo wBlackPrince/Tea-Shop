@@ -16,8 +16,7 @@ public class LoginUserHandler(
     IUsersRepository usersRepository,
     ITokensRepository tokenRepository,
     ITokenProvider tokenProvider,
-    ITransactionManager transactionManager,
-    IFluentEmail fluentEmail): ICommandHandler<LoginResponseDto, LoginUserCommand>
+    ITransactionManager transactionManager): ICommandHandler<LoginResponseDto, LoginUserCommand>
 {
     public async Task<Result<LoginResponseDto, Error>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
@@ -38,7 +37,7 @@ public class LoginUserHandler(
 
         var user = await usersRepository.GetUserByEmail(command.Request.Email, cancellationToken);
 
-        if (user is null)
+        if (user is null || !user.EmailVerified)
         {
             logger.LogError("User not found");
             transactionScope.Rollback();
@@ -88,14 +87,6 @@ public class LoginUserHandler(
             transactionScope.Rollback();
             return commitedResult.Error;
         }
-
-
-        // email verification
-        await fluentEmail
-            .To(user.Email)
-            .Subject("Email verification for TeaShop")
-            .Body("To verify your email address, click here")
-            .SendAsync();
 
         return response;
     }

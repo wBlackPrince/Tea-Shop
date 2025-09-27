@@ -1,12 +1,16 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
+using FluentEmail.Core;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Auth;
 using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain;
 using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
@@ -16,10 +20,13 @@ namespace Tea_Shop.Application.Users.Commands.CreateUserCommand;
 public class CreateUserHandler(
     IUsersRepository usersRepository,
     IBasketsRepository basketsRepository,
+    ITokensRepository tokensRepository,
     ILogger<CreateUserHandler> logger,
     IFileProvider fileProvider,
     IValidator<CreateUserRequestDto> validator,
-    ITransactionManager transactionManager): ICommandHandler<CreateUserResponseDto, CreateUserCommand>
+    ITransactionManager transactionManager,
+    IFluentEmail fluentEmail,
+    EmailVerificationLinkFactory verificationLinkFactory): ICommandHandler<CreateUserResponseDto, CreateUserCommand>
 {
     const string _avatarBucket = "media";
 
@@ -85,9 +92,33 @@ public class CreateUserHandler(
             avatarId,
             command.Request.MiddleName);
 
+        DateTime utcNow = DateTime.UtcNow;
+        var verificationToken = new EmailVerificationToken()
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            CreatedOnUtc = utcNow,
+            ExpiresOnUtc = utcNow.AddDays(1),
+            User = user,
+        };
+
+        await tokensRepository.CreateVerificationTokenToken(verificationToken, cancellationToken);
+
         await usersRepository.CreateUser(user, cancellationToken);
 
         await basketsRepository.Create(basket, cancellationToken);
+
+
+        // email verification
+        string verificationLink = verificationLinkFactory.Create(verificationToken);
+
+        await fluentEmail
+            .To(user.Email)
+            .Subject("Email verification for TeaShop")
+            .Body($"To verify your email address, click here <a href='{verificationLink}'>click here</a>", isHtml: true)
+            .SendAsync();
+
+
 
         var saveResult = await transactionManager.SaveChangesAsync(cancellationToken);
 
@@ -133,6 +164,7 @@ public class CreateUserHandler(
                 return Error.Failure("create.user", $"avatar upload failed: {upload.Error.Message}");
             }
         }
+
 
         logger.LogDebug("User with id {UserId} created a new account.", user.Id.Value);
 

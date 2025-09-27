@@ -113,6 +113,33 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("comments", (string)null);
                 });
 
+            modelBuilder.Entity("Tea_Shop.Domain.EmailVerificationToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<DateTime>("ExpiresOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_on_utc");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("email_verification_tokens_pk");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("email_verification_tokens", (string)null);
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -288,14 +315,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("refresh_tokens_pk");
 
                     b.HasIndex("Token")
                         .IsUnique();
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
@@ -472,6 +500,17 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.EmailVerificationToken", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>

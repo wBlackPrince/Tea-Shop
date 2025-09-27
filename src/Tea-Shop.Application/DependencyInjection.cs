@@ -9,6 +9,7 @@ using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
+using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
 using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
@@ -33,12 +34,14 @@ using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
 using Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Tags;
+using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
 using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
+using Tea_Shop.Application.Users.Commands.VerifyEmailCommand;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
@@ -180,6 +183,9 @@ public static class DependencyInjection
             ICommandHandler<LoginResponseDto, LoginUserWithRefreshTokenCommand>,
             LoginUserWithRefreshTokenHandler>();
         services.AddScoped<RevokeRefreshTokensHandler>();
+        services.AddScoped<VerifyEmail>();
+
+        services.AddScoped<EmailVerificationLinkFactory>();
 
         return services;
     }
