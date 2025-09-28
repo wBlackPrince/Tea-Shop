@@ -26,7 +26,8 @@ public class CreateUserHandler(
     IValidator<CreateUserRequestDto> validator,
     ITransactionManager transactionManager,
     IFluentEmail fluentEmail,
-    EmailVerificationLinkFactory verificationLinkFactory): ICommandHandler<CreateUserResponseDto, CreateUserCommand>
+    EmailVerificationLinkFactory verificationLinkFactory,
+    IPasswordHasher passwordHasher): ICommandHandler<CreateUserResponseDto, CreateUserCommand>
 {
     const string _avatarBucket = "media";
 
@@ -82,7 +83,7 @@ public class CreateUserHandler(
 
         User user = new User(
             userId,
-            command.Request.Password,
+            passwordHasher.Hash(command.Request.Password),
             command.Request.FirstName,
             command.Request.LastName,
             command.Request.Email,

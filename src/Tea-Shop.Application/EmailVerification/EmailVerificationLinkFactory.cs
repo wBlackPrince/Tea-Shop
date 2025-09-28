@@ -5,7 +5,7 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.EmailVerification;
 
-public sealed class EmailVerificationLinkFactory(
+public class EmailVerificationLinkFactory(
     IHttpContextAccessor httpContextAccessor,
     LinkGenerator linkGenerator)
 {

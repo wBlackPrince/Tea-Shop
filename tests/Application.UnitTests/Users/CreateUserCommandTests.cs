@@ -3,6 +3,8 @@ using CSharpFunctionalExtensions;
 using FluentEmail.Core;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
@@ -14,6 +16,7 @@ using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Contract.Users;
+using Tea_Shop.Domain;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -52,6 +55,12 @@ public class CreateUserCommandTests
 
     private readonly EmailVerificationLinkFactory _verificationLinkFactory;
 
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    private readonly LinkGenerator _linkGenerator;
+
+    private readonly IPasswordHasher _passwordHasher;
+
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
@@ -62,7 +71,14 @@ public class CreateUserCommandTests
         _filesProviderMock = Substitute.For<IFileProvider>();
         _transactionManagerMock = Substitute.For<ITransactionManager>();
         _fluentEmail = Substitute.For<IFluentEmail>();
-        _verificationLinkFactory = Substitute.For<EmailVerificationLinkFactory>();
+        _passwordHasher = Substitute.For<IPasswordHasher>();
+
+        _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        _linkGenerator = Substitute.For<LinkGenerator>();
+
+        _verificationLinkFactory = Substitute.For<EmailVerificationLinkFactory>(
+            _httpContextAccessor,
+            _linkGenerator);
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
@@ -73,7 +89,8 @@ public class CreateUserCommandTests
             _validatorMock,
             _transactionManagerMock,
             _fluentEmail,
-            _verificationLinkFactory);
+            _verificationLinkFactory,
+            _passwordHasher);
     }
 
     [Fact]
@@ -146,12 +163,12 @@ public class CreateUserCommandTests
 
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
-            .Returns(new ValidationResult(new[]
+            .Returns(Task.FromResult(new ValidationResult(new[]
             {
                 new ValidationFailure(
                     "FirstName",
                     "First Name is required"),
-            }));
+            })));
 
 
         // result
@@ -294,6 +311,8 @@ public class CreateUserCommandTests
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
 
+        _passwordHasher.Hash(Arg.Any<string>()).Returns("hash");
+
         var scope = Substitute.For<ITransactionScope>();
 
         scope.Commit().Returns(UnitResult.Success<Error>());
@@ -322,6 +341,8 @@ public class CreateUserCommandTests
         _validatorMock
             .ValidateAsync(Arg.Any<CreateUserRequestDto>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ValidationResult()));
+
+        _passwordHasher.Hash(Arg.Any<string>()).Returns("hash");
 
         await _usersRepositoryMock.CreateUser(Arg.Any<User>(), Arg.Any<CancellationToken>());
 

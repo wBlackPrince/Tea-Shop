@@ -16,7 +16,8 @@ public class LoginUserHandler(
     IUsersRepository usersRepository,
     ITokensRepository tokenRepository,
     ITokenProvider tokenProvider,
-    ITransactionManager transactionManager): ICommandHandler<LoginResponseDto, LoginUserCommand>
+    ITransactionManager transactionManager,
+    IPasswordHasher passwordHasher): ICommandHandler<LoginResponseDto, LoginUserCommand>
 {
     public async Task<Result<LoginResponseDto, Error>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
@@ -46,7 +47,10 @@ public class LoginUserHandler(
                 $"User with email {command.Request.Email} not found");
         }
 
-        if (user.Password != command.Request.Password)
+        // верификация пароля
+        bool verificied = passwordHasher.Verify(command.Request.Password, user.Password);
+
+        if (!verificied)
         {
             logger.LogError("Request's password is incorrect");
             transactionScope.Rollback();

@@ -45,7 +45,7 @@ builder.Services.AddMinioDependencies(builder.Configuration);
 
 var app = builder.Build();
 
-//app.MapOpenApi();
+// app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI(
     options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tea-Shop v1"));
