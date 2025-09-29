@@ -113,16 +113,6 @@ public class CreateOrderHandler(
                     "product not found");
             }
 
-            // если такого товара в корзине не существует
-            if (basketItem is null)
-            {
-                logger.LogError("No basket item with id {basketItemId} found", basketItemId?.Value);
-                transactionScope.Rollback();
-                return Error.NotFound(
-                    "create.order",
-                    "basket item not found");
-            }
-
 
             product = await readDbContext.ProductsRead
                 .FirstOrDefaultAsync(

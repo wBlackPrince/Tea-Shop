@@ -6,7 +6,9 @@ using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Subscriptions;
 using Tea_Shop.Domain.Tags;
+using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres;
@@ -47,6 +49,14 @@ public class ProductsDbContext: DbContext, IReadDbContext
     public DbSet<Basket> Buskets { get; set; }
 
     public DbSet<BasketItem> BusketsItems { get; set; }
+
+    public DbSet<Kit> Kits { get; set; }
+
+    public DbSet<KitDetails> KitDetails { get; set; }
+
+    public DbSet<KitItem> KitsItems { get; set; }
+
+    public DbSet<Subscription> Subscriptions { get; set; }
 
     public DbSet<Tag> Tags { get; set; }
 

@@ -138,6 +138,26 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "email_verification_tokens",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    created_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    expires_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("email_verification_tokens_pk", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_email_verification_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "orders",
                 columns: table => new
                 {
@@ -156,6 +176,26 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_orders_users_user_id",
                         column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refresh_tokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExpireOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("refresh_tokens_pk", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_refresh_tokens_users_UserId",
+                        column: x => x.UserId,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -244,6 +284,86 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "kit_items",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false),
+                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("kit_items_id", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_kit_items_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "kits",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DetailsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    avatar_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ipk_kits", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "kits_details",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    sum = table.Column<int>(type: "integer", nullable: false),
+                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("kit_details_pk", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_kits_details_kits_KitId",
+                        column: x => x.KitId,
+                        principalTable: "kits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "subscriptions",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    State = table.Column<string>(type: "text", nullable: false),
+                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ipk_subscriptions", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_subscriptions_kits_KitId",
+                        column: x => x.KitId,
+                        principalTable: "kits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_subscriptions_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_user_id",
                 table: "baskets",
@@ -264,6 +384,32 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_comments_user_id",
                 table: "comments",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_email_verification_tokens_user_id",
+                table: "email_verification_tokens",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_kit_items_KitId",
+                table: "kit_items",
+                column: "KitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_kit_items_product_id",
+                table: "kit_items",
+                column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_kits_DetailsId",
+                table: "kits",
+                column: "DetailsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_kits_details_KitId",
+                table: "kits_details",
+                column: "KitId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_items_order_id",
@@ -291,6 +437,17 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_refresh_tokens_Token",
+                table: "refresh_tokens",
+                column: "Token",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_refresh_tokens_UserId",
+                table: "refresh_tokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_reviews_product_id",
                 table: "reviews",
                 column: "product_id");
@@ -299,16 +456,52 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_reviews_user_id",
                 table: "reviews",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_subscriptions_KitId",
+                table: "subscriptions",
+                column: "KitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_subscriptions_user_id",
+                table: "subscriptions",
+                column: "user_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_kit_items_kits_KitId",
+                table: "kit_items",
+                column: "KitId",
+                principalTable: "kits",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_kits_kits_details_DetailsId",
+                table: "kits",
+                column: "DetailsId",
+                principalTable: "kits_details",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_kits_details_kits_KitId",
+                table: "kits_details");
+
             migrationBuilder.DropTable(
                 name: "baskets_items");
 
             migrationBuilder.DropTable(
                 name: "comments");
+
+            migrationBuilder.DropTable(
+                name: "email_verification_tokens");
+
+            migrationBuilder.DropTable(
+                name: "kit_items");
 
             migrationBuilder.DropTable(
                 name: "order_items");
@@ -317,7 +510,13 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "products_tags");
 
             migrationBuilder.DropTable(
+                name: "refresh_tokens");
+
+            migrationBuilder.DropTable(
                 name: "reviews");
+
+            migrationBuilder.DropTable(
+                name: "subscriptions");
 
             migrationBuilder.DropTable(
                 name: "baskets");
@@ -333,6 +532,12 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.DropTable(
+                name: "kits");
+
+            migrationBuilder.DropTable(
+                name: "kits_details");
         }
     }
 }

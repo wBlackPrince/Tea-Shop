@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain;
+using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres.Auth;

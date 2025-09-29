@@ -1,6 +1,6 @@
 ﻿using Tea_Shop.Domain.Users;
 
-namespace Tea_Shop.Domain;
+namespace Tea_Shop.Domain.Tokens;
 
 public sealed class EmailVerificationToken
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Tea_Shop.Domain;
+using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.EmailVerification;

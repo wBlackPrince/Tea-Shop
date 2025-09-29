@@ -113,33 +113,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("comments", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.EmailVerificationToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<DateTime>("ExpiresOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expires_on_utc");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("email_verification_tokens_pk");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("email_verification_tokens", (string)null);
-                });
-
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -298,34 +271,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("products_tags", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ExpireOnUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("refresh_tokens_pk");
-
-                    b.HasIndex("Token")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("refresh_tokens", (string)null);
-                });
-
             modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
                 {
                     b.Property<Guid>("Id")
@@ -378,6 +323,113 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("reviews", (string)null);
                 });
 
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Kit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AvatarId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("avatar_id");
+
+                    b.Property<Guid>("DetailsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("ipk_kits");
+
+                    b.HasIndex("DetailsId");
+
+                    b.ToTable("kits", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.KitDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<Guid>("KitId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Sum")
+                        .HasColumnType("integer")
+                        .HasColumnName("sum");
+
+                    b.HasKey("Id")
+                        .HasName("kit_details_pk");
+
+                    b.HasIndex("KitId")
+                        .IsUnique();
+
+                    b.ToTable("kits_details", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.KitItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer")
+                        .HasColumnName("amount");
+
+                    b.Property<Guid>("KitId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("Id")
+                        .HasName("kit_items_id");
+
+                    b.HasIndex("KitId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("kit_items", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("KitId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("ipk_subscriptions");
+
+                    b.HasIndex("KitId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("subscriptions", (string)null);
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Tags.Tag", b =>
                 {
                     b.Property<Guid>("Id")
@@ -400,6 +452,61 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasName("pk_tags");
 
                     b.ToTable("tags", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Tokens.EmailVerificationToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<DateTime>("ExpiresOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_on_utc");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("email_verification_tokens_pk");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("email_verification_tokens", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Tokens.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ExpireOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("refresh_tokens_pk");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Users.User", b =>
@@ -500,17 +607,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.EmailVerificationToken", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
@@ -623,17 +719,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.RefreshToken", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Products.Product", null)
@@ -649,6 +734,80 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Kit", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Subscriptions.KitDetails", "Details")
+                        .WithMany()
+                        .HasForeignKey("DetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Details");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.KitDetails", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Subscriptions.Kit", null)
+                        .WithOne()
+                        .HasForeignKey("Tea_Shop.Domain.Subscriptions.KitDetails", "KitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.KitItem", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Subscriptions.Kit", null)
+                        .WithMany("KitItems")
+                        .HasForeignKey("KitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Subscription", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Subscriptions.Kit", "Kit")
+                        .WithMany()
+                        .HasForeignKey("KitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Kit");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Tokens.EmailVerificationToken", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Tokens.RefreshToken", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
                 {
                     b.Navigation("Items");
@@ -662,6 +821,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
             modelBuilder.Entity("Tea_Shop.Domain.Products.Product", b =>
                 {
                     b.Navigation("TagsIds");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Kit", b =>
+                {
+                    b.Navigation("KitItems");
                 });
 #pragma warning restore 612, 618
         }
