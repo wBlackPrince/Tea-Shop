@@ -6,25 +6,16 @@ using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 
-public class GetSimilarProductsHandler:
+public class GetSimilarProductsHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<GetSimilarProductsHandler> logger):
     IQueryHandler<GetSimilarProductResponseDto[], GetSimilarProductsQuery>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly ILogger<GetSimilarProductsHandler> _logger;
-
-    public GetSimilarProductsHandler(
-        IDbConnectionFactory dbConnectionFactory,
-        ILogger<GetSimilarProductsHandler> logger)
-    {
-        _dbConnectionFactory = dbConnectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetSimilarProductResponseDto[]> Handle(
         GetSimilarProductsQuery query,
         CancellationToken cancellationToken)
     {
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
+        var connection = await dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
         var similarProducts = await connection.QueryAsync<GetSimilarProductResponseDto>("""
                                                           with chosen_product as (

@@ -7,33 +7,24 @@ using Tea_Shop.Domain.Comments;
 
 namespace Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 
-public class GetCommentByIdHandler:
+public class GetCommentByIdHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetCommentByIdHandler> logger):
     IQueryHandler<CommentDto?, GetCommentByIdQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetCommentByIdHandler> _logger;
-
-    public GetCommentByIdHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetCommentByIdHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<CommentDto?> Handle(
         GetCommentByIdQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetCommentByIdHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetCommentByIdHandler));
 
-        var comment = await _readDbContext.CommentsRead.FirstOrDefaultAsync(
+        var comment = await readDbContext.CommentsRead.FirstOrDefaultAsync(
             c => c.Id == new CommentId(query.WithOnlyId.CommentId),
             cancellationToken);
 
         if (comment is null)
         {
-            _logger.LogWarning("Comment with id {commentId} not found", query.WithOnlyId.CommentId);
+            logger.LogWarning("Comment with id {commentId} not found", query.WithOnlyId.CommentId);
             return null;
         }
 
@@ -47,7 +38,7 @@ public class GetCommentByIdHandler:
             comment.CreatedAt,
             comment.UpdatedAt);
 
-        _logger.LogDebug("Get comment with id {commentId}.", query.WithOnlyId.CommentId);
+        logger.LogDebug("Get comment with id {commentId}.", query.WithOnlyId.CommentId);
 
         return response;
     }

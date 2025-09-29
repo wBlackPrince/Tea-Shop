@@ -7,33 +7,24 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 
-public class GetUserByIdHandler:
+public class GetUserByIdHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetUserByIdHandler> logger):
     IQueryHandler<GetUserResponseDto?, GetUserByIdQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetUserByIdHandler> _logger;
-
-    public GetUserByIdHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetUserByIdHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<GetUserResponseDto?> Handle(
         GetUserByIdQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetUserByIdHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetUserByIdHandler));
 
-        User? user = await _readDbContext.UsersRead.FirstOrDefaultAsync(
+        User? user = await readDbContext.UsersRead.FirstOrDefaultAsync(
             u => u.Id == new UserId(query.Request.UserId),
             cancellationToken);
 
         if (user is null)
         {
-            _logger.LogWarning("User with {userId} not found", query.Request.UserId);
+            logger.LogWarning("User with {userId} not found", query.Request.UserId);
             return null;
         }
 
@@ -46,7 +37,7 @@ public class GetUserByIdHandler:
             user.AvatarId,
             user.MiddleName);
 
-        _logger.LogDebug("Get user with id {userId}.", query.Request.UserId);
+        logger.LogDebug("Get user with id {userId}.", query.Request.UserId);
 
         return response;
     }

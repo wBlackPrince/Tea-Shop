@@ -6,28 +6,18 @@ using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetPopularProductsQuery;
 
-public class GetPopularProductsHandler: IQueryHandler<
-    GetPopularProductsResponseDto[],
-    GetPopularProductsQuery>
+public class GetPopularProductsHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<GetPopularProductsHandler> logger):
+    IQueryHandler<GetPopularProductsResponseDto[], GetPopularProductsQuery>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly ILogger<GetPopularProductsHandler> _logger;
-
-    public GetPopularProductsHandler(
-        IDbConnectionFactory dbConnectionFactory,
-        ILogger<GetPopularProductsHandler> logger)
-    {
-        _dbConnectionFactory = dbConnectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetPopularProductsResponseDto[]> Handle(
         GetPopularProductsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetPopularProductsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetPopularProductsHandler));
 
-        using var connection = await _dbConnectionFactory.CreateConnectionAsync(
+        using var connection = await dbConnectionFactory.CreateConnectionAsync(
             cancellationToken: cancellationToken);
 
         var popularProducts = (await connection.QueryAsync<GetPopularProductsResponseDto>(
@@ -54,10 +44,10 @@ public class GetPopularProductsHandler: IQueryHandler<
 
         if (popularProducts.Length == 0)
         {
-            _logger.LogWarning("Popular products not found.");
+            logger.LogWarning("Popular products not found.");
         }
 
-        _logger.LogDebug("Get popular products.");
+        logger.LogDebug("Get popular products.");
 
         return popularProducts;
     }

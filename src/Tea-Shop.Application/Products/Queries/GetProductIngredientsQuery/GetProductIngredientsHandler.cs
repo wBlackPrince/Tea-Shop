@@ -7,35 +7,25 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 
-public class GetProductIngredientsHandler: IQueryHandler<
-    GetIngrendientsResponseDto[],
-    GetProductsIngredientsQuery>
+public class GetProductIngredientsHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetProductIngredientsHandler> logger):
+    IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetProductIngredientsHandler> _logger;
-
-    public GetProductIngredientsHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetProductIngredientsHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<GetIngrendientsResponseDto[]> Handle(
         GetProductsIngredientsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetProductIngredientsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetProductIngredientsHandler));
 
-        var product = await _readDbContext.ProductsRead
+        var product = await readDbContext.ProductsRead
             .FirstOrDefaultAsync(
                 p => p.Id == new ProductId(query.Request.ProductId),
                 cancellationToken);
 
         if (product is null)
         {
-            _logger.LogWarning(
+            logger.LogWarning(
                 "Product with id {productId} not found",
                 query.Request.ProductId);
             return [];
@@ -51,7 +41,7 @@ public class GetProductIngredientsHandler: IQueryHandler<
                 i.IsAllergen))
             .ToArray();
 
-        _logger.LogDebug(
+        logger.LogDebug(
             "Get product with id {productId}.",
             query.Request.ProductId);
 

@@ -6,27 +6,18 @@ using Tea_Shop.Contract.Comments;
 
 namespace Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
 
-public class GetCommentChildCommentsHandler:
+public class GetCommentChildCommentsHandler(
+    IDbConnectionFactory connectionFactory,
+    ILogger<GetCommentChildCommentsHandler> logger):
     IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery>
 {
-    private readonly IDbConnectionFactory _connectionFactory;
-    private readonly ILogger<GetCommentChildCommentsHandler> _logger;
-
-    public GetCommentChildCommentsHandler(
-        IDbConnectionFactory connectionFactory,
-        ILogger<GetCommentChildCommentsHandler> logger)
-    {
-        _connectionFactory = connectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetChildCommentsResponseDto> Handle(
         GetCommentChildCommentsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetCommentChildCommentsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetCommentChildCommentsHandler));
 
-        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
+        using var connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
 
         var childComments = (await connection.QueryAsync<CommentDto>(
             """
@@ -46,7 +37,7 @@ public class GetCommentChildCommentsHandler:
 
         if (childComments.Length == 0)
         {
-            _logger.LogWarning(
+            logger.LogWarning(
                 "Children comments from comment with id {commentId} not found.",
                 query.WithOnlyId.CommentId);
         }
@@ -54,7 +45,7 @@ public class GetCommentChildCommentsHandler:
         var response = new GetChildCommentsResponseDto(
             childComments.ToArray());
 
-        _logger.LogDebug(
+        logger.LogDebug(
             "Get children comments from comment with id {commentId}.",
             query.WithOnlyId.CommentId);
 

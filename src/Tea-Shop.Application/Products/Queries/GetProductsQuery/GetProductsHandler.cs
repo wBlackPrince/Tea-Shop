@@ -7,27 +7,17 @@ using Tea_Shop.Contract.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetProductsQuery;
 
-public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProductsQuery>
+public class GetProductsHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetProductsHandler> logger,
+    IDbConnectionFactory dbConnectionFactory):
+    IQueryHandler<GetProductsResponseDto, GetProductsQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetProductsHandler> _logger;
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-
-    public GetProductsHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetProductsHandler> logger,
-        IDbConnectionFactory dbConnectionFactory)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-        _dbConnectionFactory = dbConnectionFactory;
-    }
-
     public async Task<GetProductsResponseDto> Handle(
         GetProductsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetProductsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetProductsHandler));
 
         var parameters = new DynamicParameters();
         var conditions = new List<string>();
@@ -87,7 +77,7 @@ public class GetProductsHandler: IQueryHandler<GetProductsResponseDto, GetProduc
             DbType.Int32);
 
 
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
+        var connection = await dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetProductsResponseDto? products = new GetProductsResponseDto();
         long totalCount = 0;

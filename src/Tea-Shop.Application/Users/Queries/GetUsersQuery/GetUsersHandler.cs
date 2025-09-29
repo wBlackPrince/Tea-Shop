@@ -7,27 +7,18 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Application.Users.Queries.GetUsersQuery;
 
-public class GetUsersHandler:
+public class GetUsersHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetUsersHandler> logger):
     IQueryHandler<GetUsersResponseDto, GetUsersQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetUsersHandler> _logger;
-
-    public GetUsersHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetUsersHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<GetUsersResponseDto> Handle(
         GetUsersQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetUsersHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetUsersHandler));
 
-        var usersQuery = _readDbContext.UsersRead;
+        var usersQuery = readDbContext.UsersRead;
 
         if (!string.IsNullOrWhiteSpace(query.Request.SearchFirstName))
         {
@@ -84,10 +75,10 @@ public class GetUsersHandler:
 
         if (users.Length == 0)
         {
-            _logger.LogWarning("Users with these filters not found.");
+            logger.LogWarning("Users with these filters not found.");
         }
 
-        _logger.LogDebug("Users with these filters found.");
+        logger.LogDebug("Users with these filters found.");
 
         return new GetUsersResponseDto(users, totalCount);
     }

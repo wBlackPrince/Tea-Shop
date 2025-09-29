@@ -6,27 +6,18 @@ using Tea_Shop.Contract.Orders;
 
 namespace Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 
-public class GetOrderByIdHandler: IQueryHandler<
-    GetOrderResponseDto?, GetOrderByIdQuery>
+public class GetOrderByIdHandler(
+    IDbConnectionFactory connectionFactory,
+    ILogger<GetOrderByIdHandler> logger):
+    IQueryHandler<GetOrderResponseDto?, GetOrderByIdQuery>
 {
-    private readonly IDbConnectionFactory _connectionFactory;
-    private readonly ILogger<GetOrderByIdHandler> _logger;
-
-    public GetOrderByIdHandler(
-        IDbConnectionFactory connectionFactory,
-        ILogger<GetOrderByIdHandler> logger)
-    {
-        _connectionFactory = connectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetOrderResponseDto?> Handle(
         GetOrderByIdQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetOrderByIdHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetOrderByIdHandler));
 
-        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
+        using var connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetOrderResponseDto? orderDto = null;
 
@@ -66,10 +57,10 @@ public class GetOrderByIdHandler: IQueryHandler<
 
         if (orderDto is null)
         {
-            _logger.LogWarning("Order not found");
+            logger.LogWarning("Order not found");
         }
 
-        _logger.LogDebug("Order with id {orderId} found.", query.Request.OrderId);
+        logger.LogDebug("Order with id {orderId} found.", query.Request.OrderId);
 
         return orderDto;
     }

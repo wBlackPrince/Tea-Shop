@@ -8,27 +8,18 @@ using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 
-public class GetUserCommentsHandler:
+public class GetUserCommentsHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<GetUserCommentsHandler> logger):
     IQueryHandler<GetUserCommentsResponseDto?, GetUserCommentsQuery>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly ILogger<GetUserCommentsHandler> _logger;
-
-    public GetUserCommentsHandler(
-        IDbConnectionFactory dbConnectionFactory,
-        ILogger<GetUserCommentsHandler> logger)
-    {
-        _dbConnectionFactory = dbConnectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetUserCommentsResponseDto?> Handle(
         GetUserCommentsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetUserCommentsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetUserCommentsHandler));
 
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
+        var connection = await dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetUserCommentsResponseDto? commentsDto = null;
 
@@ -96,10 +87,10 @@ public class GetUserCommentsHandler:
 
         if (commentsDto is null)
         {
-            _logger.LogWarning("User's comments with id {userId}", query.Request.UserId);
+            logger.LogWarning("User's comments with id {userId}", query.Request.UserId);
         }
 
-        _logger.LogDebug("Get user's comments with id {userId}", query.Request.UserId);
+        logger.LogDebug("Get user's comments with id {userId}", query.Request.UserId);
 
         return commentsDto;
     }

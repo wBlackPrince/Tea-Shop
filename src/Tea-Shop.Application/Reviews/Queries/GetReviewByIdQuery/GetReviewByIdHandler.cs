@@ -7,34 +7,24 @@ using Tea_Shop.Domain.Reviews;
 
 namespace Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
 
-public class GetReviewByIdHandler: IQueryHandler<
-    GetReviewResponseDto?,
-    GetReviewByIdQuery>
+public class GetReviewByIdHandler(
+    IReadDbContext readDbContext,
+    ILogger<GetReviewByIdHandler> logger):
+    IQueryHandler<GetReviewResponseDto?, GetReviewByIdQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetReviewByIdHandler> _logger;
-
-    public GetReviewByIdHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetReviewByIdHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<GetReviewResponseDto?> Handle(
         GetReviewByIdQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetReviewByIdHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetReviewByIdHandler));
 
-        var review = await _readDbContext.ReviewsRead.FirstOrDefaultAsync(
+        var review = await readDbContext.ReviewsRead.FirstOrDefaultAsync(
             r => r.Id == new ReviewId(query.Request.ReviewId),
             cancellationToken);
 
         if (review is null)
         {
-            _logger.LogWarning("Review with id {reviewId} not found", query.Request.ReviewId);
+            logger.LogWarning("Review with id {reviewId} not found", query.Request.ReviewId);
             return null;
         }
 
@@ -50,7 +40,7 @@ public class GetReviewByIdHandler: IQueryHandler<
             UpdatedAt = review.UpdatedAt,
         };
 
-        _logger.LogDebug("Get review with id {reviewId}", query.Request.ReviewId);
+        logger.LogDebug("Get review with id {reviewId}", query.Request.ReviewId);
 
         return response;
     }

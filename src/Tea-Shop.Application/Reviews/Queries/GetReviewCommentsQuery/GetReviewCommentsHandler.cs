@@ -7,27 +7,18 @@ using Tea_Shop.Contract.Reviews;
 
 namespace Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 
-public class GetReviewCommentsHandler:
+public class GetReviewCommentsHandler(
+    IDbConnectionFactory connectionFactory,
+    ILogger<GetReviewCommentsHandler> logger):
     IQueryHandler<GetReviewCommentsResponseDto, GetReviewCommentsQuery>
 {
-    private readonly IDbConnectionFactory _connectionFactory;
-    private readonly ILogger<GetReviewCommentsHandler> _logger;
-
-    public GetReviewCommentsHandler(
-        IDbConnectionFactory connectionFactory,
-        ILogger<GetReviewCommentsHandler> logger)
-    {
-        _connectionFactory = connectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetReviewCommentsResponseDto> Handle(
         GetReviewCommentsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetReviewCommentsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetReviewCommentsHandler));
 
-        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
+        using var connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
 
         var reviewComments = (await connection.QueryAsync<CommentDto>(
             """
@@ -48,7 +39,7 @@ public class GetReviewCommentsHandler:
 
         if (reviewComments.Count == 0)
         {
-            _logger.LogWarning(
+            logger.LogWarning(
                 "Comments from review with id {reviewId} not found",
                 query.Request.ReviewId);
         }
@@ -59,7 +50,7 @@ public class GetReviewCommentsHandler:
             Comments = reviewComments,
         };
 
-        _logger.LogDebug("Get comments from review with id {reviewId}", query.Request.ReviewId);
+        logger.LogDebug("Get comments from review with id {reviewId}", query.Request.ReviewId);
 
         return response;
     }

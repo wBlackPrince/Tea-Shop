@@ -7,25 +7,16 @@ using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
 
-public class GetUserReviewsHandler:
+public class GetUserReviewsHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<GetUserReviewsHandler> logger):
     IQueryHandler<GetUserReviewsResponseDto?, GetUserReviewsQuery>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly ILogger<GetUserReviewsHandler> _logger;
-
-    public GetUserReviewsHandler(
-        IDbConnectionFactory dbConnectionFactory,
-        ILogger<GetUserReviewsHandler> logger)
-    {
-        _dbConnectionFactory = dbConnectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetUserReviewsResponseDto?> Handle(
         GetUserReviewsQuery query,
         CancellationToken cancellationToken)
     {
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
+        var connection = await dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetUserReviewsResponseDto? userReviewsDto = null;
 

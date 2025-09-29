@@ -6,27 +6,18 @@ using Tea_Shop.Contract.Reviews;
 
 namespace Tea_Shop.Application.Products.Queries.GetProductReviews;
 
-public class GetProductReviewsHandler:
+public class GetProductReviewsHandler(
+    IDbConnectionFactory connectionFactory,
+    ILogger<GetProductReviewsHandler> logger):
     IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery>
 {
-    private readonly IDbConnectionFactory _connectionFactory;
-    private readonly ILogger<GetProductReviewsHandler> _logger;
-
-    public GetProductReviewsHandler(
-        IDbConnectionFactory connectionFactory,
-        ILogger<GetProductReviewsHandler> logger)
-    {
-        _connectionFactory = connectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetReviewResponseDto[]> Handle(
         GetProductReviewsQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetProductReviewsHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetProductReviewsHandler));
 
-        using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
+        using var connection = await connectionFactory.CreateConnectionAsync(cancellationToken);
 
         var reviews = (await connection.QueryAsync<GetReviewResponseDto>(
             """
@@ -48,10 +39,10 @@ public class GetProductReviewsHandler:
 
         if (reviews.Length == 0)
         {
-            _logger.LogWarning("Reviews not found");
+            logger.LogWarning("Reviews not found");
         }
 
-        _logger.LogDebug("Get reviews");
+        logger.LogDebug("Get reviews");
 
         return reviews.ToArray();
     }

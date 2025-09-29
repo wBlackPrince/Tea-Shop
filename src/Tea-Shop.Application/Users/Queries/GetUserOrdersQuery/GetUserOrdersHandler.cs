@@ -7,27 +7,18 @@ using Tea_Shop.Contract.Orders;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
 
-public class GetUserOrdersHandler:
+public class GetUserOrdersHandler(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<GetUserCommentsHandler> logger):
     IQueryHandler<GetUserOrdersResponseDto?, GetUserOrdersQuery>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly ILogger<GetUserCommentsHandler> _logger;
-
-    public GetUserOrdersHandler(
-        IDbConnectionFactory dbConnectionFactory,
-        ILogger<GetUserCommentsHandler> logger)
-    {
-        _dbConnectionFactory = dbConnectionFactory;
-        _logger = logger;
-    }
-
     public async Task<GetUserOrdersResponseDto?> Handle(
         GetUserOrdersQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetUserOrdersHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetUserOrdersHandler));
 
-        var connection = await _dbConnectionFactory.CreateConnectionAsync(cancellationToken);
+        var connection = await dbConnectionFactory.CreateConnectionAsync(cancellationToken);
 
         GetUserOrdersResponseDto? userOrdersDto = null;
 
@@ -72,10 +63,10 @@ public class GetUserOrdersHandler:
 
         if (userOrdersDto is null)
         {
-            _logger.LogWarning("User's orders with id {userId}", query.Request.UserDto.UserId);
+            logger.LogWarning("User's orders with id {userId}", query.Request.UserDto.UserId);
         }
 
-        _logger.LogDebug("Get user's orders with id {userId}", query.Request.UserDto.UserId);
+        logger.LogDebug("Get user's orders with id {userId}", query.Request.UserDto.UserId);
 
         return userOrdersDto;
     }

@@ -7,26 +7,16 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Application.Products.Queries.GetProductByIdQuery;
 
-public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductByIdQuery>
+public class GetProductByIdHandler(IReadDbContext readDbContext, ILogger<GetProductByIdHandler> logger):
+    IQueryHandler<GetProductDto?, GetProductByIdQuery>
 {
-    private readonly IReadDbContext _readDbContext;
-    private readonly ILogger<GetProductByIdHandler> _logger;
-
-    public GetProductByIdHandler(
-        IReadDbContext readDbContext,
-        ILogger<GetProductByIdHandler> logger)
-    {
-        _readDbContext = readDbContext;
-        _logger = logger;
-    }
-
     public async Task<GetProductDto?> Handle(
         GetProductByIdQuery query,
         CancellationToken cancellationToken)
     {
-        _logger.LogDebug("Handling {handler}", nameof(GetProductByIdHandler));
+        logger.LogDebug("Handling {handler}", nameof(GetProductByIdHandler));
 
-        Product? product = await _readDbContext.ProductsRead
+        Product? product = await readDbContext.ProductsRead
             .Include(p => p.TagsIds)
             .FirstOrDefaultAsync(
                 p => p.Id == new ProductId(query.Request.ProductId),
@@ -34,7 +24,7 @@ public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductById
 
         if (product is null)
         {
-            _logger.LogWarning("Product with id {productId} not found", query.Request.ProductId);
+            logger.LogWarning("Product with id {productId} not found", query.Request.ProductId);
             return null;
         }
 
@@ -65,7 +55,7 @@ public class GetProductByIdHandler: IQueryHandler<GetProductDto?, GetProductById
             tagsIds,
             product.PhotosIds);
 
-        _logger.LogDebug("Get product {productId}", query.Request.ProductId);
+        logger.LogDebug("Get product {productId}", query.Request.ProductId);
 
         return productGetDto;
     }
