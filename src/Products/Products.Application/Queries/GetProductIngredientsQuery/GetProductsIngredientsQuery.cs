@@ -1,0 +1,3 @@
+﻿namespace Products.Application.Queries.GetProductIngredientsQuery;
+
+public record GetProductsIngredientsQuery(GetProductIngridientsRequestDto Request): IQuery;

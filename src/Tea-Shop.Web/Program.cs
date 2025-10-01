@@ -40,7 +40,7 @@ builder.Services.AddScoped<ProductsDbContext>(_ => new ProductsDbContext(
 builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsDbContext(
     builder.Configuration.GetConnectionString("TeaShopDb")!));
 
-builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Minio"));
+builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Infrastructure.Minio"));
 builder.Services.AddMinioDependencies(builder.Configuration);
 
 var app = builder.Build();

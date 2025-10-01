@@ -1,0 +1,3 @@
+﻿namespace Products.Application.Commands.UpdatePreparationTime;
+
+public record UpdatePreparationTimeCommand(UpdatePreparationTimeRequestDto Request): ICommand;
