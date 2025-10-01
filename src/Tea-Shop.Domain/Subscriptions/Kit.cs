@@ -29,7 +29,7 @@ public class Kit
             new KitDetailsId(Guid.NewGuid()),
             description,
             sum);
-        KitItems = products.ToArray();
+        KitItems = products.ToList();
     }
 
     // Для Ef Core
@@ -55,7 +55,7 @@ public class Kit
     /// <summary>
     /// Gets or sets Список продуктов внутри подписки.
     /// </summary>
-    public KitItem[] KitItems { get; set; } = [];
+    public List<KitItem> KitItems { get; set; } = [];
 
     /// <summary>
     /// Gets or sets Изображение для карточки чайного набора.

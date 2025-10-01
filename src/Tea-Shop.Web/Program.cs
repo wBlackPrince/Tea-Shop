@@ -53,10 +53,10 @@ app.UseSwaggerUI(
 if (app.Environment.IsDevelopment())
 {
     // для сидирования базы данных
-    // if (args.Contains("--seeding"))
-    // {
-    //     await app.Services.RunSeeding();
-    // }
+    if (args.Contains("--seeding"))
+    {
+        await app.Services.RunSeeding();
+    }
 }
 
 app.UseAuthentication();

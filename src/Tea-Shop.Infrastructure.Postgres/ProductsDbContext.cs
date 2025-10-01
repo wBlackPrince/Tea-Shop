@@ -77,6 +77,8 @@ public class ProductsDbContext: DbContext, IReadDbContext
 
     public IQueryable<User> UsersRead => Set<User>().AsNoTracking();
 
+    public IQueryable<Kit> KitsRead => Set<Kit>().AsNoTracking();
+
     public IQueryable<Basket> BusketsRead => Set<Basket>().AsNoTracking();
 
     public IQueryable<BasketItem> BusketsItemsRead => Set<BasketItem>().AsNoTracking();

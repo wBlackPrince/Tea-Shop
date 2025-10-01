@@ -30,6 +30,11 @@ public class KitItemsConfiguration: IEntityTypeConfiguration<KitItem>
             .HasColumnName("amount");
 
         builder
+            .Property(ki => ki.KitId)
+            .HasConversion(ki => ki.Value, id => new KitId(id))
+            .HasColumnName("kit_id");
+
+        builder
             .HasOne<Product>()
             .WithMany()
             .IsRequired()

@@ -12,6 +12,19 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "kits",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    avatar_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ipk_kits", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "products",
                 columns: table => new
                 {
@@ -68,6 +81,52 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "kits_details",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
+                    sum = table.Column<int>(type: "integer", nullable: false),
+                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("kit_details_pk", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_kits_details_kits_KitId",
+                        column: x => x.KitId,
+                        principalTable: "kits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "kit_items",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    kit_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    amount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("kit_items_id", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_kit_items_kits_kit_id",
+                        column: x => x.kit_id,
+                        principalTable: "kits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_kit_items_products_product_id",
+                        column: x => x.product_id,
+                        principalTable: "products",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,6 +292,32 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "subscriptions",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    State = table.Column<string>(type: "text", nullable: false),
+                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ipk_subscriptions", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_subscriptions_kits_KitId",
+                        column: x => x.KitId,
+                        principalTable: "kits",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_subscriptions_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "baskets_items",
                 columns: table => new
                 {
@@ -284,86 +369,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "kit_items",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    product_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    amount = table.Column<int>(type: "integer", nullable: false),
-                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("kit_items_id", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_kit_items_products_product_id",
-                        column: x => x.product_id,
-                        principalTable: "products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "kits",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DetailsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    avatar_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("ipk_kits", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "kits_details",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    sum = table.Column<int>(type: "integer", nullable: false),
-                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("kit_details_pk", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_kits_details_kits_KitId",
-                        column: x => x.KitId,
-                        principalTable: "kits",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "subscriptions",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    State = table.Column<string>(type: "text", nullable: false),
-                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("ipk_subscriptions", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_subscriptions_kits_KitId",
-                        column: x => x.KitId,
-                        principalTable: "kits",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_subscriptions_users_user_id",
-                        column: x => x.user_id,
-                        principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_user_id",
                 table: "baskets",
@@ -391,19 +396,14 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_kit_items_KitId",
+                name: "IX_kit_items_kit_id",
                 table: "kit_items",
-                column: "KitId");
+                column: "kit_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_kit_items_product_id",
                 table: "kit_items",
                 column: "product_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_kits_DetailsId",
-                table: "kits",
-                column: "DetailsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_kits_details_KitId",
@@ -466,31 +466,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_subscriptions_user_id",
                 table: "subscriptions",
                 column: "user_id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_kit_items_kits_KitId",
-                table: "kit_items",
-                column: "KitId",
-                principalTable: "kits",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_kits_kits_details_DetailsId",
-                table: "kits",
-                column: "DetailsId",
-                principalTable: "kits_details",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_kits_details_kits_KitId",
-                table: "kits_details");
-
             migrationBuilder.DropTable(
                 name: "baskets_items");
 
@@ -502,6 +482,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "kit_items");
+
+            migrationBuilder.DropTable(
+                name: "kits_details");
 
             migrationBuilder.DropTable(
                 name: "order_items");
@@ -531,13 +514,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "products");
 
             migrationBuilder.DropTable(
-                name: "users");
-
-            migrationBuilder.DropTable(
                 name: "kits");
 
             migrationBuilder.DropTable(
-                name: "kits_details");
+                name: "users");
         }
     }
 }

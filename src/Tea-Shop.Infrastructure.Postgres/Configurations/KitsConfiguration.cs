@@ -30,5 +30,12 @@ public class KitsConfiguration: IEntityTypeConfiguration<Kit>
             .WithOne()
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne(k => k.Details)
+            .WithOne()
+            .HasForeignKey<KitDetails>()
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -26,12 +26,5 @@ public class KitDetailsConfiguration : IEntityTypeConfiguration<KitDetails>
         builder
             .Property(kd => kd.Sum)
             .HasColumnName("sum");
-
-        builder
-            .HasOne<Kit>()
-            .WithOne()
-            .HasForeignKey<KitDetails>()
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

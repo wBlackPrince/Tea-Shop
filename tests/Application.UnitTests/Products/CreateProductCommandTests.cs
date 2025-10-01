@@ -119,7 +119,7 @@ public class CreateProductCommandTests
                 "validation errors",
                 "Title"));
     }
-    
+
     [Fact]
     public async Task Handle_Should_ReturnError_WhenTitleIsTooLong()
     {

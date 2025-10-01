@@ -9,10 +9,12 @@ public class KitItem
 {
     public KitItem(
         KitItemId id,
+        KitId kitId,
         ProductId productId,
         int amount)
     {
         Id = id;
+        KitId = kitId;
         ProductId = productId;
         Amount = amount;
     }
@@ -26,6 +28,11 @@ public class KitItem
     /// Gets or sets Идентификатор элемента набора.
     /// </summary>
     public KitItemId Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets Идентификатор набора.
+    /// </summary>
+    public KitId KitId { get; set; }
 
     /// <summary>
     /// Gets or sets Идентификатор продукта.

@@ -333,9 +333,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("avatar_id");
 
-                    b.Property<Guid>("DetailsId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -343,8 +340,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.HasKey("Id")
                         .HasName("ipk_kits");
-
-                    b.HasIndex("DetailsId");
 
                     b.ToTable("kits", (string)null);
                 });
@@ -387,7 +382,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("amount");
 
                     b.Property<Guid>("KitId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("kit_id");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid")
@@ -734,21 +730,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Kit", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Subscriptions.KitDetails", "Details")
-                        .WithMany()
-                        .HasForeignKey("DetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Details");
-                });
-
             modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.KitDetails", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Subscriptions.Kit", null)
-                        .WithOne()
+                        .WithOne("Details")
                         .HasForeignKey("Tea_Shop.Domain.Subscriptions.KitDetails", "KitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -825,6 +810,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Tea_Shop.Domain.Subscriptions.Kit", b =>
                 {
+                    b.Navigation("Details")
+                        .IsRequired();
+
                     b.Navigation("KitItems");
                 });
 #pragma warning restore 612, 618
