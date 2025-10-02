@@ -1,5 +1,8 @@
 ﻿using System.Data;
+using Baskets.Contracts;
+using Baskets.Contracts.Dtos;
 using CSharpFunctionalExtensions;
+using FluentEmail.Core;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
@@ -15,7 +18,7 @@ namespace Users.Application.Commands.CreateUserCommand;
 
 public class CreateUserHandler(
     IUsersRepository usersRepository,
-    IBasketsRepository basketsRepository,
+    IBasketsContracts basketsRepository,
     ITokensRepository tokensRepository,
     ILogger<CreateUserHandler> logger,
     IFileProvider fileProvider,
@@ -73,9 +76,7 @@ public class CreateUserHandler(
 
         Guid? avatarId = Guid.NewGuid();
 
-        // создание корзины для пользователя
         BasketId basketId = new BasketId(Guid.NewGuid());
-        Basket basket = new Basket(basketId, userId);
 
         User user = new User(
             userId,
@@ -103,8 +104,9 @@ public class CreateUserHandler(
 
         await usersRepository.CreateUser(user, cancellationToken);
 
-        await basketsRepository.Create(basket, cancellationToken);
-
+        await basketsRepository.CreateBasket(
+            new CreateBasketRequestDto(userId.Value, basketId.Value),
+            cancellationToken);
 
         // email verification
         string verificationLink = verificationLinkFactory.Create(verificationToken);

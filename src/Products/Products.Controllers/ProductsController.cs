@@ -1,3 +1,4 @@
+using Comments.Contracts.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,6 @@ using Products.Application.Queries.GetProductsQuery;
 using Products.Application.Queries.GetSimilarProductsQuery;
 using Products.Contracts.Dtos;
 using Products.Domain;
-using Reviews.Contracts;
-using Reviews.Contracts.Dtos;
 using Shared.Abstractions;
 using Shared.Dto;
 

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Products.Application;
 using Products.Domain;
-using Shared.Database;
 
 namespace Products.Infrastructure.Postgres;
 
@@ -30,7 +29,11 @@ public class ProductsDbContext: DbContext, IProductsReadDbContext
 
     public DbSet<Product> Products { get; set; }
 
+    public DbSet<Tag> Tags { get; set; }
+
     public DbSet<ProductsTags> ProductsTags { get; set; }
 
     public IQueryable<Product> ProductsRead => Set<Product>().AsNoTracking();
+
+    public IQueryable<Tag> TagsRead => Set<Tag>().AsNoTracking();
 }

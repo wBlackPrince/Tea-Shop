@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Http;
 using Shared;
 using Shared.ValueObjects;
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Orders.Contracts;
 using Orders.Contracts.Dtos;
 using Orders.Domain;
+using Products.Contracts;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
@@ -16,7 +17,7 @@ public class CreateOrderHandler(
     IOrdersRepository ordersRepository,
     IUsersRepository usersRepository,
     IBasketsRepository basketsRepository,
-    IProductsReadDbContext readDbContext,
+    IProductsContracts productsContracts,
     ILogger<CreateOrderHandler> logger,
     IValidator<CreateOrderRequestDto> validator,
     ITransactionManager transactionManager): ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>

@@ -1,4 +1,4 @@
-﻿using Reviews.Contracts.Dtos;
+﻿using Comments.Contracts.Dtos;
 
 namespace Users.Contracts.Dtos;
 
