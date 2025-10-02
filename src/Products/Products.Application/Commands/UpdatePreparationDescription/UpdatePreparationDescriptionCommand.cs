@@ -1,4 +1,6 @@
-﻿namespace Products.Application.Commands.UpdatePreparationDescription;
+﻿using Products.Contracts.Dtos;
+using Shared.Abstractions;
 
-public record UpdatePreparationDescriptionCommand(
-    UpdatePreparationDescriptionRequestDto Request): ICommand;
+namespace Products.Application.Commands.UpdatePreparationDescription;
+
+public record UpdatePreparationDescriptionCommand(UpdatePreparationDescriptionRequestDto Request): ICommand;

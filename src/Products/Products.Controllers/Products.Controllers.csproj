@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Reviews\Reviews.Contracts\Reviews.Contracts.csproj" />
+      <ProjectReference Include="..\Products.Application\Products.Application.csproj" />
+      <ProjectReference Include="..\Products.Contracts\Products.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    </ItemGroup>
+
 </Project>

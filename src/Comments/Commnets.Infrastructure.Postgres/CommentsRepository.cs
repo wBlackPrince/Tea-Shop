@@ -1,10 +1,15 @@
-﻿namespace Commnets.Infrastructure.Postgres;
+﻿using Comments.Application;
+using Comments.Domain;
+using Microsoft.EntityFrameworkCore;
+using Shared.ValueObjects;
+
+namespace Commnets.Infrastructure.Postgres;
 
 public class CommentsRepository: ICommentsRepository
 {
-    private readonly ProductsDbContext _dbContext;
+    private readonly CommentsDbContext _dbContext;
 
-    public CommentsRepository(ProductsDbContext dbContext)
+    public CommentsRepository(CommentsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

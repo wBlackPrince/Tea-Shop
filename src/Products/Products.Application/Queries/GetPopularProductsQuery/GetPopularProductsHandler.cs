@@ -1,4 +1,10 @@
-﻿namespace Products.Application.Queries.GetPopularProductsQuery;
+﻿using Dapper;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Database;
+
+namespace Products.Application.Queries.GetPopularProductsQuery;
 
 public class GetPopularProductsHandler(
     IDbConnectionFactory dbConnectionFactory,

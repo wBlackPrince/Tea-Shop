@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Dapper;
+using Microsoft.Extensions.Logging;
 using Orders.Contracts;
+using Orders.Contracts.Dtos;
 using Shared.Abstractions;
 using Shared.Database;
 

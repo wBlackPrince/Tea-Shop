@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Reviews.Infrastructure.Postgres\Reviews.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Reviews.Application\Reviews.Application.csproj" />
+      <ProjectReference Include="..\Reviews.Contracts\Reviews.Contracts.csproj" />
     </ItemGroup>
-
 </Project>

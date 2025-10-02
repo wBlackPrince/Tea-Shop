@@ -1,4 +1,12 @@
 ﻿using System.Data;
+using CSharpFunctionalExtensions;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Products.Domain;
+using Shared;
+using Shared.Abstractions;
+using Shared.Database;
 
 namespace Products.Application.Commands.UpdateProductIngredients;
 

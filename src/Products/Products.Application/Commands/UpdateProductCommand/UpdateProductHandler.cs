@@ -1,5 +1,11 @@
 ﻿using System.Data;
+using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Logging;
 using Products.Application.Commands.CreateProductCommand;
+using Products.Domain;
+using Shared;
+using Shared.Database;
 
 namespace Products.Application.Commands.UpdateProductCommand;
 

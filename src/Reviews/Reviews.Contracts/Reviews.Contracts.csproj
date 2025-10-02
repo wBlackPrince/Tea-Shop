@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Comments\Comments.Contracts\Comments.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

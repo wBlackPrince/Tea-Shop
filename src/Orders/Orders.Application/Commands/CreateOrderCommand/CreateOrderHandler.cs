@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Orders.Contracts;
+using Orders.Contracts.Dtos;
 using Orders.Domain;
 using Shared;
 using Shared.Abstractions;
@@ -15,7 +16,7 @@ public class CreateOrderHandler(
     IOrdersRepository ordersRepository,
     IUsersRepository usersRepository,
     IBasketsRepository basketsRepository,
-    IReadDbContext readDbContext,
+    IProductsReadDbContext readDbContext,
     ILogger<CreateOrderHandler> logger,
     IValidator<CreateOrderRequestDto> validator,
     ITransactionManager transactionManager): ICommandHandler<CreateOrderResponseDto, CreateOrderCommand>
@@ -53,14 +54,12 @@ public class CreateOrderHandler(
 
         // валидация бизнес-логики
         // проверка того что все товары заказа доступны для покупки
-        Product? product = null;
-        BasketItem? basketItem = null;
         BasketItemId? basketItemId = null;
-        User? user = await usersRepository.GetUserById(
+        var user = await usersRepository.GetUserById(
             new UserId(command.Request.UserId),
             cancellationToken);
         Result<OrderItem, Error> orderItem;
-        Basket? basket = await basketsRepository.GetById(
+        var basket = await basketsRepository.GetById(
             user?.BasketId,
             cancellationToken);
 
@@ -82,7 +81,7 @@ public class CreateOrderHandler(
         {
             basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
-            basketItem = await basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
+            var basketItem = await basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
 
             // если такой вещи корзины не существует
             if (basketItem is null)
@@ -94,7 +93,7 @@ public class CreateOrderHandler(
                     "basket item not found");
             }
 
-            product = await readDbContext.ProductsRead.FirstOrDefaultAsync(
+            var product = await readDbContext.ProductsRead.FirstOrDefaultAsync(
                 p => p.Id == basketItem.ProductId,
                 cancellationToken);
 

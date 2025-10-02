@@ -1,4 +1,6 @@
-﻿using AppFileProvider = Tea_Shop.Application.FilesStorage.IFileProvider;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Shared.FilesStorage;
 
 namespace Minio;
 
@@ -23,7 +25,7 @@ public static class DependencyInjection
             return client;
         });
 
-        services.AddScoped<AppFileProvider, MinioProvider>();
+        services.AddScoped<IFileProvider, MinioProvider>();
 
         return services;
     }

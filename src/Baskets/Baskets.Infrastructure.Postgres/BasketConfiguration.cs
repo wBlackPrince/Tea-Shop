@@ -1,4 +1,9 @@
-﻿namespace Baskets.Infrastructure.Postgres;
+﻿using Baskets.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+
+namespace Baskets.Infrastructure.Postgres;
 
 public class BasketConfiguration: IEntityTypeConfiguration<Basket>
 {

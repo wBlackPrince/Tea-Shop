@@ -1,4 +1,11 @@
-﻿using Products.Application.Commands.CreateProductCommand;
+﻿using CSharpFunctionalExtensions;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
+using Products.Application.Commands.CreateProductCommand;
+using Products.Contracts.Dtos;
+using Shared;
+using Shared.Abstractions;
+using Shared.FilesStorage;
 
 namespace Products.Application.Commands.UploadProductsPhotosCommand;
 

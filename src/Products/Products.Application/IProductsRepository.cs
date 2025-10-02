@@ -1,4 +1,9 @@
-﻿namespace Products.Application;
+﻿using CSharpFunctionalExtensions;
+using Products.Domain;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Products.Application;
 
 public interface IProductsRepository
 {

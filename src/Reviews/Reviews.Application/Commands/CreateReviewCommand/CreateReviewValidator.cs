@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Reviews.Contracts;
+using Reviews.Contracts.Dtos;
 using Shared;
 
 namespace Reviews.Application.Commands.CreateReviewCommand;

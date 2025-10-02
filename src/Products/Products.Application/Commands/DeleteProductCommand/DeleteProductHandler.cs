@@ -1,5 +1,12 @@
 ﻿using System.Data;
+using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
 using Products.Application.Commands.UpdateProductCommand;
+using Products.Contracts.Dtos;
+using Shared;
+using Shared.Abstractions;
+using Shared.Database;
+using Shared.ValueObjects;
 
 namespace Products.Application.Commands.DeleteProductCommand;
 

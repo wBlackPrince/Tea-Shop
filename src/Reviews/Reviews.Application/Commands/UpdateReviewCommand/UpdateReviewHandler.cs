@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Reviews.Domain;
 using Shared;

@@ -1,11 +1,18 @@
-﻿namespace Users.Infrastructure.Postgres;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using Shared;
+using Shared.ValueObjects;
+using Users.Application;
+using Users.Domain;
+
+namespace Users.Infrastructure.Postgres;
 
 
 public class UsersRepository : IUsersRepository
 {
-    private readonly ProductsDbContext _dbContext;
+    private readonly UsersDbContext _dbContext;
 
-    public UsersRepository(ProductsDbContext dbContext)
+    public UsersRepository(UsersDbContext dbContext)
     {
         _dbContext = dbContext;
     }

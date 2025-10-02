@@ -1,4 +1,6 @@
-﻿namespace Shared.Dto;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Shared.Dto;
 
 public record CreateUserHttpRequestDto
 {

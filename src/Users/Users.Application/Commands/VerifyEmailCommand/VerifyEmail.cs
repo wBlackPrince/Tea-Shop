@@ -1,9 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Shared;
-using Shared.Auth;
 using Shared.Database;
-using Shared.Tokens;
 using IsolationLevel = System.Data.IsolationLevel;
 
 namespace Users.Application.Commands.VerifyEmailCommand;

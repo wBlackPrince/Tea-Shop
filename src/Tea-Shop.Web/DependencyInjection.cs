@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Tea_Shop.Application;
 using Tea_Shop.Infrastructure.Postgres;
 
 namespace Tea_Shop.Web;
@@ -9,9 +8,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddProgramDependencies(this IServiceCollection services)
     {
-        services.AddApplication();
+        //services.AddApplication();
         services.AddWebDependencies();
-        services.AddPostgresDependencies();
+        //services.AddPostgresDependencies();
         services.AddSwaggerGenWithAuthentification();
 
         return services;

@@ -1,4 +1,9 @@
-﻿namespace Users.Application;
+﻿using CSharpFunctionalExtensions;
+using Shared;
+using Shared.ValueObjects;
+using Users.Domain;
+
+namespace Users.Application;
 
 public interface IUsersRepository
 {

@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Shared;
+using Shared.ValueObjects;
 
 namespace Products.Domain;
 

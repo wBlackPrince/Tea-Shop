@@ -1,4 +1,6 @@
-﻿namespace Subscriptions.Domain;
+﻿using Shared.ValueObjects;
+
+namespace Subscriptions.Domain;
 
 public class ProductsKits
 {

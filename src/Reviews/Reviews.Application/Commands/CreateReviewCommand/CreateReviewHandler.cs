@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Reviews.Contracts;
+using Reviews.Contracts.Dtos;
 using Reviews.Domain;
 using Shared;
 using Shared.Abstractions;

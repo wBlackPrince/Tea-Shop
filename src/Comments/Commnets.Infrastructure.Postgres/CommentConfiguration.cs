@@ -1,4 +1,10 @@
-﻿namespace Commnets.Infrastructure.Postgres;
+﻿using Comments.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Commnets.Infrastructure.Postgres;
 
 public class CommentConfiguration: IEntityTypeConfiguration<Comment>
 {
@@ -47,5 +53,18 @@ public class CommentConfiguration: IEntityTypeConfiguration<Comment>
             .Property(c => c.UserId)
             .HasConversion(u => u.Value, id => new UserId(id))
             .HasColumnName("user_id");
+
+        builder
+            .HasMany<Comment>()
+            .WithOne()
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne<object>()
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

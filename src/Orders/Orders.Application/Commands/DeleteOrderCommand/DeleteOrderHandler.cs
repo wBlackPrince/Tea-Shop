@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Orders.Contracts;
+using Orders.Contracts.Dtos;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;

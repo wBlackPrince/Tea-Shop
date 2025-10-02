@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Orders.Application;
 using Orders.Domain;
 using Shared;
@@ -9,9 +10,9 @@ namespace Orders.Infrastructure.Postgres;
 
 public class OrdersRepository: IOrdersRepository
 {
-    private readonly ProductsDbContext _dbContext;
+    private readonly OrdersDbContext _dbContext;
 
-    public OrdersRepository(ProductsDbContext dbContext)
+    public OrdersRepository(OrdersDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -1,4 +1,14 @@
-﻿namespace Baskets.Controllers;
+﻿using Baskets.Application.Commands.AddBasketItemCommand;
+using Baskets.Application.Commands.RemoveBasketItemCommand;
+using Baskets.Contracts;
+using Baskets.Contracts.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Orders.Contracts;
+using Orders.Contracts.Dtos;
+using Shared.Abstractions;
+
+namespace Baskets.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,12 +1,16 @@
 ﻿using System.Diagnostics;
+using Baskets.Application;
+using Baskets.Domain;
+using Microsoft.EntityFrameworkCore;
+using Shared.ValueObjects;
 
 namespace Baskets.Infrastructure.Postgres;
 
 public class BasketsRepository : IBasketsRepository
 {
-    private readonly ProductsDbContext _dbContext;
+    private readonly BasketsDbContext _dbContext;
 
-    public BasketsRepository(ProductsDbContext dbContext)
+    public BasketsRepository(BasketsDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -23,9 +27,7 @@ public class BasketsRepository : IBasketsRepository
 
     public async Task<Guid> Create(Basket basket, CancellationToken cancellationToken)
     {
-        var entry = await _dbContext.Buskets.AddAsync(basket, cancellationToken);
-
-        Debug.Assert(entry.State == EntityState.Added);
+        await _dbContext.Buskets.AddAsync(basket, cancellationToken);
 
         return basket.Id.Value;
     }

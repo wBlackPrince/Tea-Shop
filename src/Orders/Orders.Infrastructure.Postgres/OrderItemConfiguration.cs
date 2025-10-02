@@ -31,5 +31,12 @@ public class OrderItemConfiguration: IEntityTypeConfiguration<OrderItem>
         builder
             .Property(oi => oi.ProductId)
             .HasColumnName("product_id");
+
+        builder
+            .HasOne<object>()
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

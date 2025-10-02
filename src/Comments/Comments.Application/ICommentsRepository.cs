@@ -1,4 +1,7 @@
-﻿namespace Comments.Application;
+﻿using Comments.Domain;
+using Shared.ValueObjects;
+
+namespace Comments.Application;
 
 public interface ICommentsRepository
 {

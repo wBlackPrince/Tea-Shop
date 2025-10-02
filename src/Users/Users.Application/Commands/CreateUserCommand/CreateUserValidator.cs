@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 using Users.Domain;
 
 namespace Users.Application.Commands.CreateUserCommand;

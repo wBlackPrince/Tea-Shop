@@ -3,10 +3,9 @@ using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Abstractions;
-using Shared.Auth;
 using Shared.Database;
-using Shared.Tokens;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 
 namespace Users.Application.Commands.LoginUserWithRefreshTokenCommand;
 

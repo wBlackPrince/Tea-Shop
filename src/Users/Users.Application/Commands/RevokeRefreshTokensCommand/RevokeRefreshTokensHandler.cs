@@ -1,7 +1,6 @@
 ﻿using System.Security.Claims;
 using CSharpFunctionalExtensions;
 using Shared;
-using Shared.Auth;
 using Shared.ValueObjects;
 
 namespace Users.Application.Commands.RevokeRefreshTokensCommand;

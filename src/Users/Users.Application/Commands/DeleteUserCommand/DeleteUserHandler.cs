@@ -6,6 +6,7 @@ using Shared.Abstractions;
 using Shared.Database;
 using Shared.ValueObjects;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 
 namespace Users.Application.Commands.DeleteUserCommand;
 

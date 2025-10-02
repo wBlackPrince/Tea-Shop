@@ -1,4 +1,7 @@
-﻿namespace Products.Application.Commands.UpdateProductIngredients;
+﻿using FluentValidation;
+using Shared;
+
+namespace Products.Application.Commands.UpdateProductIngredients;
 
 public class UpdateProductIngridientsValidator: AbstractValidator<UpdateProductIngredientsCommand>
 {

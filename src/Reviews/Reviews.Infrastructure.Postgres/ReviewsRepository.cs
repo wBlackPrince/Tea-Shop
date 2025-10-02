@@ -1,10 +1,15 @@
-﻿namespace Reviews.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Reviews.Application;
+using Reviews.Domain;
+using Shared.ValueObjects;
+
+namespace Reviews.Infrastructure.Postgres;
 
 public class ReviewsRepository : IReviewsRepository
 {
-    private readonly ProductsDbContext _dbContext;
+    private readonly ReviewsDbContext _dbContext;
 
-    public ReviewsRepository(ProductsDbContext dbContext)
+    public ReviewsRepository(ReviewsDbContext dbContext)
     {
         _dbContext = dbContext;
     }

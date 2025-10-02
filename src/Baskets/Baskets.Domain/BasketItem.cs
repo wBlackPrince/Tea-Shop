@@ -1,4 +1,6 @@
-﻿namespace Baskets.Domain;
+﻿using Shared.ValueObjects;
+
+namespace Baskets.Domain;
 
 /// <summary>
 /// Domain-модель элемента корзины

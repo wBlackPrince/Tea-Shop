@@ -4,13 +4,11 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Abstractions;
-using Shared.Auth;
 using Shared.Database;
-using Shared.EmailVerification;
 using Shared.FilesStorage;
-using Shared.Tokens;
 using Shared.ValueObjects;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 using Users.Domain;
 
 namespace Users.Application.Commands.CreateUserCommand;

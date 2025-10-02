@@ -1,7 +1,15 @@
-﻿namespace Comments.Application.Queries.GetCommentByIdQuery;
+﻿using Comments.Contracts;
+using Comments.Contracts.Dtos;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Shared.Abstractions;
+using Shared.Database;
+using Shared.ValueObjects;
+
+namespace Comments.Application.Queries.GetCommentByIdQuery;
 
 public class GetCommentByIdHandler(
-    IReadDbContext readDbContext,
+    ICommentsReadDbContext readDbContext,
     ILogger<GetCommentByIdHandler> logger):
     IQueryHandler<CommentDto?, GetCommentByIdQuery>
 {

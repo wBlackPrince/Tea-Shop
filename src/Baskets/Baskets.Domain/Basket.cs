@@ -1,4 +1,8 @@
-﻿namespace Baskets.Domain;
+﻿using CSharpFunctionalExtensions;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Baskets.Domain;
 
 /// <summary>
 /// Domain-модель корзины

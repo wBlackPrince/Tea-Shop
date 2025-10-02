@@ -1,4 +1,17 @@
-﻿namespace Comments.Controllers;
+﻿using Comments.Application.Commands.CreateCommentCommand;
+using Comments.Application.Commands.DeleteCommentCommand;
+using Comments.Application.Commands.UpdateCommentCommand;
+using Comments.Application.Queries.GetCommentByIdQuery;
+using Comments.Application.Queries.GetCommentChildCommentsQuery;
+using Comments.Contracts;
+using Comments.Contracts.Dtos;
+using Comments.Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Shared.Abstractions;
+
+namespace Comments.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,4 +1,10 @@
-﻿namespace Products.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Products.Domain;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Products.Infrastructure.Postgres;
 
 public class ProductConfiguration: IEntityTypeConfiguration<Product>
 {
@@ -85,19 +91,5 @@ public class ProductConfiguration: IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.PhotosIds)
             .HasColumnName("photos_ids");
-
-        builder
-            .HasMany<OrderItem>()
-            .WithOne()
-            .HasForeignKey(oi => oi.ProductId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasMany<Review>()
-            .WithOne()
-            .HasForeignKey(r => r.ProductId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

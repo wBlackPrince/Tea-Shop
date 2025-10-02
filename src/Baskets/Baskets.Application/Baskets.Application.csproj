@@ -10,4 +10,9 @@
       <Folder Include="Queries\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Baskets.Contracts\Baskets.Contracts.csproj" />
+      <ProjectReference Include="..\Baskets.Domain\Baskets.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

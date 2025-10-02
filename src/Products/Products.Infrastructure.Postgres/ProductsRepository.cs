@@ -1,4 +1,11 @@
-﻿namespace Products.Infrastructure.Postgres;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using Products.Application;
+using Products.Domain;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Products.Infrastructure.Postgres;
 
 public class ProductsRepository: IProductsRepository
 {

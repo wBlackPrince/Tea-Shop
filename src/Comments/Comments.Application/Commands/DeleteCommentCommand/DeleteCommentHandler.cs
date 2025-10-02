@@ -1,10 +1,19 @@
 ﻿using System.Data;
+using Comments.Contracts;
+using Comments.Contracts.Dtos;
+using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Shared;
+using Shared.Abstractions;
+using Shared.Database;
+using Shared.ValueObjects;
 
 namespace Comments.Application.Commands.DeleteCommentCommand;
 
 public class DeleteCommentHandler(
     ICommentsRepository commentsRepository,
-    IReadDbContext readDbContext,
+    ICommentsReadDbContext readDbContext,
     ILogger<DeleteCommentHandler> logger,
     ITransactionManager transactionManager):
     ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand>

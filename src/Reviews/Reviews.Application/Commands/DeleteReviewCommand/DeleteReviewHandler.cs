@@ -1,7 +1,9 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Reviews.Contracts;
+using Reviews.Contracts.Dtos;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
@@ -10,7 +12,7 @@ using Shared.ValueObjects;
 namespace Reviews.Application.Commands.DeleteReviewCommand;
 
 public class DeleteReviewHandler(
-    IReadDbContext readDbContext,
+    IReviewsReadDbContext readDbContext,
     IReviewsRepository reviewsRepository,
     ILogger<DeleteReviewHandler> logger,
     ITransactionManager transactionManager):

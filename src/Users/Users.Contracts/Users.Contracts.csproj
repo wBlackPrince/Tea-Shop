@@ -6,4 +6,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Comments\Comments.Contracts\Comments.Contracts.csproj" />
+      <ProjectReference Include="..\..\Core\Shared\Shared.csproj" />
+      <ProjectReference Include="..\..\Reviews\Reviews.Contracts\Reviews.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

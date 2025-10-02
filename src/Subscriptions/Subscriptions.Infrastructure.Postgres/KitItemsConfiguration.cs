@@ -1,4 +1,9 @@
-﻿namespace Subscriptions.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+using Subscriptions.Domain;
+
+namespace Subscriptions.Infrastructure.Postgres;
 
 public class KitItemsConfiguration: IEntityTypeConfiguration<KitItem>
 {
@@ -30,8 +35,9 @@ public class KitItemsConfiguration: IEntityTypeConfiguration<KitItem>
             .HasColumnName("kit_id");
 
         builder
-            .HasOne<Product>()
+            .HasOne<object>()
             .WithMany()
+            .HasForeignKey(ki => ki.ProductId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

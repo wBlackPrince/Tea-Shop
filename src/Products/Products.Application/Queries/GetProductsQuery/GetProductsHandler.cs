@@ -1,9 +1,14 @@
 ﻿using System.Data;
+using Dapper;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Database;
 
 namespace Products.Application.Queries.GetProductsQuery;
 
 public class GetProductsHandler(
-    IReadDbContext readDbContext,
+    IProductsReadDbContext readDbContext,
     ILogger<GetProductsHandler> logger,
     IDbConnectionFactory dbConnectionFactory):
     IQueryHandler<GetProductsResponseDto, GetProductsQuery>

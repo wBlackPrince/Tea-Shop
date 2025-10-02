@@ -1,4 +1,7 @@
-﻿namespace Products.Domain;
+﻿using CSharpFunctionalExtensions;
+using Shared;
+
+namespace Products.Domain;
 
 public record PreparationMethod
 {

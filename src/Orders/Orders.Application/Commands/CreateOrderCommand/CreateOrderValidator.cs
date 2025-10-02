@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Orders.Contracts;
+using Orders.Contracts.Dtos;
 using Orders.Domain;
 
 namespace Orders.Application.Commands.CreateOrderCommand;

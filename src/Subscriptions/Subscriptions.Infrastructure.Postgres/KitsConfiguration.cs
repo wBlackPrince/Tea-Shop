@@ -1,4 +1,9 @@
-﻿namespace Subscriptions.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+using Subscriptions.Domain;
+
+namespace Subscriptions.Infrastructure.Postgres;
 
 public class KitsConfiguration: IEntityTypeConfiguration<Kit>
 {

@@ -1,8 +1,5 @@
 namespace Tea_Shop.Domain.Tags;
 
-
-public record TagId(Guid Value);
-
 /// <summary>
 /// Domain-модель тега
 /// </summary>

@@ -1,4 +1,9 @@
-﻿namespace Products.Application.Commands.CreateProductCommand;
+﻿using FluentValidation;
+using Products.Contracts.Dtos;
+using Products.Domain;
+using Shared;
+
+namespace Products.Application.Commands.CreateProductCommand;
 
 public class CreateProductValidator: AbstractValidator<CreateProductRequestDto>
 {

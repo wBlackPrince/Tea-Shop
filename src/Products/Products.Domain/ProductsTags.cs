@@ -1,6 +1,6 @@
-﻿namespace Products.Domain;
+﻿using Shared.ValueObjects;
 
-public record ProductsTagsId(Guid Value);
+namespace Products.Domain;
 
 public class ProductsTags
 {

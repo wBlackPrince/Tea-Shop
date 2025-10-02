@@ -1,4 +1,9 @@
-﻿namespace Subscriptions.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+using Subscriptions.Domain;
+
+namespace Subscriptions.Infrastructure.Postgres;
 
 public class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscription>
 {
@@ -26,8 +31,9 @@ public class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscription>
             .HasColumnName("user_id");
 
         builder
-            .HasOne<User>()
+            .HasOne<object>()
             .WithMany()
+            .HasForeignKey(k => k.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 

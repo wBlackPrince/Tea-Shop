@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Orders.Domain\Orders.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.1.66" />
+      <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="10.0.0-rc.1.25451.107" />
+    </ItemGroup>
+
 </Project>

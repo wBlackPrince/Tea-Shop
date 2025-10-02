@@ -1,4 +1,10 @@
-﻿namespace Products.Application.Queries.GetProductReviews;
+﻿using Dapper;
+using Microsoft.Extensions.Logging;
+using Reviews.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Database;
+
+namespace Products.Application.Queries.GetProductReviews;
 
 public class GetProductReviewsHandler(
     IDbConnectionFactory connectionFactory,

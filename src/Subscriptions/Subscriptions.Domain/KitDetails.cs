@@ -1,4 +1,6 @@
-﻿namespace Subscriptions.Domain;
+﻿using Shared.ValueObjects;
+
+namespace Subscriptions.Domain;
 
 /// <summary>
 /// Domain-модель детального описания чайного набора

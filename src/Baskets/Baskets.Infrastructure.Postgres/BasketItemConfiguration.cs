@@ -1,4 +1,9 @@
-﻿namespace Baskets.Infrastructure.Postgres;
+﻿using Baskets.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+
+namespace Baskets.Infrastructure.Postgres;
 
 public class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
 {
@@ -30,8 +35,9 @@ public class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
             .HasColumnName("quantity");
 
         builder
-            .HasOne<Product>()
+            .HasOne<object>()
             .WithMany()
+            .HasForeignKey(bi => bi.ProductId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

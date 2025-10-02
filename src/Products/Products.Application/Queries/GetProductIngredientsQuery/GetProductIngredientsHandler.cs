@@ -1,7 +1,14 @@
-﻿namespace Products.Application.Queries.GetProductIngredientsQuery;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Database;
+using Shared.ValueObjects;
+
+namespace Products.Application.Queries.GetProductIngredientsQuery;
 
 public class GetProductIngredientsHandler(
-    IReadDbContext readDbContext,
+    IProductsReadDbContext readDbContext,
     ILogger<GetProductIngredientsHandler> logger):
     IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery>
 {

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Orders.Contracts.Dtos;
+using Shared;
 using Shared.Abstractions;
 using Shared.Dto;
 using Users.Application.Commands.CreateUserCommand;
@@ -15,6 +18,7 @@ using Users.Application.Queries.GetUserOrdersQuery;
 using Users.Application.Queries.GetUserReviewsQuery;
 using Users.Application.Queries.GetUsersQuery;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 using Users.Domain;
 
 namespace Users.Controllers;

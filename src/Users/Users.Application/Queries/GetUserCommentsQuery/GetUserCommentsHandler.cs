@@ -1,8 +1,11 @@
 ﻿using System.Data;
+using Comments.Contracts.Dtos;
+using Dapper;
 using Microsoft.Extensions.Logging;
 using Shared.Abstractions;
 using Shared.Database;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 
 namespace Users.Application.Queries.GetUserCommentsQuery;
 

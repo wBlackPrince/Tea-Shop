@@ -1,14 +1,16 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Shared.Abstractions;
 using Shared.Database;
 using Shared.ValueObjects;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 using Users.Domain;
 
 namespace Users.Application.Queries.GetUserByIdQuery;
 
 public class GetUserByIdHandler(
-    IReadDbContext readDbContext,
+    IUsersReadDbContext readDbContext,
     ILogger<GetUserByIdHandler> logger):
     IQueryHandler<GetUserResponseDto?, GetUserByIdQuery>
 {

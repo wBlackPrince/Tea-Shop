@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Reviews.Application.Commands.CreateReviewCommand;
 using Reviews.Application.Commands.DeleteReviewCommand;
@@ -6,6 +7,7 @@ using Reviews.Application.Commands.UpdateReviewCommand;
 using Reviews.Application.Queries.GetReviewByIdQuery;
 using Reviews.Application.Queries.GetReviewCommentsQuery;
 using Reviews.Contracts;
+using Reviews.Contracts.Dtos;
 using Reviews.Domain;
 using Shared.Abstractions;
 

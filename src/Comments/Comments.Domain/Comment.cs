@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Shared;
+using Shared.ValueObjects;
 
 namespace Comments.Domain;
 

@@ -1,4 +1,9 @@
-﻿namespace Comments.Application.Commands.CreateCommentCommand;
+﻿using Comments.Contracts;
+using Comments.Contracts.Dtos;
+using FluentValidation;
+using Shared;
+
+namespace Comments.Application.Commands.CreateCommentCommand;
 
 public class CreateCommentValidator: AbstractValidator<CreateCommentRequestDto>
 {

@@ -1,3 +1,26 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Products.Application.Commands.CreateProductCommand;
+using Products.Application.Commands.DeleteProductCommand;
+using Products.Application.Commands.UpdatePreparationDescription;
+using Products.Application.Commands.UpdatePreparationTime;
+using Products.Application.Commands.UpdateProductCommand;
+using Products.Application.Commands.UpdateProductIngredients;
+using Products.Application.Commands.UploadProductsPhotosCommand;
+using Products.Application.Queries.GetPopularProductsQuery;
+using Products.Application.Queries.GetProductByIdQuery;
+using Products.Application.Queries.GetProductIngredientsQuery;
+using Products.Application.Queries.GetProductReviews;
+using Products.Application.Queries.GetProductsQuery;
+using Products.Application.Queries.GetSimilarProductsQuery;
+using Products.Contracts.Dtos;
+using Products.Domain;
+using Reviews.Contracts;
+using Reviews.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Dto;
+
 namespace Products.Controllers;
 
 [ApiController]

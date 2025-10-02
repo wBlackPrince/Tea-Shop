@@ -1,4 +1,17 @@
-﻿namespace Orders.Controllers;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using Orders.Application.Commands.CreateOrderCommand;
+using Orders.Application.Commands.DeleteOrderCommand;
+using Orders.Application.Commands.UpdateOrderCommand;
+using Orders.Application.Queries.GetOrderByIdQuery;
+using Orders.Application.Queries.GetOrderItemsQuery;
+using Orders.Contracts;
+using Orders.Contracts.Dtos;
+using Orders.Domain;
+using Shared.Abstractions;
+
+namespace Orders.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -31,7 +31,7 @@ builder.Services
 Console.WriteLine($"SMTP Host: {builder.Configuration["Email:Host"]}");
 Console.WriteLine($"SMTP Port: {builder.Configuration["Email:Port"]}");
 
-builder.Services.AddProgramDependencies();
+//builder.Services.AddProgramDependencies();
 
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -46,7 +46,7 @@ builder.Services.AddMinioDependencies(builder.Configuration);
 var app = builder.Build();
 
 // app.MapOpenApi();
-app.UseSwagger();
+//app.UseSwagger();
 app.UseSwaggerUI(
     options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tea-Shop v1"));
 

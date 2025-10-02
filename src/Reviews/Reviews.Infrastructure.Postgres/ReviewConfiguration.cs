@@ -1,4 +1,10 @@
-﻿namespace Reviews.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Reviews.Domain;
+using Shared;
+using Shared.ValueObjects;
+
+namespace Reviews.Infrastructure.Postgres;
 
 public class ReviewConfiguration: IEntityTypeConfiguration<Review>
 {
@@ -52,9 +58,16 @@ public class ReviewConfiguration: IEntityTypeConfiguration<Review>
             .HasColumnName("user_id");
 
         builder
-            .HasOne<Product>()
+            .HasOne<object>()
             .WithMany()
             .HasForeignKey(p => p.ProductId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasOne<object>()
+            .WithMany()
+            .HasForeignKey(r => r.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

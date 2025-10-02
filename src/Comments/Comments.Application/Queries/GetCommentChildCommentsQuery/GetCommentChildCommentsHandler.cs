@@ -1,4 +1,11 @@
-﻿namespace Comments.Application.Queries.GetCommentChildCommentsQuery;
+﻿using Comments.Contracts;
+using Comments.Contracts.Dtos;
+using Dapper;
+using Microsoft.Extensions.Logging;
+using Shared.Abstractions;
+using Shared.Database;
+
+namespace Comments.Application.Queries.GetCommentChildCommentsQuery;
 
 public class GetCommentChildCommentsHandler(
     IDbConnectionFactory connectionFactory,

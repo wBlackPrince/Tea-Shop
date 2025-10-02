@@ -1,4 +1,7 @@
-﻿namespace Baskets.Application;
+﻿using Baskets.Domain;
+using Shared.ValueObjects;
+
+namespace Baskets.Application;
 
 public interface IBasketsRepository
 {

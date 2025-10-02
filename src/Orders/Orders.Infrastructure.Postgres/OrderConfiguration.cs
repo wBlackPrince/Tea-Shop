@@ -56,7 +56,7 @@ public class OrderConfiguration: IEntityTypeConfiguration<Order>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne<User>()
+            .HasOne<object>()
             .WithMany()
             .HasForeignKey(o => o.UserId)
             .IsRequired()

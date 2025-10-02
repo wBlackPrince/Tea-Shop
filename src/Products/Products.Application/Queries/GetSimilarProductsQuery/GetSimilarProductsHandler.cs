@@ -1,4 +1,10 @@
-﻿namespace Products.Application.Queries.GetSimilarProductsQuery;
+﻿using Dapper;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Shared.Abstractions;
+using Shared.Database;
+
+namespace Products.Application.Queries.GetSimilarProductsQuery;
 
 public class GetSimilarProductsHandler(
     IDbConnectionFactory dbConnectionFactory,

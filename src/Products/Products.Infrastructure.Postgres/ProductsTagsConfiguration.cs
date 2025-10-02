@@ -1,4 +1,9 @@
-﻿namespace Products.Infrastructure.Postgres;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Products.Domain;
+using Shared.ValueObjects;
+
+namespace Products.Infrastructure.Postgres;
 
 public class ProductsTagsConfiguration: IEntityTypeConfiguration<ProductsTags>
 {
@@ -27,7 +32,7 @@ public class ProductsTagsConfiguration: IEntityTypeConfiguration<ProductsTags>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasOne<Tag>()
+            .HasOne<object>()
             .WithMany()
             .HasForeignKey(pt => pt.TagId)
             .IsRequired()

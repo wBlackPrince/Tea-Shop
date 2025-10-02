@@ -62,20 +62,6 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
             .HasColumnName("is_active");
 
         builder
-            .HasMany<Review>()
-            .WithOne()
-            .HasForeignKey(r => r.UserId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasMany<Comment>()
-            .WithOne()
-            .HasForeignKey(c => c.UserId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder
             .HasOne<Basket>()
             .WithOne()
             .HasForeignKey<Basket>(r => r.UserId)

@@ -1,6 +1,14 @@
-﻿namespace Products.Application.Queries.GetProductByIdQuery;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Products.Contracts.Dtos;
+using Products.Domain;
+using Shared.Abstractions;
+using Shared.Database;
+using Shared.ValueObjects;
 
-public class GetProductByIdHandler(IReadDbContext readDbContext, ILogger<GetProductByIdHandler> logger):
+namespace Products.Application.Queries.GetProductByIdQuery;
+
+public class GetProductByIdHandler(IProductsReadDbContext readDbContext, ILogger<GetProductByIdHandler> logger):
     IQueryHandler<GetProductDto?, GetProductByIdQuery>
 {
     public async Task<GetProductDto?> Handle(

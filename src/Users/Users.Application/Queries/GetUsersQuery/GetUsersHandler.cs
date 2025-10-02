@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Shared.Abstractions;
-using Shared.Database;
 using Users.Contracts;
+using Users.Contracts.Dtos;
 using Users.Domain;
 
 namespace Users.Application.Queries.GetUsersQuery;
 
 public class GetUsersHandler(
-    IReadDbContext readDbContext,
+    IUsersReadDbContext readDbContext,
     ILogger<GetUsersHandler> logger):
     IQueryHandler<GetUsersResponseDto, GetUsersQuery>
 {
@@ -56,9 +57,7 @@ public class GetUsersHandler(
 
         usersQuery = usersQuery
             .OrderBy(u => u.LastName)
-            .Skip(
-                (query.Request.Pagination.Page - 1) *
-                query.Request.Pagination.PageSize)
+            .Skip((query.Request.Pagination.Page - 1) * query.Request.Pagination.PageSize)
             .Take(query.Request.Pagination.PageSize);
 
         var users = await usersQuery
