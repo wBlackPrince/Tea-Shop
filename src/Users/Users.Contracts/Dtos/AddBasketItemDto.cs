@@ -1,4 +1,4 @@
-﻿namespace Baskets.Contracts.Dtos;
+﻿namespace Users.Contracts.Dtos;
 
 public record AddBasketItemDto(
     Guid BusketId,

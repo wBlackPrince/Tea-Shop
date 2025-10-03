@@ -1,7 +1,6 @@
-﻿using Baskets.Contracts;
-using Baskets.Contracts.Dtos;
-using Shared.Abstractions;
+﻿using Shared.Abstractions;
+using Users.Contracts.Dtos;
 
-namespace Baskets.Application.Commands.AddBasketItemCommand;
+namespace Users.Application.Commands.AddBasketItemCommand;
 
 public record AddBasketItemCommand(AddBasketItemDto AddBasketItemDto): ICommand;

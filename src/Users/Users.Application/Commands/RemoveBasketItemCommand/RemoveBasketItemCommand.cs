@@ -1,7 +1,6 @@
-﻿using Baskets.Contracts;
-using Baskets.Contracts.Dtos;
-using Shared.Abstractions;
+﻿using Shared.Abstractions;
+using Users.Contracts.Dtos;
 
-namespace Baskets.Application.Commands.RemoveBasketItemCommand;
+namespace Users.Application.Commands.RemoveBasketItemCommand;
 
 public record RemoveBasketItemCommand(RemoveBasketItemDto BasketItemDto): ICommand;

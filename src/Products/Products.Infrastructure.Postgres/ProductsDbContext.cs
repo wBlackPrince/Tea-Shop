@@ -24,6 +24,7 @@ public class ProductsDbContext: DbContext, IProductsReadDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("products");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductsDbContext).Assembly);
     }
 

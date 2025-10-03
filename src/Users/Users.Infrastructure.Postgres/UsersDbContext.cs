@@ -24,12 +24,21 @@ public class UsersDbContext: DbContext, IUsersReadDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("users");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UsersDbContext).Assembly);
     }
 
     public DbSet<User> Users { get; set; }
 
     public IQueryable<User> UsersRead => Set<User>().AsNoTracking();
+
+    public DbSet<Basket> Baskets { get; set; }
+
+    public DbSet<BasketItem> BasketItems { get; set; }
+
+    public IQueryable<Basket> BasketsRead => Set<Basket>().AsNoTracking();
+
+    public IQueryable<BasketItem> BasketsItemsRead => Set<BasketItem>().AsNoTracking();
 
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 

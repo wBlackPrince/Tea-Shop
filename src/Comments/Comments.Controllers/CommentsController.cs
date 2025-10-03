@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Abstractions;
+using Shared.Dto;
 
 namespace Comments.Controllers;
 
@@ -68,7 +69,7 @@ public class CommentsController: ControllerBase
     public async Task<IActionResult> UpdateComment(
         [FromRoute] Guid commentId,
         [FromServices] UpdateCommentHandler handler,
-        [FromBody] JsonPatchDocument<Comment> commentUpdates,
+        [FromBody] UpdateEntityRequestDto commentUpdates,
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(commentId, commentUpdates, cancellationToken);

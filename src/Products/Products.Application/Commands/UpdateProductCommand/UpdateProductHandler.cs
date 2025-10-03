@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using Products.Application.Commands.CreateProductCommand;
 using Products.Domain;
 using Shared;
 using Shared.Database;
+using Shared.Dto;
 
 namespace Products.Application.Commands.UpdateProductCommand;
 
@@ -16,7 +18,7 @@ public class UpdateProductHandler(
 {
     public async Task<Result<Guid, Error>> Handle(
         Guid productId,
-        JsonPatchDocument<Product> productUpdates,
+        UpdateEntityRequestDto request,
         CancellationToken cancellationToken)
     {
         var transactionScopeResult = await transactionManager.BeginTransactionAsync(
@@ -44,7 +46,29 @@ public class UpdateProductHandler(
 
         try
         {
-            productUpdates.ApplyTo(product);
+            switch (request.Property)
+            {
+                case nameof(product.Title):
+                    product.Title = (string)request.NewValue;
+                    break;
+                case nameof(product.Amount):
+                    product.Amount = (float)request.NewValue;
+                    break;
+                case nameof(product.Description):
+                    product.Description = (string)request.NewValue;
+                    break;
+                case nameof(product.Price):
+                    product.Price = (float)request.NewValue;
+                    break;
+                case nameof(product.StockQuantity):
+                    product.StockQuantity = (int)request.NewValue;
+                    break;
+                case nameof(product.Season):
+                    product.Season = (Season)Enum.Parse(typeof(Season), (string)request.NewValue);
+                    break;
+                default:
+                    throw new ValidationException("Invalid property");
+            }
         }
         catch (Exception e)
         {

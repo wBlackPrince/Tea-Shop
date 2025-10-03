@@ -1,15 +1,14 @@
 ﻿using System.Data;
-using Baskets.Contracts;
-using Baskets.Contracts.Dtos;
-using Baskets.Domain;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
 using Shared.ValueObjects;
+using Users.Contracts.Dtos;
+using Users.Domain;
 
-namespace Baskets.Application.Commands.AddBasketItemCommand;
+namespace Users.Application.Commands.AddBasketItemCommand;
 
 public class AddBasketItemHandler(
     IBasketsRepository basketsRepository,

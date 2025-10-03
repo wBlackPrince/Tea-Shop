@@ -6,17 +6,20 @@ using Orders.Contracts;
 using Orders.Contracts.Dtos;
 using Orders.Domain;
 using Products.Contracts;
+using Products.Contracts.Dtos;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
+using Shared.Dto;
 using Shared.ValueObjects;
+using Users.Contracts;
+using Users.Contracts.Dtos;
 
 namespace Orders.Application.Commands.CreateOrderCommand;
 
 public class CreateOrderHandler(
     IOrdersRepository ordersRepository,
-    IUsersRepository usersRepository,
-    IBasketsRepository basketsRepository,
+    IUsersContracts usersContracts,
     IProductsContracts productsContracts,
     ILogger<CreateOrderHandler> logger,
     IValidator<CreateOrderRequestDto> validator,
@@ -56,18 +59,28 @@ public class CreateOrderHandler(
         // валидация бизнес-логики
         // проверка того что все товары заказа доступны для покупки
         BasketItemId? basketItemId = null;
-        var user = await usersRepository.GetUserById(
-            new UserId(command.Request.UserId),
+        var user = await usersContracts.GetUserById(
+            new UserWithOnlyIdDto(command.Request.UserId),
             cancellationToken);
+
+        if (user is null)
+        {
+            logger.LogError("No user with id {basketId} found", user?.Id);
+            transactionScope.Rollback();
+            return Error.NotFound(
+                "create.order",
+                "user not found");
+        }
+
         Result<OrderItem, Error> orderItem;
-        var basket = await basketsRepository.GetById(
-            user?.BasketId,
+        var basket = await usersContracts.GetBasketById(
+            new BasketId(user.BasketId),
             cancellationToken);
 
         // если такой корзины не существует
         if (basket is null)
         {
-            logger.LogError("No basket with id {basketId} found", basket?.Id.Value);
+            logger.LogError("No basket with id {basketId} found", basket?.Id);
             transactionScope.Rollback();
             return Error.NotFound(
                 "create.order",
@@ -82,37 +95,31 @@ public class CreateOrderHandler(
         {
             basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
-            var basketItem = await basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
+            var basketItem = await usersContracts.GetBasketItemById(basketItemId, cancellationToken);
 
             // если такой вещи корзины не существует
             if (basketItem is null)
             {
-                logger.LogError("No basket item with id {basketItemId} found", basketItem?.Id.Value);
+                logger.LogError("No basket item with id {basketItemId} found", basketItem?.Id);
                 transactionScope.Rollback();
                 return Error.NotFound(
                     "create.order",
                     "basket item not found");
             }
 
-            var product = await readDbContext.ProductsRead.FirstOrDefaultAsync(
-                p => p.Id == basketItem.ProductId,
+            var product = await productsContracts.GetProductById(
+                new ProductWithOnlyIdDto(basketItem.ProductId),
                 cancellationToken);
 
             // если такого продукта не существует
             if (product is null)
             {
-                logger.LogError("No product with id {productId} found", product?.Id.Value);
+                logger.LogError("No product with id {productId} found", product?.Id);
                 transactionScope.Rollback();
                 return Error.NotFound(
                     "create.order",
                     "product not found");
             }
-
-
-            product = await readDbContext.ProductsRead
-                .FirstOrDefaultAsync(
-                    p => p.Id == basketItem.ProductId,
-                    cancellationToken);
 
             // если число товаров в корзине меньше чем в запросе
             if (basketItem.Quantity < command.Request.Items[i].Quantity)
@@ -131,7 +138,7 @@ public class CreateOrderHandler(
             {
                 logger.LogError(
                     "Product with id {productId} doesn't have enough stock quantity",
-                    product?.Id.Value);
+                    product?.Id);
 
                 transactionScope.Rollback();
 
@@ -153,23 +160,48 @@ public class CreateOrderHandler(
             }
 
 
-            product.StockQuantity -= command.Request.Items[i].Quantity;
+            //product.StockQuantity -= command.Request.Items[i].Quantity;
+            var updateResult = await productsContracts.UpdateProduct(
+                product.Id,
+                new UpdateEntityRequestDto(
+                    "StockQuantity", 
+                    product?.StockQuantity - command.Request.Items[i].Quantity),
+                cancellationToken);
+
+            if (updateResult.IsFailure)
+            {
+                logger.LogError(
+                    "Cannot update product's stock quantity with {productId}",
+                    product?.Id);
+
+                transactionScope.Rollback();
+
+                return Error.Failure(
+                    "create.order",
+                    $"Cannot update product's stock quantity: {updateResult.Error.Message}");
+            }
+
             newBonuses += (int)(product.Price * 0.15f * command.Request.Items[i].Quantity);
             orderSum += product.Price;
 
             orderItem = OrderItem.Create(
                 new OrderItemId(Guid.NewGuid()),
-                product.Id,
+                new ProductId(product.Id),
                 command.Request.Items[i].Quantity);
 
             if (orderItem.IsSuccess)
             {
                 orderItems.Add(orderItem.Value);
-                basketItem.Quantity -= command.Request.Items[i].Quantity;
-                if (basketItem.Quantity <= 0)
-                {
-                    basket?.RemoveItem(basketItem);
-                }
+                await usersContracts.UpdateBasketItem(
+                    basketItemId, 
+                    new UpdateEntityRequestDto("Quantity", basketItem.Quantity - command.Request.Items[i].Quantity),
+                    cancellationToken);
+
+                // TODO
+                // if (basketItem.Quantity <= 0)
+                // {
+                //     basket?.RemoveItem(basketItem);
+                // }
             }
             else
             {
@@ -211,9 +243,15 @@ public class CreateOrderHandler(
             orderSum = orderSum - command.Request.UsedBonuses;
         }
 
-        user.RemoveBonusPoints(command.Request.UsedBonuses);
+        await usersContracts.UpdateUser(
+            new UserId(user.Id),
+            new UpdateEntityRequestDto("BonusPoints", user.BonusPoints - command.Request.UsedBonuses),
+            cancellationToken);
 
-        user.AddBonusPoints(newBonuses);
+        await usersContracts.UpdateUser(
+            new UserId(user.Id),
+            new UpdateEntityRequestDto("BonusPoints", user.BonusPoints + newBonuses),
+            cancellationToken);
 
         await transactionManager.SaveChangesAsync(cancellationToken);
 

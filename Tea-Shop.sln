@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Web", "src\Tea-Shop.Web\Tea-Shop.Web.csproj", "{7F4048CE-205A-45B1-AF0C-7076C6FA5B03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tea-Shop.Infrastructure.Postgres", "src\Tea-Shop.Infrastructure.Postgres\Tea-Shop.Infrastructure.Postgres.csproj", "{0902EE51-BFB8-418D-9F1C-FD90850A41EA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6AC2D317-59CB-4E13-9DBC-9E61763155FB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "tests\Application.UnitTests\Application.UnitTests.csproj", "{58E6E651-1685-4373-851C-F2279B472E7C}"
@@ -26,16 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subscriptions", "Subscripti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users", "Users", "{EE58A110-5A41-4FA7-8EBC-9820BF8F6BF4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tags", "Tags", "{A5F4D892-AE25-4008-9EA2-257DB3B0244C}"
-	ProjectSection(SolutionItems) = preProject
-		CreateTagRequestDto.cs = CreateTagRequestDto.cs
-		CreateTagValidator.cs = CreateTagValidator.cs
-		ITagsRepository.cs = ITagsRepository.cs
-		ITagsService.cs = ITagsService.cs
-		TagsService.cs = TagsService.cs
-		Create.cs = Create.cs
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Domain", "src\Orders\Orders.Domain\Orders.Domain.csproj", "{BDC33086-29E7-44D5-8E80-426C49D2A41E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Application", "src\Orders\Orders.Application\Orders.Application.csproj", "{75F9B9D8-F39B-4114-8016-82C8C81ABC84}"
@@ -48,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments.Domain", "src\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments.Application", "src\Comments\Comments.Application\Comments.Application.csproj", "{22BBF104-D563-4072-8164-5C03F0E0A2EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commnets.Infrastructure.Postgres", "src\Comments\Commnets.Infrastructure.Postgres\Commnets.Infrastructure.Postgres.csproj", "{B26560A1-6449-44A6-BC48-A87313310501}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments.Infrastructure.Postgres", "src\Comments\Comments.Infrastructure.Postgres\Comments.Infrastructure.Postgres.csproj", "{B26560A1-6449-44A6-BC48-A87313310501}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comments.Controllers", "src\Comments\Comments.Controllers\Comments.Controllers.csproj", "{2BEB7DB1-EDCC-4E93-B38D-27753A66D447}"
 EndProject
@@ -103,14 +91,12 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7F4048CE-205A-45B1-AF0C-7076C6FA5B03} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
-		{0902EE51-BFB8-418D-9F1C-FD90850A41EA} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{58E6E651-1685-4373-851C-F2279B472E7C} = {6AC2D317-59CB-4E13-9DBC-9E61763155FB}
 		{44AF17AE-326A-4A76-BC3F-CACFFB0A2616} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{8B361C68-8873-4AA8-BF7F-7D3A2EAE14FB} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{E994EE0E-9BE2-4B8D-A92D-41C89D4C862C} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{71517112-0DF4-4A11-8DBA-F8CDEB672358} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{EE58A110-5A41-4FA7-8EBC-9820BF8F6BF4} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
-		{A5F4D892-AE25-4008-9EA2-257DB3B0244C} = {368D3A52-A0AC-41E3-80FC-4C595EC3A1BB}
 		{BDC33086-29E7-44D5-8E80-426C49D2A41E} = {8B361C68-8873-4AA8-BF7F-7D3A2EAE14FB}
 		{75F9B9D8-F39B-4114-8016-82C8C81ABC84} = {8B361C68-8873-4AA8-BF7F-7D3A2EAE14FB}
 		{AF22401F-8BB0-4D68-9C8F-FA584885847F} = {8B361C68-8873-4AA8-BF7F-7D3A2EAE14FB}
@@ -147,10 +133,6 @@ Global
 		{7F4048CE-205A-45B1-AF0C-7076C6FA5B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4048CE-205A-45B1-AF0C-7076C6FA5B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4048CE-205A-45B1-AF0C-7076C6FA5B03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0902EE51-BFB8-418D-9F1C-FD90850A41EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{58E6E651-1685-4373-851C-F2279B472E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{58E6E651-1685-4373-851C-F2279B472E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E6E651-1685-4373-851C-F2279B472E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU

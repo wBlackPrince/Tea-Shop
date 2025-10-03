@@ -35,6 +35,7 @@ public class GetUserByIdHandler(
             user.FirstName,
             user.LastName,
             user.Role.ToString(),
+            user.BonusPoints,
             user.BasketId.Value,
             user.AvatarId,
             user.MiddleName);

@@ -10,4 +10,10 @@ public interface ICommentsRepository
     Task<Guid?> CreateComment(Comment comment, CancellationToken cancellationToken);
 
     Task<Guid?> DeleteComment(CommentId commentId, CancellationToken cancellationToken);
+    
+    Task<Review?> GetReviewById(ReviewId orderId, CancellationToken cancellationToken);
+
+    Task<Guid> CreateReview(Review review, CancellationToken cancellationToken);
+
+    Task<Guid> DeleteReview(ReviewId reviewId, CancellationToken cancellationToken);
 }

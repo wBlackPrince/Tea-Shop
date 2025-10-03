@@ -1,9 +1,11 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Database;
+using Shared.Dto;
 using Shared.ValueObjects;
 using Users.Domain;
 
@@ -14,9 +16,9 @@ public class UpdateUserHandler(
     ILogger<UpdateUserHandler> logger,
     ITransactionManager transactionManager)
 {
-    public async Task<Result<Guid, Error>> Handle(
+    public async Task<Result<UserId, Error>> Handle(
         Guid userId,
-        JsonPatchDocument<User> userUpdates,
+        UpdateEntityRequestDto request,
         CancellationToken cancellationToken)
     {
         logger.LogDebug("Handling {handleName}", nameof(UpdateUserHandler));
@@ -48,7 +50,41 @@ public class UpdateUserHandler(
 
         try
         {
-            userUpdates.ApplyTo(user);
+            switch (request.Property)
+            {
+                case nameof(user.BonusPoints):
+                    user.BonusPoints = (int)request.NewValue;
+                    break;
+                case nameof(user.Email):
+                    user.Email = (string)request.NewValue;
+                    break;
+                case nameof(user.FirstName):
+                    user.FirstName = (string)request.NewValue;
+                    break;
+                case nameof(user.LastName):
+                    user.LastName = (string)request.NewValue;
+                    break;
+                case nameof(user.MiddleName):
+                    user.MiddleName = (string)request.NewValue;
+                    break;
+                case nameof(user.EmailVerified):
+                    user.EmailVerified = (bool)request.NewValue;
+                    break;
+                case nameof(user.Password):
+                    user.Password = (string)request.NewValue;
+                    break;
+                case nameof(user.PhoneNumber):
+                    user.PhoneNumber = (string)request.NewValue;
+                    break;
+                case nameof(user.IsActive):
+                    user.IsActive = (bool)request.NewValue;
+                    break;
+                case nameof(user.Role):
+                    user.Role = (Role)Enum.Parse(typeof(Role), (string)request.NewValue);
+                    break;
+                default:
+                    throw new ValidationException("Invalid property");
+            }
         }
         catch (Exception e)
         {
@@ -73,6 +109,6 @@ public class UpdateUserHandler(
 
         logger.LogDebug("Update user with id {UserId}", userId);
 
-        return user.Id.Value;
+        return user.Id;
     }
 }

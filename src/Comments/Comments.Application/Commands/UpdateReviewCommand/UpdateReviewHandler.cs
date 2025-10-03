@@ -1,22 +1,24 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 using Comments.Domain;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Database;
+using Shared.Dto;
 using Shared.ValueObjects;
 
 namespace Comments.Application.Commands.UpdateReviewCommand;
 
 public class UpdateReviewHandler(
-    IReviewsRepository reviewsRepository,
+    ICommentsRepository reviewsRepository,
     ILogger<UpdateReviewHandler> logger,
     ITransactionManager transactionManager)
 {
     public async Task<Result<Guid, Error>> Handle(
         Guid reviewId,
-        JsonPatchDocument<Review> reviewUpdates,
+        UpdateEntityRequestDto request,
         CancellationToken cancellationToken)
     {
         var transactionScopeResult = await transactionManager.BeginTransactionAsync(
@@ -44,7 +46,20 @@ public class UpdateReviewHandler(
 
         try
         {
-            reviewUpdates.ApplyTo(review);
+            switch (request.Property)
+            {
+                case nameof(review.Text):
+                    review.Text = (string)request.NewValue;
+                    break;
+                case nameof(review.Rating):
+                    review.Rating = (int)request.NewValue;
+                    break;
+                case nameof(review.Title):
+                    review.Title = (string)request.NewValue;
+                    break;
+                default:
+                    throw new ValidationException("Invalid property");
+            }
         }
         catch (Exception e)
         {

@@ -8,12 +8,14 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Products\Products.Contracts\Products.Contracts.csproj" />
+      <ProjectReference Include="..\..\Users\Users.Contracts\Users.Contracts.csproj" />
       <ProjectReference Include="..\Orders.Contracts\Orders.Contracts.csproj" />
       <ProjectReference Include="..\Orders.Domain\Orders.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.1.66" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="10.0.0-rc.1.25451.107" />
     </ItemGroup>
 

@@ -9,12 +9,13 @@ using Products.Contracts.Dtos;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
+using Shared.Dto;
 using Shared.ValueObjects;
 
 namespace Comments.Application.Commands.CreateReviewCommand;
 
 public class CreateReviewHandler(
-    IReviewsRepository reviewsRepository,
+    ICommentsRepository reviewsRepository,
     IProductsContracts productsContracts,
     IValidator<CreateReviewRequestDto> validator,
     ILogger<CreateReviewHandler> logger,
@@ -68,8 +69,16 @@ public class CreateReviewHandler(
             return Error.Validation("create.review", "Product not found");
         }
 
-        product.SumRatings += command.Request.ProductRate;
-        product.CountRatings += 1;
+        
+        await productsContracts.UpdateProduct(
+            product.Id,
+            new UpdateEntityRequestDto("SumRatings", product.SumRatings + command.Request.ProductRate),
+            cancellationToken);
+        
+        await productsContracts.UpdateProduct(
+            product.Id,
+            new UpdateEntityRequestDto("CountRatings", product.CountRatings + 1),
+            cancellationToken);
 
 
         await reviewsRepository.CreateReview(review, cancellationToken);

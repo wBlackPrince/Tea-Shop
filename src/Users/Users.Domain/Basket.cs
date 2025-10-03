@@ -2,7 +2,7 @@
 using Shared;
 using Shared.ValueObjects;
 
-namespace Baskets.Domain;
+namespace Users.Domain;
 
 /// <summary>
 /// Domain-модель корзины

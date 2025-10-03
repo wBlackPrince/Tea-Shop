@@ -212,7 +212,7 @@ public class UsersController: ControllerBase
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
-        [FromBody] JsonPatchDocument<User> userUpdates,
+        [FromBody] UpdateEntityRequestDto userUpdates,
         [FromServices] UpdateUserHandler handler,
         CancellationToken cancellationToken)
     {

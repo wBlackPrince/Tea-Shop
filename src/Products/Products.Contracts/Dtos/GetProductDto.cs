@@ -6,6 +6,8 @@ public record GetProductDto(
     float Price,
     float Amount,
     int StockQuantity,
+    int SumRatings,
+    int CountRatings,
     string Description,
     string Season,
     GetIngrendientsResponseDto[] Ingredients,

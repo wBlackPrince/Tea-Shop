@@ -10,6 +10,10 @@ public interface IUsersRepository
     Task<User?> GetUserById(
         UserId userId,
         CancellationToken cancellationToken);
+    
+    Task<BasketItem?> GetBasketItemById(
+        BasketItemId basketItemId,
+        CancellationToken cancellationToken);
 
     Task<User?> GetUserByEmail(
         string email,

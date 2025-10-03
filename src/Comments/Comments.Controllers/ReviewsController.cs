@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Abstractions;
+using Shared.Dto;
 
 namespace Comments.Controllers;
 
@@ -59,7 +60,7 @@ public class ReviewsController: ControllerBase
     [HttpPatch("{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(
         [FromRoute] Guid reviewId,
-        [FromBody] JsonPatchDocument<Review> reviewUpdates,
+        [FromBody] UpdateEntityRequestDto reviewUpdates,
         [FromServices] UpdateReviewHandler handler,
         CancellationToken cancellationToken)
     {

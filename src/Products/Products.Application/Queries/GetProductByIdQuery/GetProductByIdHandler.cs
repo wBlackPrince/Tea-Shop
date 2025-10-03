@@ -46,6 +46,8 @@ public class GetProductByIdHandler(IProductsReadDbContext readDbContext, ILogger
             product.Price,
             product.Amount,
             product.StockQuantity,
+            product.SumRatings,
+            product.CountRatings,
             product.Description,
             product.Season.ToString(),
             ingrindientsGetDto,

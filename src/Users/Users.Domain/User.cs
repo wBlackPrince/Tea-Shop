@@ -127,7 +127,11 @@ public class User: Entity
     /// <summary>
     /// Gets бонусные баллы пользователя
     /// </summary>
-    public int BonusPoints => _bonusPoints;
+    public int BonusPoints
+    {
+        get => _bonusPoints;
+        set => UpdateBonusPoints(value);
+    }
 
     /// <summary>
     /// Gets or sets Номер телефона пользователя
@@ -203,24 +207,20 @@ public class User: Entity
         _email = email;
     }
 
-    public void AddBonusPoints(int points)
+    public UnitResult<Error> UpdateBonusPoints(int points)
     {
-        _bonusPoints += points;
-    }
-
-    public UnitResult<Error> RemoveBonusPoints(int points)
-    {
-        if (points > _bonusPoints)
+        if (points < 0)
         {
             return Error.Validation(
                 "remove.bonus_points",
-                "There are too little bonuses to remove");
+                "Points cannot be negative");
         }
-
-        _bonusPoints -= points;
+        
+        _bonusPoints =  points;
 
         return UnitResult.Success<Error>();
     }
+
 
     public void UpdatePhoneNumber(string phoneNumber)
     {

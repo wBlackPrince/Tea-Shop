@@ -66,6 +66,7 @@ public class GetUsersHandler(
                 u.FirstName,
                 u.LastName,
                 u.Role.ToString(),
+                u.BonusPoints,
                 u.BasketId.Value,
                 u.AvatarId,
                 u.MiddleName))

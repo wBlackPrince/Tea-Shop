@@ -24,6 +24,7 @@ public class SubscriptionsDbContext: DbContext, ISubscriptionsReadDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("subscriptions");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SubscriptionsDbContext).Assembly);
     }
 

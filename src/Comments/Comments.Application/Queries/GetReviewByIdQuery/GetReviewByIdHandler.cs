@@ -7,7 +7,7 @@ using Shared.ValueObjects;
 namespace Comments.Application.Queries.GetReviewByIdQuery;
 
 public class GetReviewByIdHandler(
-    IReviewsReadDbContext readDbContext,
+    ICommentsReadDbContext readDbContext,
     ILogger<GetReviewByIdHandler> logger):
     IQueryHandler<GetReviewResponseDto?, GetReviewByIdQuery>
 {

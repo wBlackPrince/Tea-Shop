@@ -15,11 +15,24 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.6.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Tea-Shop.Infrastructure.Postgres\Tea-Shop.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Comments\Comments.Controllers\Comments.Controllers.csproj" />
+      <ProjectReference Include="..\Comments\Comments.Infrastructure.Postgres\Comments.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Core\Infrastructure\ElasticSearch\ElasticSearch.csproj" />
+      <ProjectReference Include="..\Core\Infrastructure\Infrastructure.Minio\Infrastructure.Minio.csproj" />
+      <ProjectReference Include="..\Orders\Orders.Application\Orders.Application.csproj" />
+      <ProjectReference Include="..\Orders\Orders.Controllers\Orders.Controllers.csproj" />
+      <ProjectReference Include="..\Orders\Orders.Infrastructure.Postgres\Orders.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Products\Products.Controllers\Products.Controllers.csproj" />
+      <ProjectReference Include="..\Products\Products.Infrastructure.Postgres\Products.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Subscriptions\Subscriptions.Controllers\Subscriptions.Controllers.csproj" />
+      <ProjectReference Include="..\Subscriptions\Subscriptions.Infrastructure.Postgres\Subscriptions.Infrastructure.Postgres.csproj" />
+      <ProjectReference Include="..\Users\Users.Controllers\Users.Controllers.csproj" />
+      <ProjectReference Include="..\Users\Users.Infrastructure.Postgres\Users.Infrastructure.Postgres.csproj" />
     </ItemGroup>
 
 </Project>

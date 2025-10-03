@@ -1,10 +1,11 @@
-﻿using System.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 using Comments.Domain;
 using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Database;
+using Shared.Dto;
 
 namespace Comments.Application.Commands.UpdateCommentCommand;
 
@@ -15,7 +16,7 @@ public class UpdateCommentHandler(
 {
     public async Task<Result<Guid?, Error>> Handle(
         Guid commentId,
-        JsonPatchDocument<Comment> commentUpdates,
+        UpdateEntityRequestDto request,
         CancellationToken cancellationToken)
     {
         logger.LogDebug("Handling {handlerName}", nameof(UpdateCommentHandler));
@@ -44,7 +45,18 @@ public class UpdateCommentHandler(
 
         try
         {
-            commentUpdates.ApplyTo(comment);
+            switch (request.Property)
+            {
+                case nameof(comment.Text):
+                    comment.Text = (string)request.NewValue;
+                    break;
+                case nameof(comment.Rating):
+                    comment.Rating = (int)request.NewValue;
+                    break;
+                default:
+                    throw new ValidationException("Invalid property");
+            }
+            
         }
         catch (Exception e)
         {

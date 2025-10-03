@@ -164,7 +164,7 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
         [FromRoute] Guid productId,
-        [FromBody] JsonPatchDocument<Product> productUpdates,
+        [FromBody] UpdateEntityRequestDto productUpdates,
         CancellationToken cancellationToken)
     {
         var updateResult = await handler.Handle(productId, productUpdates, cancellationToken);

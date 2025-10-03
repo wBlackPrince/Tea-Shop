@@ -14,7 +14,6 @@ namespace Comments.Application.Commands.CreateCommentCommand;
 
 public class CreateCommentHandler(
     ICommentsRepository commentsRepository,
-    IReviewsRepository reviewsRepository,
     IValidator<CreateCommentRequestDto> validator,
     ILogger<CreateCommentHandler> logger,
     ITransactionManager transactionManager
@@ -51,7 +50,7 @@ public class CreateCommentHandler(
 
 
         ReviewId reviewId = new ReviewId(command.Request.ReviewId);
-        var review = await reviewsRepository.GetReviewById(reviewId, cancellationToken);
+        var review = await commentsRepository.GetReviewById(reviewId, cancellationToken);
 
         if (review is null)
         {

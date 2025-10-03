@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Comments.Application\Comments.Application.csproj" />
       <ProjectReference Include="..\Comments.Contracts\Comments.Contracts.csproj" />
+      <ProjectReference Include="..\Comments.Infrastructure.Postgres\Comments.Infrastructure.Postgres.csproj" />
     </ItemGroup>
 
     <ItemGroup>

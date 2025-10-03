@@ -1,11 +1,9 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tea_Shop.Application.Tags;
-using Tea_Shop.Contract.Tags;
-using Tea_Shop.Shared;
+using Products.Application;
+using Products.Contracts.Dtos;
 
-namespace Tea_Shop.Tags;
+namespace Products.Controllers;
 
 [ApiController]
 [Route("[controller]")]

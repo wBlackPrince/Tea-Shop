@@ -1,15 +1,13 @@
 ﻿using System.Data;
-using Baskets.Contracts;
-using Baskets.Contracts.Dtos;
-using Baskets.Domain;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using Shared;
 using Shared.Abstractions;
 using Shared.Database;
 using Shared.ValueObjects;
+using Users.Contracts.Dtos;
 
-namespace Baskets.Application.Commands.RemoveBasketItemCommand;
+namespace Users.Application.Commands.RemoveBasketItemCommand;
 
 public class RemoveBasketItemHandler(
     IBasketsRepository basketsRepository,

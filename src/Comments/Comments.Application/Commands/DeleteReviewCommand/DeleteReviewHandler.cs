@@ -11,8 +11,8 @@ using Shared.ValueObjects;
 namespace Comments.Application.Commands.DeleteReviewCommand;
 
 public class DeleteReviewHandler(
-    IReviewsReadDbContext readDbContext,
-    IReviewsRepository reviewsRepository,
+    ICommentsReadDbContext readDbContext,
+    ICommentsRepository reviewsRepository,
     ILogger<DeleteReviewHandler> logger,
     ITransactionManager transactionManager):
     ICommandHandler<DeleteReviewDto, DeleteReviewCommand>
