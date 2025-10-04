@@ -12,7 +12,7 @@ using Orders.Infrastructure.Postgres;
 namespace Orders.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(OrdersDbContext))]
-    [Migration("20251003201334_Initial")]
+    [Migration("20251004091118_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("orders")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -68,7 +68,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("orders", "products");
+                    b.ToTable("orders", "orders");
                 });
 
             modelBuilder.Entity("Orders.Domain.OrderItem", b =>
@@ -96,7 +96,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("order_items", "products");
+                    b.ToTable("order_items", "orders");
                 });
 
             modelBuilder.Entity("Orders.Domain.ProductStub", b =>

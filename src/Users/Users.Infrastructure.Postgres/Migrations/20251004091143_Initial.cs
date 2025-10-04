@@ -12,11 +12,11 @@ namespace Users.Infrastructure.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "products");
+                name: "users");
 
             migrationBuilder.CreateTable(
                 name: "users",
-                schema: "products",
+                schema: "users",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -40,7 +40,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "baskets",
-                schema: "products",
+                schema: "users",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -52,7 +52,7 @@ namespace Users.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_baskets_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "products",
+                        principalSchema: "users",
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -60,7 +60,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "email_verification_tokens",
-                schema: "products",
+                schema: "users",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -74,7 +74,7 @@ namespace Users.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_email_verification_tokens_users_user_id",
                         column: x => x.user_id,
-                        principalSchema: "products",
+                        principalSchema: "users",
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -82,7 +82,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "refresh_tokens",
-                schema: "products",
+                schema: "users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -96,7 +96,7 @@ namespace Users.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_refresh_tokens_users_UserId",
                         column: x => x.UserId,
-                        principalSchema: "products",
+                        principalSchema: "users",
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -104,14 +104,13 @@ namespace Users.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "baskets_items",
-                schema: "products",
+                schema: "users",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     basket_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    quantity = table.Column<int>(type: "integer", nullable: false),
-                    ProductStubId = table.Column<Guid>(type: "uuid", nullable: false)
+                    quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,13 +118,13 @@ namespace Users.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_baskets_items_baskets_basket_id",
                         column: x => x.basket_id,
-                        principalSchema: "products",
+                        principalSchema: "users",
                         principalTable: "baskets",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_baskets_items_products_ProductStubId",
-                        column: x => x.ProductStubId,
+                        name: "FK_baskets_items_products_product_id",
+                        column: x => x.product_id,
                         principalSchema: "products",
                         principalTable: "products",
                         principalColumn: "id",
@@ -134,39 +133,39 @@ namespace Users.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_user_id",
-                schema: "products",
+                schema: "users",
                 table: "baskets",
                 column: "user_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_items_basket_id",
-                schema: "products",
+                schema: "users",
                 table: "baskets_items",
                 column: "basket_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_baskets_items_ProductStubId",
-                schema: "products",
+                name: "IX_baskets_items_product_id",
+                schema: "users",
                 table: "baskets_items",
-                column: "ProductStubId");
+                column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_email_verification_tokens_user_id",
-                schema: "products",
+                schema: "users",
                 table: "email_verification_tokens",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_refresh_tokens_Token",
-                schema: "products",
+                schema: "users",
                 table: "refresh_tokens",
                 column: "Token",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_refresh_tokens_UserId",
-                schema: "products",
+                schema: "users",
                 table: "refresh_tokens",
                 column: "UserId");
         }
@@ -176,23 +175,23 @@ namespace Users.Infrastructure.Postgres.Migrations
         {
             migrationBuilder.DropTable(
                 name: "baskets_items",
-                schema: "products");
+                schema: "users");
 
             migrationBuilder.DropTable(
                 name: "email_verification_tokens",
-                schema: "products");
+                schema: "users");
 
             migrationBuilder.DropTable(
                 name: "refresh_tokens",
-                schema: "products");
+                schema: "users");
 
             migrationBuilder.DropTable(
                 name: "baskets",
-                schema: "products");
+                schema: "users");
 
             migrationBuilder.DropTable(
                 name: "users",
-                schema: "products");
+                schema: "users");
         }
     }
 }

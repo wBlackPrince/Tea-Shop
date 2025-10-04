@@ -17,7 +17,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("users")
+                .HasDefaultSchema("subscriptions")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -41,7 +41,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
                     b.HasKey("Id")
                         .HasName("ipk_kits");
 
-                    b.ToTable("kits", "users");
+                    b.ToTable("kits", "subscriptions");
                 });
 
             modelBuilder.Entity("Subscriptions.Domain.KitDetails", b =>
@@ -68,7 +68,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
                     b.HasIndex("KitId")
                         .IsUnique();
 
-                    b.ToTable("kits_details", "users");
+                    b.ToTable("kits_details", "subscriptions");
                 });
 
             modelBuilder.Entity("Subscriptions.Domain.KitItem", b =>
@@ -96,7 +96,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("kit_items", "users");
+                    b.ToTable("kit_items", "subscriptions");
                 });
 
             modelBuilder.Entity("Subscriptions.Domain.ProductStub", b =>
@@ -137,7 +137,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("subscriptions", "users");
+                    b.ToTable("subscriptions", "subscriptions");
                 });
 
             modelBuilder.Entity("Subscriptions.Domain.UserStub", b =>

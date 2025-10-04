@@ -17,7 +17,7 @@ namespace Commnets.Infrastructure.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("social")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -28,9 +28,6 @@ namespace Commnets.Infrastructure.Postgres.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<Guid>("CommentId")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -65,11 +62,11 @@ namespace Commnets.Infrastructure.Postgres.Migrations
                     b.HasKey("Id")
                         .HasName("pk_comments");
 
-                    b.HasIndex("CommentId");
+                    b.HasIndex("ParentId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("comments", "products");
+                    b.ToTable("comments", "social");
                 });
 
             modelBuilder.Entity("Comments.Domain.ProductStub", b =>
@@ -135,7 +132,7 @@ namespace Commnets.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("reviews", "products");
+                    b.ToTable("reviews", "social");
                 });
 
             modelBuilder.Entity("Comments.Domain.UserStub", b =>
@@ -154,17 +151,18 @@ namespace Commnets.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Comments.Domain.Comment", b =>
                 {
-                    b.HasOne("Comments.Domain.Comment", null)
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Comments.Domain.Comment", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Comments.Domain.UserStub", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Comments.Domain.Review", b =>
@@ -180,6 +178,11 @@ namespace Commnets.Infrastructure.Postgres.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Comments.Domain.Comment", b =>
+                {
+                    b.Navigation("Children");
                 });
 #pragma warning restore 612, 618
         }

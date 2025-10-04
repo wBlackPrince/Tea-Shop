@@ -77,14 +77,17 @@ public class Comment: Entity
     /// <summary>
     /// Gets or sets идентификатор родительского комментария
     /// </summary>
-    [NotMapped]
     public CommentId? ParentId { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets родительский комментарий
+    /// </summary>
+    public Comment Parent { get; set; }
 
     /// <summary>
     /// Gets or sets список идентификаторов дочерних комменатриев
     /// </summary>
-    [NotMapped]
-    public CommentId[] ChildrenIds { get; set; }
+    public ICollection<Comment> Children { get; set; } = new List<Comment>();
 
     /// <summary>
     /// Gets or sets время создания

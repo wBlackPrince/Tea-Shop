@@ -55,9 +55,9 @@ public class CommentConfiguration: IEntityTypeConfiguration<Comment>
             .HasColumnName("user_id");
 
         builder
-            .HasMany<Comment>()
-            .WithOne()
-            .IsRequired()
+            .HasOne(c => c.Parent)
+            .WithMany(c => c.Children)
+            .HasForeignKey(c => c.ParentId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder

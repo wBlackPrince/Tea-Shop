@@ -10,7 +10,7 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration config)
     {
-        services.Configure<MinioOptions>(config.GetSection("Infrastructure.Minio"));
+        services.Configure<MinioOptions>(config.GetSection("Minio"));
 
         services.AddSingleton(sp =>
         {

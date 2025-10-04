@@ -12,11 +12,11 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "users");
+                name: "subscriptions");
 
             migrationBuilder.CreateTable(
                 name: "kits",
-                schema: "users",
+                schema: "subscriptions",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -30,7 +30,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "kit_items",
-                schema: "users",
+                schema: "subscriptions",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -44,7 +44,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_kit_items_kits_kit_id",
                         column: x => x.kit_id,
-                        principalSchema: "users",
+                        principalSchema: "subscriptions",
                         principalTable: "kits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -59,7 +59,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "kits_details",
-                schema: "users",
+                schema: "subscriptions",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -73,7 +73,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_kits_details_kits_KitId",
                         column: x => x.KitId,
-                        principalSchema: "users",
+                        principalSchema: "subscriptions",
                         principalTable: "kits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -81,7 +81,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "subscriptions",
-                schema: "users",
+                schema: "subscriptions",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -95,7 +95,7 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_subscriptions_kits_KitId",
                         column: x => x.KitId,
-                        principalSchema: "users",
+                        principalSchema: "subscriptions",
                         principalTable: "kits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -110,32 +110,32 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_kit_items_kit_id",
-                schema: "users",
+                schema: "subscriptions",
                 table: "kit_items",
                 column: "kit_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_kit_items_product_id",
-                schema: "users",
+                schema: "subscriptions",
                 table: "kit_items",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_kits_details_KitId",
-                schema: "users",
+                schema: "subscriptions",
                 table: "kits_details",
                 column: "KitId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_subscriptions_KitId",
-                schema: "users",
+                schema: "subscriptions",
                 table: "subscriptions",
                 column: "KitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_subscriptions_user_id",
-                schema: "users",
+                schema: "subscriptions",
                 table: "subscriptions",
                 column: "user_id");
         }
@@ -145,19 +145,19 @@ namespace Subscriptions.Infrastructure.Postgres.Migrations
         {
             migrationBuilder.DropTable(
                 name: "kit_items",
-                schema: "users");
+                schema: "subscriptions");
 
             migrationBuilder.DropTable(
                 name: "kits_details",
-                schema: "users");
+                schema: "subscriptions");
 
             migrationBuilder.DropTable(
                 name: "subscriptions",
-                schema: "users");
+                schema: "subscriptions");
 
             migrationBuilder.DropTable(
                 name: "kits",
-                schema: "users");
+                schema: "subscriptions");
         }
     }
 }

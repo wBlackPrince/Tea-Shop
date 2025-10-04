@@ -13,13 +13,13 @@ using Users.Infrastructure.Postgres;
 
 namespace Tea_Shop.Web;
 
-public class ProductsSeeders(
+public class Seeders(
     ProductsDbContext productsDbContext,
     CommentsDbContext commentsDbContext,
     OrdersDbContext ordersDbContext,
     SubscriptionsDbContext subscriptionsDbContext,
     UsersDbContext usersDbContext,
-    ILogger<ProductsSeeders> logger)
+    ILogger<Seeders> logger)
 {
     // Константы для количества данных
     private const int USERS_COUNT = 50000;
@@ -425,9 +425,6 @@ public class ProductsSeeders(
         "Полезная информация, благодарю!",
     };
 
-    private readonly ProductsDbContext _dbContext;
-    private readonly ILogger<ProductsSeeders> _logger;
-
     private readonly Random _random = new();
 
     private static readonly float[] ProductPrices =
@@ -522,10 +519,10 @@ public class ProductsSeeders(
 
     public async Task SeedAsync()
     {
-        //await SeedUsersBatched();
-        //await SeedTagsBatched();
-        //await SeedProductsBatched();
-        //await SeedKitsBatched();
+        await SeedUsersBatched();
+        await SeedTagsBatched();
+        await SeedProductsBatched();
+        await SeedKitsBatched();
         await SeedSubscriptions();
         await SeedBusketItems();
         await SeedOrdersBatched();
@@ -535,8 +532,9 @@ public class ProductsSeeders(
 
     private async Task SeedSubscriptions()
     {
-        _logger.LogInformation("Seeding subscriptions in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding subscriptions in batching...");
+        subscriptionsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var usersIds = usersDbContext.UsersRead.Select(u => u.Id).ToArray();
         var kits = subscriptionsDbContext.Kits.ToArray();
@@ -558,9 +556,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} subscriptions...");
+                logger.LogInformation($"Saved {i} subscriptions...");
                 subscriptionsDbContext.AddRange(subscriptions);
-                await _dbContext.SaveChangesAsync();
+                await subscriptionsDbContext.SaveChangesAsync();
                 subscriptions.Clear();
             }
         }
@@ -568,16 +566,23 @@ public class ProductsSeeders(
         if (subscriptions.Any())
         {
             subscriptionsDbContext.Subscriptions.AddRange(subscriptions);
-            await _dbContext.SaveChangesAsync();
+            await subscriptionsDbContext.SaveChangesAsync();
         }
+
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        subscriptionsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     private async Task SeedKitsBatched()
     {
-        _logger.LogInformation("Seeding kits in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding kits in batching...");
 
-        var productsIds = _dbContext.ProductsRead.Select(p => p.Id).ToArray();
+        subscriptionsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        var productsIds = productsDbContext.ProductsRead
+            .Select(p => p.Id)
+            .ToArray();
 
         const int batchSize = 10;
         List<Kit> kits = [];
@@ -612,9 +617,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} kits...");
+                logger.LogInformation($"Saved {i} kits...");
                 subscriptionsDbContext.Kits.AddRange(kits);
-                await _dbContext.SaveChangesAsync();
+                await subscriptionsDbContext.SaveChangesAsync();
                 kits.Clear();
             }
         }
@@ -622,14 +627,19 @@ public class ProductsSeeders(
         if (kits.Any())
         {
             subscriptionsDbContext.Kits.AddRange(kits);
-            await _dbContext.SaveChangesAsync();
+            await subscriptionsDbContext.SaveChangesAsync();
         }
+
+        subscriptionsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     private async Task SeedCommentsBatched()
     {
-        _logger.LogInformation("Seeding comments in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding comments in batching...");
+
+        commentsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var usersIds = usersDbContext.UsersRead.Select(u => u.Id.Value).ToArray();
         var reviewsIds = commentsDbContext.ReviewsRead.Select(r => r.Id.Value).ToArray();
@@ -676,9 +686,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} comments...");
-                commentsDbContext.Comments.AddRange();
-                await _dbContext.SaveChangesAsync();
+                logger.LogInformation($"Saved {i} comments...");
+                commentsDbContext.Comments.AddRange(comments);
+                await commentsDbContext.SaveChangesAsync();
                 comments.Clear();
             }
         }
@@ -686,17 +696,26 @@ public class ProductsSeeders(
         if (comments.Any())
         {
             commentsDbContext.Comments.AddRange(comments);
-            await _dbContext.SaveChangesAsync();
+            await commentsDbContext.SaveChangesAsync();
         }
+
+        commentsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     private async Task SeedReviewsBatched()
     {
-        _logger.LogInformation("Seeding reviews in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding reviews in batching...");
+        commentsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
-        var usersIds = usersDbContext.UsersRead.Select(u => u.Id.Value).ToArray();
-        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+        var usersIds = usersDbContext.UsersRead
+            .Select(u => u.Id.Value)
+            .ToArray();
+        var productIds = productsDbContext.ProductsRead
+            .Select(u => u.Id.Value)
+            .ToArray();
 
         const int batchSize = 1000;
         List<Review> reviews = [];
@@ -728,9 +747,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} reviews...");
+                logger.LogInformation($"Saved {i} reviews...");
                 commentsDbContext.Reviews.AddRange(reviews);
-                await _dbContext.SaveChangesAsync();
+                await commentsDbContext.SaveChangesAsync();
                 reviews.Clear();
             }
         }
@@ -738,17 +757,23 @@ public class ProductsSeeders(
         if (reviews.Any())
         {
             commentsDbContext.Reviews.AddRange(reviews);
-            await _dbContext.SaveChangesAsync();
+            await commentsDbContext.SaveChangesAsync();
         }
+
+        commentsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     private async Task SeedOrdersBatched()
     {
-        _logger.LogInformation("Seeding orders in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding orders in batching...");
+        ordersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var usersIds = usersDbContext.UsersRead.Select(u => u.Id.Value).ToArray();
-        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+        var productIds = productsDbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
 
         int orderCount;
         int quantity;
@@ -804,9 +829,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} orders...");
+                logger.LogInformation($"Saved {i} orders...");
                 ordersDbContext.Orders.AddRange(orders);
-                await _dbContext.SaveChangesAsync();
+                await ordersDbContext.SaveChangesAsync();
                 orders.Clear();
             }
         }
@@ -814,13 +839,17 @@ public class ProductsSeeders(
         if (orders.Any())
         {
             ordersDbContext.Orders.AddRange(orders);
-            await _dbContext.SaveChangesAsync();
+            await ordersDbContext.SaveChangesAsync();
         }
+
+        ordersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     private async Task SeedTagsBatched()
     {
-        _logger.LogInformation("Seeding tags in batches...");
+        logger.LogInformation("Seeding tags in batches...");
 
         const int batchSize = 100;
 
@@ -874,7 +903,7 @@ public class ProductsSeeders(
 
 
         // Отключаем отслеживание изменений для ускорения
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var tags = new List<Tag>();
         for (var i = 0; i < TAGS_COUNT; i++)
@@ -890,31 +919,30 @@ public class ProductsSeeders(
             if (tags.Count < batchSize)
                 continue;
 
-            _dbContext.Set<Tag>().AddRange(tags);
-            await _dbContext.SaveChangesAsync();
+            productsDbContext.Set<Tag>().AddRange(tags);
+            await productsDbContext.SaveChangesAsync();
             tags.Clear();
         }
 
         if (tags.Count != 0)
         {
-            _dbContext.Set<Tag>().AddRange(tags);
-            await _dbContext.SaveChangesAsync();
+            productsDbContext.Set<Tag>().AddRange(tags);
+            await productsDbContext.SaveChangesAsync();
         }
 
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
-        _logger.LogInformation("Seeded {TagsCount} users.", TAGS_COUNT);
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        logger.LogInformation("Seeded {TagsCount} users.", TAGS_COUNT);
     }
 
     private async Task SeedProductsBatched()
     {
-        _logger.LogInformation("Seeding products in batches...");
+        logger.LogInformation("Seeding products in batches...");
 
-        Guid [] TagsIds = _dbContext.Tags.Select(x => x.Id.Value).ToArray();
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+        Guid [] TagsIds = productsDbContext.Tags.Select(x => x.Id.Value).ToArray();
 
         const int batchSize = 15;
-
-        // Отключаем отслеживание изменений для ускорения
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var products = new List<Product>();
         for (var i = 0; i < PRODUCTS_COUNT; i++)
@@ -972,24 +1000,24 @@ public class ProductsSeeders(
             if (products.Count < batchSize)
                 continue;
 
-            _dbContext.Set<Product>().AddRange(products);
-            await _dbContext.SaveChangesAsync();
+            productsDbContext.Set<Product>().AddRange(products);
+            await productsDbContext.SaveChangesAsync();
             products.Clear();
         }
 
         if (products.Count != 0)
         {
-            _dbContext.Set<Product>().AddRange(products);
-            await _dbContext.SaveChangesAsync();
+            productsDbContext.Set<Product>().AddRange(products);
+            await productsDbContext.SaveChangesAsync();
         }
 
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
-        _logger.LogInformation("Seeded {ProductCount} product.", PRODUCTS_COUNT);
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        logger.LogInformation("Seeded {ProductCount} product.", PRODUCTS_COUNT);
     }
 
     private async Task SeedUsersBatched()
     {
-        _logger.LogInformation("Seeding users in batches...");
+        logger.LogInformation("Seeding users in batches...");
 
         const int batchSize = 1000;
         var firstNames = new[]
@@ -1002,7 +1030,7 @@ public class ProductsSeeders(
         };
 
         // Отключаем отслеживание изменений для ускорения
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var users = new List<User>();
         var buskets = new List<Basket>();
@@ -1027,6 +1055,8 @@ public class ProductsSeeders(
                 (Role)Enum.Parse(typeof(Role), role),
                 new BasketId(Guid.NewGuid()));
 
+            user.EmailVerified = true;
+
             busket = new Basket(
                 new BasketId(Guid.NewGuid()),
                 user.Id);
@@ -1039,33 +1069,34 @@ public class ProductsSeeders(
             if (users.Count < batchSize)
                 continue;
 
-            _dbContext.Set<User>().AddRange(users);
-            _dbContext.Set<Basket>().AddRange(buskets);
-            await _dbContext.SaveChangesAsync();
+            usersDbContext.Set<User>().AddRange(users);
+            usersDbContext.Set<Basket>().AddRange(buskets);
+            await usersDbContext.SaveChangesAsync();
             users.Clear();
             buskets.Clear();
         }
 
         if (users.Count != 0)
         {
-            _dbContext.Set<User>().AddRange(users);
-            _dbContext.Set<Basket>().AddRange(buskets);
-            await _dbContext.SaveChangesAsync();
+            usersDbContext.Set<User>().AddRange(users);
+            usersDbContext.Set<Basket>().AddRange(buskets);
+            await usersDbContext.SaveChangesAsync();
             users.Clear();
             buskets.Clear();
         }
 
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = true;
-        _logger.LogInformation("Seeded {UsersCount} users.", USERS_COUNT);
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        logger.LogInformation("Seeded {UsersCount} users.", USERS_COUNT);
     }
 
     private async Task SeedBusketItems()
     {
-        _logger.LogInformation("Seeding busket items in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        logger.LogInformation("Seeding busket items in batching...");
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
         var usersIds = usersDbContext.UsersRead.Select(u => u.Id.Value).ToArray();
-        var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
+        var productIds = productsDbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
 
         List<BasketItem> busketItems = new List<BasketItem>();
 
@@ -1091,9 +1122,9 @@ public class ProductsSeeders(
 
             if (i % batchSize == 0)
             {
-                _logger.LogInformation($"Saved {i} busket items...");
+                logger.LogInformation($"Saved {i} busket items...");
                 usersDbContext.BasketItems.AddRange(busketItems);
-                await _dbContext.SaveChangesAsync();
+                await usersDbContext.SaveChangesAsync();
                 busketItems.Clear();
             }
         }
@@ -1101,8 +1132,11 @@ public class ProductsSeeders(
         if (busketItems.Any())
         {
             usersDbContext.BasketItems.AddRange(busketItems);
-            await _dbContext.SaveChangesAsync();
+            await usersDbContext.SaveChangesAsync();
         }
+
+        usersDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+        productsDbContext.ChangeTracker.AutoDetectChangesEnabled = true;
     }
 
     static string RandomEmail(int minLen = 6, int maxLen = 12)

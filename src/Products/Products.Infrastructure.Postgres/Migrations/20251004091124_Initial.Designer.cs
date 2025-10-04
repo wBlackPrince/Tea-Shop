@@ -12,7 +12,7 @@ using Products.Infrastructure.Postgres;
 namespace Products.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20251003201340_Initial")]
+    [Migration("20251004091124_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

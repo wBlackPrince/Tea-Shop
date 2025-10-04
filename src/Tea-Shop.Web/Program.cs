@@ -85,6 +85,7 @@ app.UseSwagger();
 app.UseSwaggerUI(
     options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Tea-Shop v1"));
 
+
 if (app.Environment.IsDevelopment())
 {
     // для сидирования базы данных

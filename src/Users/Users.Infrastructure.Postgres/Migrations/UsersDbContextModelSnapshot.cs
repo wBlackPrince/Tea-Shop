@@ -17,7 +17,7 @@ namespace Users.Infrastructure.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("users")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -47,7 +47,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("email_verification_tokens", "products");
+                    b.ToTable("email_verification_tokens", "users");
                 });
 
             modelBuilder.Entity("Users.Application.RefreshToken", b =>
@@ -75,7 +75,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("refresh_tokens", "products");
+                    b.ToTable("refresh_tokens", "users");
                 });
 
             modelBuilder.Entity("Users.Domain.Basket", b =>
@@ -94,7 +94,7 @@ namespace Users.Infrastructure.Postgres.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("baskets", "products");
+                    b.ToTable("baskets", "users");
                 });
 
             modelBuilder.Entity("Users.Domain.BasketItem", b =>
@@ -111,9 +111,6 @@ namespace Users.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("product_id");
 
-                    b.Property<Guid>("ProductStubId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
@@ -123,9 +120,9 @@ namespace Users.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("BasketId");
 
-                    b.HasIndex("ProductStubId");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("baskets_items", "products");
+                    b.ToTable("baskets_items", "users");
                 });
 
             modelBuilder.Entity("Users.Domain.ProductStub", b =>
@@ -206,7 +203,7 @@ namespace Users.Infrastructure.Postgres.Migrations
                     b.HasKey("Id")
                         .HasName("pk_users");
 
-                    b.ToTable("users", "products");
+                    b.ToTable("users", "users");
                 });
 
             modelBuilder.Entity("Users.Application.EmailVerificationToken", b =>
@@ -250,7 +247,7 @@ namespace Users.Infrastructure.Postgres.Migrations
 
                     b.HasOne("Users.Domain.ProductStub", null)
                         .WithMany()
-                        .HasForeignKey("ProductStubId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

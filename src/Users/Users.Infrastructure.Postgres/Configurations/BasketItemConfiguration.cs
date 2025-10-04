@@ -37,6 +37,7 @@ public class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
         builder
             .HasOne<ProductStub>()
             .WithMany()
+            .HasForeignKey(bi => bi.ProductId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }

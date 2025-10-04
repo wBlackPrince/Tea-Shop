@@ -12,11 +12,11 @@ namespace Orders.Infrastructure.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "products");
+                name: "orders");
 
             migrationBuilder.CreateTable(
                 name: "orders",
-                schema: "products",
+                schema: "orders",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -42,7 +42,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "order_items",
-                schema: "products",
+                schema: "orders",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -56,7 +56,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_order_items_orders_order_id",
                         column: x => x.order_id,
-                        principalSchema: "products",
+                        principalSchema: "orders",
                         principalTable: "orders",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -71,19 +71,19 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_items_order_id",
-                schema: "products",
+                schema: "orders",
                 table: "order_items",
                 column: "order_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_items_product_id",
-                schema: "products",
+                schema: "orders",
                 table: "order_items",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orders_user_id",
-                schema: "products",
+                schema: "orders",
                 table: "orders",
                 column: "user_id");
         }
@@ -93,11 +93,11 @@ namespace Orders.Infrastructure.Postgres.Migrations
         {
             migrationBuilder.DropTable(
                 name: "order_items",
-                schema: "products");
+                schema: "orders");
 
             migrationBuilder.DropTable(
                 name: "orders",
-                schema: "products");
+                schema: "orders");
         }
     }
 }

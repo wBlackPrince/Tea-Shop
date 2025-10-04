@@ -12,11 +12,11 @@ namespace Commnets.Infrastructure.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "products");
+                name: "social");
 
             migrationBuilder.CreateTable(
                 name: "comments",
-                schema: "products",
+                schema: "social",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -26,16 +26,15 @@ namespace Commnets.Infrastructure.Postgres.Migrations
                     review_id = table.Column<Guid>(type: "uuid", nullable: false),
                     parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uuid", nullable: false)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_comments", x => x.id);
                     table.ForeignKey(
-                        name: "FK_comments_comments_CommentId",
-                        column: x => x.CommentId,
-                        principalSchema: "products",
+                        name: "FK_comments_comments_parent_id",
+                        column: x => x.parent_id,
+                        principalSchema: "social",
                         principalTable: "comments",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -50,7 +49,7 @@ namespace Commnets.Infrastructure.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "reviews",
-                schema: "products",
+                schema: "social",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -83,26 +82,26 @@ namespace Commnets.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_comments_CommentId",
-                schema: "products",
+                name: "IX_comments_parent_id",
+                schema: "social",
                 table: "comments",
-                column: "CommentId");
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comments_user_id",
-                schema: "products",
+                schema: "social",
                 table: "comments",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_product_id",
-                schema: "products",
+                schema: "social",
                 table: "reviews",
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_user_id",
-                schema: "products",
+                schema: "social",
                 table: "reviews",
                 column: "user_id");
         }
@@ -112,11 +111,11 @@ namespace Commnets.Infrastructure.Postgres.Migrations
         {
             migrationBuilder.DropTable(
                 name: "comments",
-                schema: "products");
+                schema: "social");
 
             migrationBuilder.DropTable(
                 name: "reviews",
-                schema: "products");
+                schema: "social");
         }
     }
 }

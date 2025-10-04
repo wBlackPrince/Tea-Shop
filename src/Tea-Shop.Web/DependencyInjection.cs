@@ -1,6 +1,7 @@
 ﻿using Comments.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using Minio;
 using Orders.Controllers;
 using Products.Controllers;
 using Users.Controllers;
@@ -18,6 +19,8 @@ public static class DependencyInjection
 
         services.AddWebDependencies();
         services.AddSwaggerGenWithAuthentification();
+
+        services.AddScoped<Seeders>();
 
         return services;
     }

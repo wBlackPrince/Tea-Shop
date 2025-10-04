@@ -17,7 +17,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("orders")
                 .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -65,7 +65,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("orders", "products");
+                    b.ToTable("orders", "orders");
                 });
 
             modelBuilder.Entity("Orders.Domain.OrderItem", b =>
@@ -93,7 +93,7 @@ namespace Orders.Infrastructure.Postgres.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("order_items", "products");
+                    b.ToTable("order_items", "orders");
                 });
 
             modelBuilder.Entity("Orders.Domain.ProductStub", b =>
