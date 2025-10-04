@@ -1,0 +1,83 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
+using Comments.Domain;
+using CSharpFunctionalExtensions;
+using Microsoft.Extensions.Logging;
+using Shared;
+using Shared.Database;
+using Shared.Dto;
+
+namespace Comments.Application.Commands.UpdateCommentCommand;
+
+public class UpdateCommentHandler(
+    ICommentsRepository commentsRepository,
+    ILogger<UpdateCommentHandler> logger,
+    ITransactionManager transactionManager)
+{
+    public async Task<Result<Guid?, Error>> Handle(
+        Guid commentId,
+        UpdateEntityRequestDto request,
+        CancellationToken cancellationToken)
+    {
+        logger.LogDebug("Handling {handlerName}", nameof(UpdateCommentHandler));
+
+        var transactionScopeResult = await transactionManager.BeginTransactionAsync(
+            IsolationLevel.RepeatableRead,
+            cancellationToken);
+
+        if (transactionScopeResult.IsFailure)
+        {
+            logger.LogError("Failed to begin transaction while creating product");
+            return transactionScopeResult.Error;
+        }
+
+        using var transactionScope = transactionScopeResult.Value;
+
+
+        Comment? comment = await commentsRepository.GetCommentById(commentId, cancellationToken);
+
+        if (comment is null)
+        {
+            logger.LogError("Comment with id {commentId} does not exist", commentId);
+            transactionScope.Rollback();
+            return Error.NotFound("comment.update", "comment not found");
+        }
+
+        try
+        {
+            switch (request.Property)
+            {
+                case nameof(comment.Text):
+                    comment.Text = (string)request.NewValue;
+                    break;
+                case nameof(comment.Rating):
+                    comment.Rating = (int)request.NewValue;
+                    break;
+                default:
+                    throw new ValidationException("Invalid property");
+            }
+            
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "validation error while updating comment");
+            transactionScope.Rollback();
+            return Error.Validation("comment.update", e.Message);
+        }
+
+        comment.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
+
+        var commitedResult = transactionScope.Commit();
+
+        if (commitedResult.IsFailure)
+        {
+            logger.LogError("Failed to commit result while updating comment");
+            transactionScope.Rollback();
+            return commitedResult.Error;
+        }
+
+        logger.LogDebug("Updated comment with id {commentId}", commentId);
+
+        return comment.Id.Value;
+    }
+}

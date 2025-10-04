@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Comments.Controllers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Tea_Shop.Application;
-using Tea_Shop.Infrastructure.Postgres;
+using Minio;
+using Orders.Controllers;
+using Products.Controllers;
+using Users.Controllers;
 
 namespace Tea_Shop.Web;
 
@@ -9,10 +12,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddProgramDependencies(this IServiceCollection services)
     {
-        services.AddApplication();
+        services.AddCommentsDependencies();
+        services.AddOrdersDependencies();
+        services.AddProductsDependencies();
+        services.AddUsersDependencies();
+
         services.AddWebDependencies();
-        services.AddPostgresDependencies();
         services.AddSwaggerGenWithAuthentification();
+
+        services.AddScoped<Seeders>();
 
         return services;
     }
@@ -20,14 +28,10 @@ public static class DependencyInjection
     private static IServiceCollection AddWebDependencies(
         this IServiceCollection services)
     {
-        services.AddControllers()
-            .AddNewtonsoftJson();
-        // services.AddOpenApi();
+        services.AddControllers().AddNewtonsoftJson();
 
-        services.AddControllers(options =>
-        {
-            options.InputFormatters.Insert(0, MyJPIF.GetJsonPatchInputFormatter());
-        });
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
         return services;
     }

@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.ValueObjects;
+using Subscriptions.Domain;
+
+namespace Subscriptions.Infrastructure.Postgres.Configurations;
+
+public class UserStubConfiguration: IEntityTypeConfiguration<UserStub>
+{
+    public void Configure(EntityTypeBuilder<UserStub> builder)
+    {
+        builder.ToTable(
+            "users",
+            "users",
+            t => t.ExcludeFromMigrations());
+
+        builder.HasKey(p => p.Id);
+        builder
+            .Property(p => p.Id)
+            .HasConversion(pi => pi.Value, id => new UserId(id))
+            .HasColumnName("id");
+    }
+}

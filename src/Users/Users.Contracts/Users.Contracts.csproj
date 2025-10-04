@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Comments\Comments.Contracts\Comments.Contracts.csproj" />
+      <ProjectReference Include="..\..\Core\Shared\Shared.csproj" />
+    </ItemGroup>
+
+</Project>

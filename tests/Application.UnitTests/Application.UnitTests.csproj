@@ -29,8 +29,4 @@
       <Folder Include="Tags\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Tea-Shop.Application\Tea-Shop.Application.csproj" />
-    </ItemGroup>
-
 </Project>
