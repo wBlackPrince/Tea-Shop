@@ -5,7 +5,7 @@ using Tea_Shop.Domain.Subscriptions;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class KitItemsConfiguration: IEntityTypeConfiguration<KitItem>
+public sealed class KitItemsConfiguration: IEntityTypeConfiguration<KitItem>
 {
     public void Configure(EntityTypeBuilder<KitItem> builder)
     {

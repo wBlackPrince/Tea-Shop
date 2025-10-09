@@ -14,9 +14,12 @@ using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Reviews;
 
+[Authorize(Roles = Role.AdminRoleName)]
+[Authorize(Roles = Role.UserRoleName)]
 [ApiController]
 [Route("[controller]")]
 public class ReviewsController: ControllerBase

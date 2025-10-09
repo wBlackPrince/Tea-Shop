@@ -26,7 +26,7 @@ public class ProductsSeeders: ISeeder
 
     private static string[] _domains = { "example.com", "example.org", "example.net", "myapp.test" };
     private static Season[] seasons = { Season.SPRING, Season.SUMMER, Season.AUTUMN, Season.WINTER };
-    private static string[] _roles = { "USER", "ADMINISTRATOR", "DEVELOPER" };
+    private static string[] _roles = { "USER", "ADMIN" };
 
     private static string[] ingredientsNames =
     {
@@ -1023,7 +1023,7 @@ public class ProductsSeeders: ISeeder
                 lastName,
                 email,
                 phoneNumber,
-                (Role)Enum.Parse(typeof(Role), role),
+                role,
                 new BasketId(Guid.NewGuid()));
 
             busket = new Basket(

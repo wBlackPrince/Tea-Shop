@@ -8,7 +8,7 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class ReviewConfiguration: IEntityTypeConfiguration<Review>
+public sealed class ReviewConfiguration: IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {

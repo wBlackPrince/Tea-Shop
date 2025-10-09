@@ -19,6 +19,7 @@ using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
 using Tea_Shop.Domain.Products;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Products;
 
@@ -26,6 +27,8 @@ namespace Tea_Shop.Products;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult<GetProductDto?>> GetProductById(
         [FromServices] IQueryHandler<GetProductDto, GetProductByIdQuery> handler,
@@ -39,6 +42,8 @@ public class ProductsController : ControllerBase
         return Ok(getResult);
     }
 
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet]
     public async Task<ActionResult<GetProductDto[]>> GetProducts(
         [FromServices] IQueryHandler<GetProductsResponseDto, GetProductsQuery> handler,
@@ -52,6 +57,8 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("{productId:guid}/ingridients")]
     public async Task<ActionResult<GetIngrendientsResponseDto[]>> GetProductsIngredients(
         [FromServices] IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery> handler,
@@ -65,6 +72,8 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("{productId:guid}/reviews")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetProductReviews(
         [FromServices] IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery> handler,
@@ -78,6 +87,8 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("popular")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
@@ -102,6 +113,8 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("{productId:guid}/similar")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetSimilarProducts(
         [FromRoute] Guid productId,
@@ -117,7 +130,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPost]
     public async Task<ActionResult<CreateProductResponseDto>> Create(
         [FromServices] ICommandHandler<CreateProductResponseDto, CreateProductCommand> handler,
@@ -136,7 +149,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPost("{productId:guid}/photos")]
     public async Task<ActionResult<Guid>> UploadPhotos(
         [FromServices] ICommandHandler<Guid, UploadProductsPhotosCommand> handler,
@@ -159,7 +172,7 @@ public class ProductsController : ControllerBase
     }
 
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPatch("{productId:guid}")]
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
@@ -177,7 +190,7 @@ public class ProductsController : ControllerBase
         return Ok(updateResult.Value);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPatch("{productId:guid}/ingredients")]
     public async Task<IActionResult> UpdateIngredients(
         [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdateProductIngredientsCommand> handler,
@@ -196,7 +209,7 @@ public class ProductsController : ControllerBase
         return Ok(updateResult.Value);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPatch("preparation-description")]
     public async Task<IActionResult> UpdatePreparationDescription(
         [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand> handler,
@@ -215,7 +228,7 @@ public class ProductsController : ControllerBase
     }
 
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpPatch("preparation-time")]
     public async Task<IActionResult> UpdatePreparationTime(
         [FromServices] ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationTimeCommand> handler,
@@ -234,7 +247,7 @@ public class ProductsController : ControllerBase
     }
 
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpDelete("{productId:guid}")]
     public async Task<IActionResult> DeleteProduct(
         [FromServices] ICommandHandler<DeleteProductDto, DeleteProductQuery> handler,

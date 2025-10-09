@@ -8,7 +8,7 @@ using Path = Tea_Shop.Domain.Comments.Path;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class CommentConfiguration: IEntityTypeConfiguration<Comment>
+public sealed class CommentConfiguration: IEntityTypeConfiguration<Comment>
 {
     public void Configure(EntityTypeBuilder<Comment> builder)
     {

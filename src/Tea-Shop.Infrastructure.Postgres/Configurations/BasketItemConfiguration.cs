@@ -5,7 +5,7 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
+public sealed class BasketItemConfiguration: IEntityTypeConfiguration<BasketItem>
 {
     public void Configure(EntityTypeBuilder<BasketItem> builder)
     {

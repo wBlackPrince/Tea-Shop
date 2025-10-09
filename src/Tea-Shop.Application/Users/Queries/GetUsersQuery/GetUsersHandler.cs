@@ -43,9 +43,7 @@ public class GetUsersHandler(
 
         if (!string.IsNullOrWhiteSpace(query.Request.Role))
         {
-            Role enumRole = (Role)Enum.Parse(typeof(Role), query.Request.Role.ToUpper());
-
-            usersQuery = usersQuery.Where(u => u.Role == enumRole);
+            usersQuery = usersQuery.Where(u => u.Role == query.Request.Role);
         }
 
         if (query.Request.IsActive.HasValue)

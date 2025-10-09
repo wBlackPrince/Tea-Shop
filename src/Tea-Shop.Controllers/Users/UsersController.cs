@@ -26,7 +26,8 @@ namespace Tea_Shop.Users;
 [Route("[controller]")]
 public class UsersController: ControllerBase
 {
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<GetUserResponseDto>> GetUserById(
         [FromRoute] Guid userId,
@@ -42,7 +43,7 @@ public class UsersController: ControllerBase
         return Ok(user);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
     [HttpGet]
     public async Task<IActionResult> GetUsers(
         [FromQuery] GetUsersRequestDto request,
@@ -56,7 +57,8 @@ public class UsersController: ControllerBase
         return Ok(users);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("orders")]
     public async Task<ActionResult<GetUserOrdersResponseDto?>> GetUserOrders(
         [FromQuery] GetUserOrdersRequestDto request,
@@ -70,7 +72,8 @@ public class UsersController: ControllerBase
         return Ok(userOrders);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("comments")]
     public async Task<ActionResult<GetUserCommentsResponseDto?>> GetUserComments(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -84,7 +87,8 @@ public class UsersController: ControllerBase
         return Ok(userComments);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpGet("reviews")]
     public async Task<ActionResult<GetUserReviewsResponseDto?>> GetUserReviews(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -207,7 +211,8 @@ public class UsersController: ControllerBase
 
 
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
@@ -225,7 +230,8 @@ public class UsersController: ControllerBase
         return Ok(updateResult.Value);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult<UserWithOnlyIdDto>> DeleteUser(
         [FromRoute] Guid userId,

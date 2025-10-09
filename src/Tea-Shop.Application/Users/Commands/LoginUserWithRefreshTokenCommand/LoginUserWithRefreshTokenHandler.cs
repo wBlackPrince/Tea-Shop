@@ -55,7 +55,7 @@ public class LoginUserWithRefreshTokenHandler(
                 "Refresh token is expired");
         }
 
-        string accessToken = tokenProvider.Create(refreshToken.User);
+        string accessToken = await tokenProvider.Create(refreshToken.User);
         refreshToken.Token = tokenProvider.GenerateRefreshToken();
         refreshToken.ExpireOnUtc = refreshToken.ExpireOnUtc.AddDays(7);
 

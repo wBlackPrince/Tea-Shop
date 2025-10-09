@@ -59,7 +59,7 @@ public class LoginUserHandler(
                 "user.login", "Request's password is incorrect");
         }
 
-        string accessToken = tokenProvider.Create(user);
+        string accessToken = await tokenProvider.Create(user);
 
         var refreshToken = new RefreshToken
         {

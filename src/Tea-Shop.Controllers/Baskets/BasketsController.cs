@@ -5,14 +5,16 @@ using Tea_Shop.Application.Baskets.Commands.AddBasketItemCommand;
 using Tea_Shop.Application.Baskets.Commands.RemoveBasketItemCommand;
 using Tea_Shop.Contract.Baskets;
 using Tea_Shop.Contract.Orders;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Baskets;
 
+[Authorize(Roles = Role.AdminRoleName)]
+[Authorize(Roles = Role.UserRoleName)]
 [ApiController]
 [Route("[controller]")]
 public class BasketsController: ControllerBase
 {
-    [Authorize]
     [HttpPost("basket-items")]
     public async Task<ActionResult<CreateOrderResponseDto>> AddBasketItem(
         [FromBody] AddBasketItemDto request,
