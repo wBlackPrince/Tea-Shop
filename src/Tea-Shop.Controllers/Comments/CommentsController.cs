@@ -7,6 +7,9 @@ using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
+using Tea_Shop.Application.Comments.Queries.GetDescendantsQuery;
+using Tea_Shop.Application.Comments.Queries.GetHierarchyQuery;
+using Tea_Shop.Application.Comments.Queries.GetNeighboursQuery;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
 
@@ -29,11 +32,51 @@ public class CommentsController: ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{commentId:guid}/hierarchy")]
+    public async Task<ActionResult<CommentDto>> GetCommentHierarchy(
+        [FromRoute] Guid commentId,
+        [FromServices]IQueryHandler<CommentsResponseDto, GetHierarchyQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetHierarchyQuery(new CommentWithOnlyIdDto(commentId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{commentId:guid}/neighbours")]
+    public async Task<ActionResult<CommentDto>> GetCommentNeighbours(
+        [FromRoute] Guid commentId,
+        [FromServices]IQueryHandler<CommentsResponseDto, GetNeighboursQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetNeighboursQuery(new CommentWithOnlyIdDto(commentId));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{commentId:guid}/descendants")]
+    public async Task<ActionResult<CommentDto>> GetCommentDescendants(
+        [FromRoute] Guid commentId,
+        [FromQuery] int depth,
+        [FromServices]IQueryHandler<CommentsResponseDto, GetDescendantsQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetDescendantsQuery(new GetDescendantsRequestDto(commentId, depth));
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result);
+    }
+
 
     [HttpGet("{commentId:guid}/comments")]
     public async Task<ActionResult<CommentDto>> GetChildCommentById(
         [FromRoute] Guid commentId,
-        [FromServices]IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery> handler,
+        [FromServices]IQueryHandler<CommentsResponseDto, GetCommentChildCommentsQuery> handler,
         CancellationToken cancellationToken)
     {
         var query = new GetCommentChildCommentsQuery(new CommentWithOnlyIdDto(commentId));

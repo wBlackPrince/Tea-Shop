@@ -521,15 +521,15 @@ public class ProductsSeeders: ISeeder
 
     public async Task SeedAsync()
     {
-        //await SeedUsersBatched();
-        //await SeedTagsBatched();
-        //await SeedProductsBatched();
-        //await SeedKitsBatched();
+        await SeedUsersBatched();
+        await SeedTagsBatched();
+        await SeedProductsBatched();
+        await SeedKitsBatched();
         await SeedSubscriptions();
         await SeedBusketItems();
         await SeedOrdersBatched();
         await SeedReviewsBatched();
-        await SeedCommentsBatched();
+        //await SeedCommentsBatched();
     }
 
     private async Task SeedSubscriptions()
@@ -625,69 +625,69 @@ public class ProductsSeeders: ISeeder
         }
     }
 
-    private async Task SeedCommentsBatched()
-    {
-        _logger.LogInformation("Seeding comments in batching...");
-        _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
-
-        var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
-        var reviewsIds = _dbContext.ReviewsRead.Select(r => r.Id.Value).ToArray();
-
-        const int batchSize = 1000;
-        List<Comment> comments = [];
-
-        DateTime startDate = new DateTime(2023, 1, 1);
-        DateTime endDate = new DateTime(2025, 9, 8);
-
-        DateTime createdAt;
-        DateTime updatedAt;
-
-        Comment? comment = null;
-        Comment? childComment = null;
-
-        for (int i = 0; i < COMMENTS_COUNT; i++)
-        {
-            createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
-            updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
-
-            comment = new Comment(
-                new CommentId(Guid.NewGuid()),
-                new UserId(usersIds[_random.Next(0, usersIds.Length)]),
-                new ReviewId(reviewsIds[_random.Next(0, reviewsIds.Length)]),
-                CommentTexts[_random.Next(0, CommentTexts.Length)],
-                startDate.ToUniversalTime(),
-                updatedAt.ToUniversalTime(),
-                null);
-
-            childComment = new Comment(
-                new CommentId(Guid.NewGuid()),
-                new UserId(usersIds[_random.Next(0, usersIds.Length)]),
-                new ReviewId(reviewsIds[_random.Next(0, reviewsIds.Length)]),
-                CommentTexts[_random.Next(0, CommentTexts.Length)],
-                startDate.AddHours(_random.Next(1, 12)).ToUniversalTime(),
-                updatedAt.AddHours(_random.Next(13, 24)).ToUniversalTime(),
-                null);
-
-            childComment.ParentId = childComment.Id;
-
-            comments.Add(comment);
-            comments.Add(childComment);
-
-            if (i % batchSize == 0)
-            {
-                _logger.LogInformation($"Saved {i} comments...");
-                _dbContext.Comments.AddRange();
-                await _dbContext.SaveChangesAsync();
-                comments.Clear();
-            }
-        }
-
-        if (comments.Any())
-        {
-            _dbContext.Comments.AddRange(comments);
-            await _dbContext.SaveChangesAsync();
-        }
-    }
+    // private async Task SeedCommentsBatched()
+    // {
+    //     _logger.LogInformation("Seeding comments in batching...");
+    //     _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+    //
+    //     var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
+    //     var reviewsIds = _dbContext.ReviewsRead.Select(r => r.Id.Value).ToArray();
+    //
+    //     const int batchSize = 1000;
+    //     List<Comment> comments = [];
+    //
+    //     DateTime startDate = new DateTime(2023, 1, 1);
+    //     DateTime endDate = new DateTime(2025, 9, 8);
+    //
+    //     DateTime createdAt;
+    //     DateTime updatedAt;
+    //
+    //     Comment? comment = null;
+    //     Comment? childComment = null;
+    //
+    //     for (int i = 0; i < COMMENTS_COUNT; i++)
+    //     {
+    //         createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
+    //         updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
+    //
+    //         comment = new Comment(
+    //             new CommentId(Guid.NewGuid()),
+    //             new UserId(usersIds[_random.Next(0, usersIds.Length)]),
+    //             new ReviewId(reviewsIds[_random.Next(0, reviewsIds.Length)]),
+    //             CommentTexts[_random.Next(0, CommentTexts.Length)],
+    //             startDate.ToUniversalTime(),
+    //             updatedAt.ToUniversalTime(),
+    //             null);
+    //
+    //         childComment = new Comment(
+    //             new CommentId(Guid.NewGuid()),
+    //             new UserId(usersIds[_random.Next(0, usersIds.Length)]),
+    //             new ReviewId(reviewsIds[_random.Next(0, reviewsIds.Length)]),
+    //             CommentTexts[_random.Next(0, CommentTexts.Length)],
+    //             startDate.AddHours(_random.Next(1, 12)).ToUniversalTime(),
+    //             updatedAt.AddHours(_random.Next(13, 24)).ToUniversalTime(),
+    //             null);
+    //
+    //         childComment.ParentId = childComment.Id;
+    //
+    //         comments.Add(comment);
+    //         comments.Add(childComment);
+    //
+    //         if (i % batchSize == 0)
+    //         {
+    //             _logger.LogInformation($"Saved {i} comments...");
+    //             _dbContext.Comments.AddRange();
+    //             await _dbContext.SaveChangesAsync();
+    //             comments.Clear();
+    //         }
+    //     }
+    //
+    //     if (comments.Any())
+    //     {
+    //         _dbContext.Comments.AddRange(comments);
+    //         await _dbContext.SaveChangesAsync();
+    //     }
+    // }
 
     private async Task SeedReviewsBatched()
     {

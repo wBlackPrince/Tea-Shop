@@ -22,8 +22,4 @@
       <ProjectReference Include="..\Tea-Shop.Domain\Tea-Shop.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Subscriptions\" />
-    </ItemGroup>
-
 </Project>

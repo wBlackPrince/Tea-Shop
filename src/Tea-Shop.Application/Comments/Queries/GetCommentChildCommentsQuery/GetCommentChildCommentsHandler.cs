@@ -9,9 +9,9 @@ namespace Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
 public class GetCommentChildCommentsHandler(
     IDbConnectionFactory connectionFactory,
     ILogger<GetCommentChildCommentsHandler> logger):
-    IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery>
+    IQueryHandler<CommentsResponseDto, GetCommentChildCommentsQuery>
 {
-    public async Task<GetChildCommentsResponseDto> Handle(
+    public async Task<CommentsResponseDto> Handle(
         GetCommentChildCommentsQuery query,
         CancellationToken cancellationToken)
     {
@@ -28,6 +28,7 @@ public class GetCommentChildCommentsHandler(
                 c2.rating,
                 c2.review_id,
                 c2.parent_id,
+                c2.path,
                 c2.created_at,
                 c2.updated_at
             from comments as c1 inner join comments as c2 on c1.id = c2.parent_id
@@ -42,7 +43,7 @@ public class GetCommentChildCommentsHandler(
                 query.WithOnlyId.CommentId);
         }
 
-        var response = new GetChildCommentsResponseDto(
+        var response = new CommentsResponseDto(
             childComments.ToArray());
 
         logger.LogDebug(

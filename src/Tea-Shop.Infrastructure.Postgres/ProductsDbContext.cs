@@ -33,6 +33,7 @@ public class ProductsDbContext: DbContext, IReadDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasPostgresExtension("ltree");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductsDbContext).Assembly);
     }
 

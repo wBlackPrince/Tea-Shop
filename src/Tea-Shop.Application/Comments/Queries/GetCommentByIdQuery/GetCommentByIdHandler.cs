@@ -35,6 +35,7 @@ public class GetCommentByIdHandler(
             comment.Rating,
             comment.ReviewId.Value,
             comment.ParentId?.Value,
+            comment.Path.Value,
             comment.CreatedAt,
             comment.UpdatedAt);
 

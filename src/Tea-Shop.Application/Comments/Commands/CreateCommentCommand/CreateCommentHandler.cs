@@ -10,6 +10,7 @@ using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
+using Path = Tea_Shop.Domain.Comments.Path;
 
 namespace Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
 
@@ -63,18 +64,62 @@ public class CreateCommentHandler(
                 $"No review with id {reviewId.Value} found");
         }
 
-        var comment = new Comment(
-            new CommentId(Guid.NewGuid()),
-            new UserId(command.Request.UserId),
-            reviewId,
-            command.Request.Text,
-            DateTime.UtcNow,
-            DateTime.UtcNow,
-            new CommentId(command.Request.ParentId));
+
+        var commentId = new CommentId(Guid.NewGuid());
+        var userId = new UserId(command.Request.UserId);
+        Comment? comment;
+
+        if (command.Request.ParentId is not null)
+        {
+            var parentId = new CommentId(command.Request.ParentId);
+            var parentComment = await commentsRepository.GetCommentById(
+                parentId.Value.Value,
+                cancellationToken);
+
+            if (parentComment is null)
+            {
+                logger.LogError($"Review not found with id {reviewId.Value}");
+                transactionScope.Rollback();
+                return Error.NotFound(
+                    "create.comment",
+                    $"No comment with id {parentId.Value} found");
+            }
+
+            var path = parentComment.Path.CreateChild(new Identifier(commentId.Value.ToString()));
+
+            comment = Comment.CreateChild(
+                userId,
+                reviewId,
+                command.Request.Text,
+                DateTime.UtcNow,
+                DateTime.UtcNow,
+                new Identifier(commentId.Value.ToString()),
+                parentComment,
+                parentId,
+                commentId);
+        }
+        else
+        {
+            comment = Comment.CreateParent(
+                userId,
+                reviewId,
+                command.Request.Text,
+                DateTime.UtcNow,
+                DateTime.UtcNow,
+                new Identifier(commentId.Value.ToString()),
+                commentId);
+        }
 
         await commentsRepository.CreateComment(comment, cancellationToken);
 
-        await transactionManager.SaveChangesAsync(cancellationToken);
+        var savingResult = await transactionManager.SaveChangesAsync(cancellationToken);
+
+        if (savingResult.IsFailure)
+        {
+            logger.LogError("Failed to save changes while creating comment");
+            transactionScope.Rollback();
+            return savingResult.Error;
+        }
 
         var commitedResult = transactionScope.Commit();
 

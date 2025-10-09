@@ -11,6 +11,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:PostgresExtension:ltree", ",,");
+
             migrationBuilder.CreateTable(
                 name: "kits",
                 columns: table => new
@@ -179,15 +182,24 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     text = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    Identifier = table.Column<string>(type: "text", nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
                     review_id = table.Column<Guid>(type: "uuid", nullable: false),
                     parent_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    path = table.Column<string>(type: "ltree", nullable: false),
+                    Depth = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_comments", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_comments_comments_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "comments",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_comments_users_user_id",
                         column: x => x.user_id,
@@ -384,6 +396,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_baskets_items_product_id",
                 table: "baskets_items",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_comments_parent_id",
+                table: "comments",
+                column: "parent_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comments_user_id",

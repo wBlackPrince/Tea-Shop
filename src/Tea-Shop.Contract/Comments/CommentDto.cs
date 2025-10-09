@@ -7,5 +7,6 @@ public record CommentDto(
     int Rating,
     Guid ReviewId,
     Guid? ParentId,
+    string Path,
     DateTime CreatedAt,
     DateTime UpdatedAt);

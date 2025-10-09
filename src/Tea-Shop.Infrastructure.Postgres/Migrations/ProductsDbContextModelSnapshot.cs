@@ -20,6 +20,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "ltree");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
@@ -79,9 +80,21 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<int>("Depth")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uuid")
                         .HasColumnName("parent_id");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("ltree")
+                        .HasColumnName("path");
 
                     b.Property<int>("Rating")
                         .HasColumnType("integer")
@@ -107,6 +120,13 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_comments");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("Path")
+                        .HasDatabaseName("idx_departments_path");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Path"), "gist");
 
                     b.HasIndex("UserId");
 
@@ -598,11 +618,18 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
                 {
+                    b.HasOne("Tea_Shop.Domain.Comments.Comment", "ParentComment")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Tea_Shop.Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ParentComment");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>

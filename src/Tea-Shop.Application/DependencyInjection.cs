@@ -9,6 +9,9 @@ using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
 using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
 using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
 using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
+using Tea_Shop.Application.Comments.Queries.GetDescendantsQuery;
+using Tea_Shop.Application.Comments.Queries.GetHierarchyQuery;
+using Tea_Shop.Application.Comments.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
@@ -128,7 +131,16 @@ public static class DependencyInjection
             IQueryHandler<CommentDto?, GetCommentByIdQuery>,
             GetCommentByIdHandler>();
         services.AddScoped<
-            IQueryHandler<GetChildCommentsResponseDto, GetCommentChildCommentsQuery>,
+            IQueryHandler<CommentsResponseDto, GetHierarchyQuery>,
+            GetHierarchyHandler>();
+        services.AddScoped<
+            IQueryHandler<CommentsResponseDto, GetNeighboursQuery>,
+            GetNeighboursHandler>();
+        services.AddScoped<
+            IQueryHandler<CommentsResponseDto, GetDescendantsQuery>,
+            GetDescendantsHandler>();
+        services.AddScoped<
+            IQueryHandler<CommentsResponseDto, GetCommentChildCommentsQuery>,
             GetCommentChildCommentsHandler>();
         services.AddScoped<
             ICommandHandler<CreateCommentResponseDto, CreateCommentCommand>,

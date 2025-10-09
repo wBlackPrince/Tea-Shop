@@ -27,18 +27,24 @@ public class Comment: Entity
         CommentId id,
         UserId userId,
         ReviewId reviewId,
+        Identifier identifier,
         string text,
         DateTime createdAt,
         DateTime updatedAt,
+        Path path,
+        int depth,
         CommentId? parentId = null)
     {
         Id = id;
         ParentId = parentId;
         UserId = userId;
         ReviewId = reviewId;
+        Identifier = identifier;
         Text = text;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
+        Path = path;
+        Depth = depth;
     }
 
     // Для Ef Core
@@ -66,6 +72,11 @@ public class Comment: Entity
     }
 
     /// <summary>
+    /// Gets or sets иднетификатор пути
+    /// </summary>
+    public Identifier Identifier { get; set; }
+
+    /// <summary>
     /// Gets or sets рейтинг комментария
     /// </summary>
     public int Rating { get; set; } = 0;
@@ -78,14 +89,22 @@ public class Comment: Entity
     /// <summary>
     /// Gets or sets идентификатор родительского комментария
     /// </summary>
-    [NotMapped]
     public CommentId? ParentId { get; set; } = null;
 
     /// <summary>
-    /// Gets or sets список идентификаторов дочерних комменатриев
+    /// Gets or sets навигационное свойство для родительского комментария
     /// </summary>
-    [NotMapped]
-    public CommentId[] ChildrenIds { get; set; }
+    public Comment? ParentComment { get; set; } = null;
+
+    /// <summary>
+    /// Gets or sets путь к коменнатрию в дереве
+    /// </summary>
+    public Path Path { get; set; }
+
+    /// <summary>
+    /// Gets or sets глубину в дереве
+    /// </summary>
+    public int Depth { get; set; } = 0;
 
     /// <summary>
     /// Gets or sets время создания
@@ -96,6 +115,57 @@ public class Comment: Entity
     /// Gets or sets время обновления
     /// </summary>
     public DateTime UpdatedAt { get; set; }
+
+
+    public static Comment CreateParent(
+        UserId userId,
+        ReviewId reviewId,
+        string text,
+        DateTime createdAt,
+        DateTime updatedAt,
+        Identifier identifier,
+        CommentId? id = null)
+    {
+        var path = Path.CreateParent(identifier);
+
+        return new Comment(
+            id ?? new CommentId(Guid.NewGuid()),
+            userId,
+            reviewId,
+            identifier,
+            text,
+            createdAt,
+            updatedAt,
+            path,
+            0,
+            null);
+    }
+
+    public static Comment CreateChild(
+        UserId userId,
+        ReviewId reviewId,
+        string text,
+        DateTime createdAt,
+        DateTime updatedAt,
+        Identifier identifier,
+        Comment parent,
+        CommentId? parentId = null,
+        CommentId? id = null)
+    {
+        var path = parent.Path.CreateChild(identifier);
+
+        return new Comment(
+            id ?? new CommentId(Guid.NewGuid()),
+            userId,
+            reviewId,
+            identifier,
+            text,
+            createdAt,
+            updatedAt,
+            path,
+            parent.Depth + 1,
+            parentId);
+    }
 
     public void UpdateText(string text)
     {
