@@ -38,7 +38,7 @@ public class User: Entity
         string lastName,
         string email,
         string phoneNumber,
-        Role role,
+        string role,
         BasketId basketId,
         Guid? avatarId = null,
         string middleName = "")
@@ -145,7 +145,7 @@ public class User: Entity
     /// <summary>
     /// Gets or sets Роль пользователя
     /// </summary>
-    public Role Role { get; set; }
+    public string Role { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether Способность пользователя пользоваться приложением

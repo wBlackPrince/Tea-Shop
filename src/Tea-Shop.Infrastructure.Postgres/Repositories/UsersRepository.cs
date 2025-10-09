@@ -48,6 +48,11 @@ public class UsersRepository : IUsersRepository
     }
 
 
+    public async Task AddUserRole(UserRole userRole, CancellationToken cancellationToken)
+    {
+        await _dbContext.UserRoles.AddAsync(userRole, cancellationToken);
+    }
+
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)
     {
         await _dbContext.Users.AddAsync(user, cancellationToken);

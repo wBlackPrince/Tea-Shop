@@ -12,9 +12,12 @@ using Tea_Shop.Application.Comments.Queries.GetHierarchyQuery;
 using Tea_Shop.Application.Comments.Queries.GetNeighboursQuery;
 using Tea_Shop.Contract.Comments;
 using Tea_Shop.Domain.Comments;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Comments;
 
+[Authorize(Roles = Role.AdminRoleName)]
+[Authorize(Roles = Role.UserRoleName)]
 [ApiController]
 [Route("[controller]")]
 public class CommentsController: ControllerBase

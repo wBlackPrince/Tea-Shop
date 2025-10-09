@@ -5,7 +5,7 @@ using Tea_Shop.Domain.Products;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class OrderItemConfiguration: IEntityTypeConfiguration<OrderItem>
+public sealed class OrderItemConfiguration: IEntityTypeConfiguration<OrderItem>
 {
     public void Configure(EntityTypeBuilder<OrderItem> builder)
     {

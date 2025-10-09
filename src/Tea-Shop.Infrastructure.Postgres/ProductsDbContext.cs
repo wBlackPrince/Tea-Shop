@@ -13,7 +13,7 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres;
 
-public class ProductsDbContext: DbContext, IReadDbContext
+public sealed class ProductsDbContext: DbContext, IReadDbContext
 {
     private readonly string _connectionString;
 
@@ -40,6 +40,10 @@ public class ProductsDbContext: DbContext, IReadDbContext
     public DbSet<Product> Products { get; set; }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<Role> Roles { get; set; }
+
+    public DbSet<UserRole> UserRoles { get; set; }
 
     public DbSet<Comment> Comments { get; set; }
 

@@ -10,7 +10,6 @@ using Tea_Shop.Application.Database;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Domain;
 using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;
@@ -89,10 +88,25 @@ public class CreateUserHandler(
             command.Request.LastName,
             command.Request.Email,
             command.Request.PhoneNumber,
-            (Role)Enum.Parse(typeof(Role), command.Request.Role),
+            command.Request.Role,
             basketId,
             avatarId,
             command.Request.MiddleName);
+
+        var role = command.Request.Role switch
+        {
+            Role.UserRoleName => Role.CreateUserRole(),
+            Role.AdminRoleName => Role.CreateAdminRole(),
+        };
+
+        var userRole = new UserRole
+        {
+            UserId = user.Id,
+            RoleId = role.Id,
+        };
+
+        await usersRepository.AddUserRole(userRole, cancellationToken);
+
 
         DateTime utcNow = DateTime.UtcNow;
         var verificationToken = new EmailVerificationToken()

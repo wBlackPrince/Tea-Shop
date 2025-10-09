@@ -51,12 +51,6 @@ public class UserConfiguration: IEntityTypeConfiguration<User>
         builder.Property(u => u.PhoneNumber)
             .HasColumnName("phone_number");
 
-        builder.Property(u => u.Role)
-            .HasConversion(
-                u => u.ToString(),
-                role => (Role)Enum.Parse(typeof(Role), role))
-            .HasColumnName("role");
-
         builder.Property(u => u.AvatarId)
             .HasColumnName("avatar_id");
 

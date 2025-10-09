@@ -5,7 +5,7 @@ using Tea_Shop.Domain.Tags;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class ProductsTagsConfiguration: IEntityTypeConfiguration<ProductsTags>
+public sealed class ProductsTagsConfiguration: IEntityTypeConfiguration<ProductsTags>
 {
     public void Configure(EntityTypeBuilder<ProductsTags> builder)
     {

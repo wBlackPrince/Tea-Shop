@@ -1,7 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
@@ -51,6 +54,19 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("ipk_roles", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tags",
                 columns: table => new
                 {
@@ -78,7 +94,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     bonus_points = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     avatar_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    role = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -330,6 +346,30 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "user_roles",
+                columns: table => new
+                {
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    role_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_roles", x => new { x.user_id, x.role_id });
+                    table.ForeignKey(
+                        name: "FK_user_roles_roles_role_id",
+                        column: x => x.role_id,
+                        principalTable: "roles",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_user_roles_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "baskets_items",
                 columns: table => new
                 {
@@ -381,6 +421,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "roles",
+                columns: new[] { "id", "name" },
+                values: new object[,]
+                {
+                    { 1, "USER" },
+                    { 2, "ADMIN" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_baskets_user_id",
                 table: "baskets",
@@ -396,6 +445,12 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_baskets_items_product_id",
                 table: "baskets_items",
                 column: "product_id");
+
+            migrationBuilder.CreateIndex(
+                name: "idx_departments_path",
+                table: "comments",
+                column: "path")
+                .Annotation("Npgsql:IndexMethod", "gist");
 
             migrationBuilder.CreateIndex(
                 name: "IX_comments_parent_id",
@@ -483,6 +538,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "IX_subscriptions_user_id",
                 table: "subscriptions",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_roles_role_id",
+                table: "user_roles",
+                column: "role_id");
         }
 
         /// <inheritdoc />
@@ -519,6 +579,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 name: "subscriptions");
 
             migrationBuilder.DropTable(
+                name: "user_roles");
+
+            migrationBuilder.DropTable(
                 name: "baskets");
 
             migrationBuilder.DropTable(
@@ -532,6 +595,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "kits");
+
+            migrationBuilder.DropTable(
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "users");

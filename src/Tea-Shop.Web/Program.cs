@@ -43,6 +43,14 @@ builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsD
 builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Minio"));
 builder.Services.AddMinioDependencies(builder.Configuration);
 
+// Раннее выявление ошибок внедрения зависимостей (для прода)
+builder.Host.UseDefaultServiceProvider(
+    (context, options) =>
+    {
+        options.ValidateOnBuild = true;
+        options.ValidateScopes = true;
+    });
+
 var app = builder.Build();
 
 // app.MapOpenApi();

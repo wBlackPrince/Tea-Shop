@@ -36,6 +36,6 @@ public class CreateUserValidator: AbstractValidator<CreateUserRequestDto>
 
     private bool BeValidRole(string role)
     {
-        return Enum.TryParse(typeof(Role), role, out _);
+        return role == Role.AdminRoleName || role == Role.UserRoleName;
     }
 }

@@ -39,7 +39,7 @@ public static class DependencyInjection
 
         services.AddScoped<ITransactionManager, TransactionManager>();
 
-        services.AddSingleton<ITokenProvider, TokenProvider>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         return services;

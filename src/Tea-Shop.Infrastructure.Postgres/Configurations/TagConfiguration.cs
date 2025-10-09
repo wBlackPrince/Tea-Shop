@@ -5,7 +5,7 @@ using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
-public class TagConfiguration: IEntityTypeConfiguration<Tag>
+public sealed class TagConfiguration: IEntityTypeConfiguration<Tag>
 {
     public void Configure(EntityTypeBuilder<Tag> builder)
     {

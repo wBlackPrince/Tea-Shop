@@ -9,14 +9,16 @@ using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Domain.Orders;
+using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Orders;
 
+[Authorize(Roles = Role.AdminRoleName)]
+[Authorize(Roles = Role.UserRoleName)]
 [ApiController]
 [Route("[controller]")]
 public class OrdersController: ControllerBase
 {
-    [Authorize]
     [HttpGet("{orderId:guid}")]
     public async Task<ActionResult<GetOrderResponseDto>> GetOrderById(
         [FromRoute] Guid orderId,
@@ -30,7 +32,6 @@ public class OrdersController: ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpGet("{orderId:guid}/items")]
     public async Task<ActionResult<OrderItemResponseDto[]>> GetOrderItems(
         [FromRoute] Guid orderId,
@@ -44,7 +45,6 @@ public class OrdersController: ControllerBase
         return Ok(orderItems);
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateOrderResponseDto>> CreateOrder(
         [FromBody] CreateOrderRequestDto request,
@@ -63,7 +63,6 @@ public class OrdersController: ControllerBase
         return Ok(result.Value);
     }
 
-    [Authorize]
     [HttpPatch("{orderId:guid}")]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] Guid orderId,
@@ -81,7 +80,6 @@ public class OrdersController: ControllerBase
         return Ok($"Updated order by id {result.Value}");
     }
 
-    [Authorize]
     [HttpDelete("{orderId:guid}")]
     public async Task<IActionResult> DeleteOrder(
         [FromRoute] Guid orderId,
@@ -100,7 +98,6 @@ public class OrdersController: ControllerBase
         return Ok(orderId);
     }
 
-    [Authorize]
     [HttpPost("{orderId:guid}/items")]
     public async Task<IActionResult> AddOrderItemById(
         [FromBody] OrderItemResponseDto orderItemResponse,
@@ -110,7 +107,6 @@ public class OrdersController: ControllerBase
         throw new NotImplementedException();
     }
 
-    [Authorize]
     [HttpDelete("{orderId:guid}/items")]
     public async Task<IActionResult> DeleteOrderItemById(
         [FromBody] OrderItemResponseDto orderItemResponse,
