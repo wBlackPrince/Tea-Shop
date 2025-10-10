@@ -56,4 +56,20 @@ public class ProductsRepository: IProductsRepository
 
         return productId.Value;
     }
+
+    public async Task<Guid> CreateTag(Tag tag, CancellationToken cancellationToken)
+    {
+        await _dbContext.Tags.AddAsync(tag, cancellationToken);
+
+        return tag.Id.Value;
+    }
+
+    public async Task<Result<Guid, Error>> DeleteTag(TagId tagId, CancellationToken cancellationToken)
+    {
+        var tag = await _dbContext.Tags
+            .Where(t => t.Id == tagId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        return tagId.Value;
+    }
 }

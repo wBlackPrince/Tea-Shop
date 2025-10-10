@@ -77,4 +77,21 @@ public class UsersRepository : IUsersRepository
 
         return userId.Value;
     }
+
+    public async Task<Basket?> GetBasketById(BasketId basketId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Baskets.FirstOrDefaultAsync(b => b.Id == basketId, cancellationToken);
+    }
+
+    public async Task<BasketItem?> GetBasketItemById(BasketItemId basketItemId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.BasketsItems.FirstOrDefaultAsync(b => b.Id == basketItemId, cancellationToken);
+    }
+
+    public async Task<Guid> CreateBasket(Basket basket, CancellationToken cancellationToken)
+    {
+        await _dbContext.Baskets.AddAsync(basket, cancellationToken);
+
+        return basket.Id.Value;
+    }
 }

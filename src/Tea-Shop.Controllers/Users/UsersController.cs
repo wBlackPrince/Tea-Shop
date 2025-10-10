@@ -2,13 +2,17 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Application.Users.Commands.AddBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
+using Tea_Shop.Application.Users.Commands.RemoveBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Commands.VerifyEmailCommand;
+using Tea_Shop.Application.Users.Queries.GetBasketByIdQuery;
+using Tea_Shop.Application.Users.Queries.GetBasketItemByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
@@ -245,6 +249,84 @@ public class UsersController: ControllerBase
         if (result.IsFailure)
         {
             return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+
+
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
+    [HttpGet("baskets/{basketId:guid}")]
+    public async Task<ActionResult<BasketDto?>> GetBasketById(
+        [FromRoute] Guid basketId,
+        [FromServices] IQueryHandler<BasketDto?, GetBasketByIdQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetBasketByIdQuery(new BasketId(basketId));
+
+        var basket = await handler.Handle(
+            query,
+            cancellationToken);
+
+        return Ok(basket);
+    }
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
+    [HttpGet("basket-items/{basketItemId:guid}")]
+    public async Task<ActionResult<BasketDto?>> GetBasketItemById(
+        [FromRoute] Guid basketId,
+        [FromServices] IQueryHandler<BasketItemDto?, GetBasketItemByIdQuery> handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetBasketItemByIdQuery(new BasketItemId(basketId));
+
+        var basket = await handler.Handle(
+            query,
+            cancellationToken);
+
+        return Ok(basket);
+    }
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
+    [HttpPost("basket-items")]
+    public async Task<ActionResult<CreateOrderResponseDto>> AddBasketItem(
+        [FromBody] AddBasketItemDto request,
+        [FromServices] ICommandHandler<AddBasketItemDto?, AddBasketItemCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new AddBasketItemCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize]
+    [HttpDelete("basket-items")]
+    public async Task<ActionResult<CreateOrderResponseDto>> RemoveBasketItem(
+        [FromBody] RemoveBasketItemDto request,
+        [FromServices] ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new RemoveBasketItemCommand(request);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
         }
 
         return Ok(result.Value);

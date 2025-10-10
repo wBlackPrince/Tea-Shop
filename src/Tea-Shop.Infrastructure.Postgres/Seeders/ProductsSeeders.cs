@@ -1,12 +1,10 @@
 ﻿using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
-using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Subscriptions;
-using Tea_Shop.Domain.Tags;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Infrastructure.Postgres.Seeders;
@@ -1091,7 +1089,7 @@ public class ProductsSeeders: ISeeder
             if (i % batchSize == 0)
             {
                 _logger.LogInformation($"Saved {i} busket items...");
-                _dbContext.BusketsItems.AddRange(busketItems);
+                _dbContext.BasketsItems.AddRange(busketItems);
                 await _dbContext.SaveChangesAsync();
                 busketItems.Clear();
             }
@@ -1099,7 +1097,7 @@ public class ProductsSeeders: ISeeder
 
         if (busketItems.Any())
         {
-            _dbContext.BusketsItems.AddRange(busketItems);
+            _dbContext.BasketsItems.AddRange(busketItems);
             await _dbContext.SaveChangesAsync();
         }
     }

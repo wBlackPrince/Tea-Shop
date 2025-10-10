@@ -9,14 +9,12 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Shouldly;
 using Tea_Shop.Application.Auth;
-using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Domain;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -38,8 +36,6 @@ public class CreateUserCommandTests
     private readonly CreateUserHandler _handler;
 
     private readonly IUsersRepository _usersRepositoryMock;
-
-    private readonly IBasketsRepository _basketsRepositoryMock;
 
     private readonly ITokensRepository _tokensRepositoryMock;
 
@@ -64,7 +60,6 @@ public class CreateUserCommandTests
     public CreateUserCommandTests()
     {
         _usersRepositoryMock = Substitute.For<IUsersRepository>();
-        _basketsRepositoryMock = Substitute.For<IBasketsRepository>();
         _tokensRepositoryMock = Substitute.For<ITokensRepository>();
         _loggerMock = Substitute.For<ILogger<CreateUserHandler>>();
         _validatorMock = Substitute.For<IValidator<CreateUserRequestDto>>();
@@ -82,7 +77,6 @@ public class CreateUserCommandTests
 
         _handler = new CreateUserHandler(
             _usersRepositoryMock,
-            _basketsRepositoryMock,
             _tokensRepositoryMock,
             _loggerMock,
             _filesProviderMock,

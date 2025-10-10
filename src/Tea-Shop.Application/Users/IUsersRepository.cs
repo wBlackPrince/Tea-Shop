@@ -24,4 +24,10 @@ public interface IUsersRepository
     Task AddUserRole(UserRole userRole, CancellationToken cancellationToken);
 
     Task<Result<Guid, Error>> DeleteUser(UserId useId, CancellationToken cancellationToken);
+
+    Task<Guid> CreateBasket(Basket basket, CancellationToken cancellationToken);
+
+    Task<Basket?> GetBasketById(BasketId basketId, CancellationToken cancellationToken);
+
+    Task<BasketItem?> GetBasketItemById(BasketItemId basketItemId, CancellationToken cancellationToken);
 }

@@ -5,12 +5,10 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Auth;
-using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Contract.Users;
-using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
@@ -19,7 +17,6 @@ namespace Tea_Shop.Application.Users.Commands.CreateUserCommand;
 
 public class CreateUserHandler(
     IUsersRepository usersRepository,
-    IBasketsRepository basketsRepository,
     ITokensRepository tokensRepository,
     ILogger<CreateUserHandler> logger,
     IFileProvider fileProvider,
@@ -122,7 +119,7 @@ public class CreateUserHandler(
 
         await usersRepository.CreateUser(user, cancellationToken);
 
-        await basketsRepository.Create(basket, cancellationToken);
+        await usersRepository.CreateBasket(basket, cancellationToken);
 
 
         // email verification

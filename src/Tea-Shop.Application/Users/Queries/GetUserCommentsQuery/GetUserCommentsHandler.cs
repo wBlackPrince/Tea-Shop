@@ -3,7 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
-using Tea_Shop.Contract.Comments;
+using Tea_Shop.Contract.Social;
 using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;

@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Domain;
-using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Subscriptions;
-using Tea_Shop.Domain.Tags;
 using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;
 
@@ -51,9 +49,9 @@ public sealed class ProductsDbContext: DbContext, IReadDbContext
 
     public DbSet<Order> Orders { get; set; }
 
-    public DbSet<Basket> Buskets { get; set; }
+    public DbSet<Basket> Baskets { get; set; }
 
-    public DbSet<BasketItem> BusketsItems { get; set; }
+    public DbSet<BasketItem> BasketsItems { get; set; }
 
     public DbSet<Kit> Kits { get; set; }
 
@@ -84,7 +82,7 @@ public sealed class ProductsDbContext: DbContext, IReadDbContext
 
     public IQueryable<Kit> KitsRead => Set<Kit>().AsNoTracking();
 
-    public IQueryable<Basket> BusketsRead => Set<Basket>().AsNoTracking();
+    public IQueryable<Basket> BasketsRead => Set<Basket>().AsNoTracking();
 
-    public IQueryable<BasketItem> BusketsItemsRead => Set<BasketItem>().AsNoTracking();
+    public IQueryable<BasketItem> BasketsItemsRead => Set<BasketItem>().AsNoTracking();
 }

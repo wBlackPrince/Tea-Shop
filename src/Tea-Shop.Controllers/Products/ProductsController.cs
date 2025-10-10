@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
+using Tea_Shop.Application.Products.Commands.CreateTagCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.DeleteTagCommand;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
@@ -16,7 +18,7 @@ using Tea_Shop.Application.Products.Queries.GetProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
-using Tea_Shop.Contract.Reviews;
+using Tea_Shop.Contract.Social;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Products;
@@ -263,5 +265,41 @@ public class ProductsController : ControllerBase
         }
 
         return Ok(productId);
+    }
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [HttpPost("tags")]
+    public async Task<IActionResult> CreateTag(
+        [FromBody] CreateTagRequestDto request,
+        [FromServices] ICommandHandler<Guid, CreateTagCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new CreateTagCommand(request);
+        var createResult = await handler.Handle(command, cancellationToken);
+
+        if (createResult.IsFailure)
+        {
+            return NotFound(createResult.Error);
+        }
+
+        return Ok(createResult.Value);
+    }
+
+    [Authorize(Roles = Role.AdminRoleName)]
+    [HttpDelete("tags/{tagId:guid}")]
+    public async Task<ActionResult<Guid>> DeleteTag(
+        [FromRoute] Guid tagId,
+        [FromServices] ICommandHandler<Guid, DeleteTagCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteTagCommand(tagId);
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(tagId);
     }
 }

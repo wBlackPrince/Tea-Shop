@@ -1,6 +1,4 @@
-﻿using Tea_Shop.Domain.Tags;
-
-namespace Tea_Shop.Domain.Products;
+﻿namespace Tea_Shop.Domain.Products;
 
 public record ProductsTagsId(Guid Value);
 

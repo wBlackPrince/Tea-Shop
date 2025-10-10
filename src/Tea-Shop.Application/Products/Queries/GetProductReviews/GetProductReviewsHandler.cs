@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
-using Tea_Shop.Contract.Reviews;
+using Tea_Shop.Contract.Social;
 
 namespace Tea_Shop.Application.Products.Queries.GetProductReviews;
 

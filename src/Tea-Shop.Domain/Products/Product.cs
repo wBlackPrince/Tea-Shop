@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Domain.Products;

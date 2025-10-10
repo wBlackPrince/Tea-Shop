@@ -4,11 +4,9 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Baskets;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Contract.Orders;
-using Tea_Shop.Domain.Baskets;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
@@ -19,7 +17,6 @@ namespace Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 public class CreateOrderHandler(
     IOrdersRepository ordersRepository,
     IUsersRepository usersRepository,
-    IBasketsRepository basketsRepository,
     IReadDbContext readDbContext,
     ILogger<CreateOrderHandler> logger,
     IValidator<CreateOrderRequestDto> validator,
@@ -65,7 +62,7 @@ public class CreateOrderHandler(
             new UserId(command.Request.UserId),
             cancellationToken);
         Result<OrderItem, Error> orderItem;
-        Basket? basket = await basketsRepository.GetById(
+        Basket? basket = await usersRepository.GetBasketById(
             user?.BasketId,
             cancellationToken);
 
@@ -87,7 +84,7 @@ public class CreateOrderHandler(
         {
             basketItemId = new BasketItemId(command.Request.Items[i].BasketItemId);
 
-            basketItem = await basketsRepository.GetBasketItemById(basketItemId, cancellationToken);
+            basketItem = await usersRepository.GetBasketItemById(basketItemId, cancellationToken);
 
             // если такой вещи корзины не существует
             if (basketItem is null)

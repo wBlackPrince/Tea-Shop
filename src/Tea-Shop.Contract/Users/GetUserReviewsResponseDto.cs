@@ -1,4 +1,4 @@
-﻿using Tea_Shop.Contract.Reviews;
+﻿using Tea_Shop.Contract.Social;
 
 namespace Tea_Shop.Contract.Users;
 

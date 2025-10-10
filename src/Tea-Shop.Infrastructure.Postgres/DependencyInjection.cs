@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Auth;
-using Tea_Shop.Application.Baskets;
-using Tea_Shop.Application.Comments;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Products;
-using Tea_Shop.Application.Reviews;
-using Tea_Shop.Application.Tags;
+using Tea_Shop.Application.Social;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Infrastructure.Postgres.Auth;
 using Tea_Shop.Infrastructure.Postgres.Database;
@@ -26,12 +23,9 @@ public static class DependencyInjection
 
         // services.AddScoped<IProductsRepository, ProductsSqlRepository>();
 
-        services.AddScoped<ITagsRepository, TagsRepository>();
         services.AddScoped<IOrdersRepository, OrdersRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
-        services.AddScoped<IReviewsRepository, ReviewsRepository>();
-        services.AddScoped<ICommentsRepository, CommentsRepository>();
-        services.AddScoped<IBasketsRepository, BasketsRepository>();
+        services.AddScoped<ISocialRepository, SocialRepository>();
         services.AddScoped<ITokensRepository, TokensRepository>();
         services.AddScoped<ISeeder, ProductsSeeders>();
 

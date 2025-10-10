@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Tags;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 

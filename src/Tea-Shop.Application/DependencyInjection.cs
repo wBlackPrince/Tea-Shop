@@ -2,16 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Auth;
-using Tea_Shop.Application.Baskets.Commands.AddBasketItemCommand;
-using Tea_Shop.Application.Baskets.Commands.RemoveBasketItemCommand;
-using Tea_Shop.Application.Comments.Commands.CreateCommentCommand;
-using Tea_Shop.Application.Comments.Commands.DeleteCommentCommand;
-using Tea_Shop.Application.Comments.Commands.UpdateCommentCommand;
-using Tea_Shop.Application.Comments.Queries.GetCommentByIdQuery;
-using Tea_Shop.Application.Comments.Queries.GetCommentChildCommentsQuery;
-using Tea_Shop.Application.Comments.Queries.GetDescendantsQuery;
-using Tea_Shop.Application.Comments.Queries.GetHierarchyQuery;
-using Tea_Shop.Application.Comments.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
@@ -19,7 +9,9 @@ using Tea_Shop.Application.Orders.Commands.UpdateOrderCommand;
 using Tea_Shop.Application.Orders.Queries.GetOrderByIdQuery;
 using Tea_Shop.Application.Orders.Queries.GetOrderItemsQuery;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
+using Tea_Shop.Application.Products.Commands.CreateTagCommand;
 using Tea_Shop.Application.Products.Commands.DeleteProductCommand;
+using Tea_Shop.Application.Products.Commands.DeleteTagCommand;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationDescription;
 using Tea_Shop.Application.Products.Commands.UpdatePreparationTime;
 using Tea_Shop.Application.Products.Commands.UpdateProductCommand;
@@ -31,30 +23,39 @@ using Tea_Shop.Application.Products.Queries.GetProductIngredientsQuery;
 using Tea_Shop.Application.Products.Queries.GetProductReviews;
 using Tea_Shop.Application.Products.Queries.GetProductsQuery;
 using Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
-using Tea_Shop.Application.Reviews.Commands.CreateReviewCommand;
-using Tea_Shop.Application.Reviews.Commands.DeleteReviewCommand;
-using Tea_Shop.Application.Reviews.Commands.UpdateReviewCommand;
-using Tea_Shop.Application.Reviews.Queries.GetReviewByIdQuery;
-using Tea_Shop.Application.Reviews.Queries.GetReviewCommentsQuery;
-using Tea_Shop.Application.Tags;
+using Tea_Shop.Application.Social.Commands.CreateCommentCommand;
+using Tea_Shop.Application.Social.Commands.CreateReviewCommand;
+using Tea_Shop.Application.Social.Commands.DeleteCommentCommand;
+using Tea_Shop.Application.Social.Commands.DeleteReviewCommand;
+using Tea_Shop.Application.Social.Commands.UpdateCommentCommand;
+using Tea_Shop.Application.Social.Commands.UpdateReviewCommand;
+using Tea_Shop.Application.Social.Queries.GetCommentByIdQuery;
+using Tea_Shop.Application.Social.Queries.GetCommentChildCommentsQuery;
+using Tea_Shop.Application.Social.Queries.GetDescendantsQuery;
+using Tea_Shop.Application.Social.Queries.GetHierarchyQuery;
+using Tea_Shop.Application.Social.Queries.GetNeighboursQuery;
+using Tea_Shop.Application.Social.Queries.GetReviewByIdQuery;
+using Tea_Shop.Application.Social.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Users;
+using Tea_Shop.Application.Users.Commands.AddBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserCommand;
 using Tea_Shop.Application.Users.Commands.LoginUserWithRefreshTokenCommand;
+using Tea_Shop.Application.Users.Commands.RemoveBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.RevokeRefreshTokensCommand;
 using Tea_Shop.Application.Users.Commands.UpdateUserCommand;
 using Tea_Shop.Application.Users.Commands.VerifyEmailCommand;
+using Tea_Shop.Application.Users.Queries.GetBasketByIdQuery;
+using Tea_Shop.Application.Users.Queries.GetBasketItemByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserByIdQuery;
 using Tea_Shop.Application.Users.Queries.GetUserCommentsQuery;
 using Tea_Shop.Application.Users.Queries.GetUserOrdersQuery;
 using Tea_Shop.Application.Users.Queries.GetUserReviewsQuery;
 using Tea_Shop.Application.Users.Queries.GetUsersQuery;
-using Tea_Shop.Contract.Baskets;
-using Tea_Shop.Contract.Comments;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Products;
-using Tea_Shop.Contract.Reviews;
+using Tea_Shop.Contract.Social;
 using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application;
@@ -65,12 +66,13 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
-        services.AddScoped<ITagsService, TagsService>();
-
         // handlers для продуктов
         services.AddScoped<
             ICommandHandler<CreateProductResponseDto, CreateProductCommand>,
             CreateProductHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid, CreateTagCommand>,
+            CreateTagHandler>();
         services.AddScoped<
             ICommandHandler<Guid, UploadProductsPhotosCommand>,
             UploadProductsPhotosHandler>();
@@ -80,6 +82,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<DeleteProductDto, DeleteProductQuery>,
             DeleteProductHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid, DeleteTagCommand>,
+            DeleteTagHandler>();
         services.AddScoped<UpdateProductHandler>();
         services.AddScoped<
             ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand>,
@@ -121,10 +126,6 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<DeleteOrderDto, DeleteOrderCommand>,
             DeleteOrderHandler>();
-
-        // handlers для корзин
-        services.AddScoped<ICommandHandler<AddBasketItemDto?, AddBasketItemCommand>, AddBasketItemHandler>();
-        services.AddScoped<ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand>, RemoveBasketItemHandler>();
 
         // handlers для комментов
         services.AddScoped<
@@ -196,6 +197,18 @@ public static class DependencyInjection
             LoginUserWithRefreshTokenHandler>();
         services.AddScoped<RevokeRefreshTokensHandler>();
         services.AddScoped<VerifyEmail>();
+        services.AddScoped<
+            ICommandHandler<AddBasketItemDto?, AddBasketItemCommand>,
+            AddBasketItemHandler>();
+        services.AddScoped<
+            ICommandHandler<RemoveBasketItemDto?, RemoveBasketItemCommand>,
+            RemoveBasketItemHandler>();
+        services.AddScoped<
+            IQueryHandler<BasketDto?, GetBasketByIdQuery>,
+            GetBasketByIdHandler>();
+        services.AddScoped<
+            IQueryHandler<BasketItemDto?, GetBasketItemByIdQuery>,
+            GetBasketItemByIdHandler>();
 
         services.AddScoped<EmailVerificationLinkFactory>();
 
