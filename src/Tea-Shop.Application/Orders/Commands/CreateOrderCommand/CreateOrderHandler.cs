@@ -157,8 +157,15 @@ public class CreateOrderHandler(
                     "You cannot order 15 or more items and pay after delivery");
             }
 
+            var updateStockResult = product.UpdateStockQuantity(product.StockQuantity - command.Request.Items[i].Quantity);
 
-            product.StockQuantity -= command.Request.Items[i].Quantity;
+            if (updateStockResult.IsFailure)
+            {
+                logger.LogError("UpdateStockQuantity failed");
+                transactionScope.Rollback();
+                return updateStockResult.Error;
+            }
+
             newBonuses += (int)(product.Price * 0.15f * command.Request.Items[i].Quantity);
             orderSum += product.Price;
 

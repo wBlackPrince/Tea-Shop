@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
@@ -18,7 +17,6 @@ using Tea_Shop.Application.Products.Queries.GetSimilarProductsQuery;
 using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Reviews;
-using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Products;
@@ -177,10 +175,11 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> Update(
         [FromServices] UpdateProductHandler handler,
         [FromRoute] Guid productId,
-        [FromBody] JsonPatchDocument<Product> productUpdates,
+        [FromBody] UpdateEntityRequestDto productUpdates,
         CancellationToken cancellationToken)
     {
-        var updateResult = await handler.Handle(productId, productUpdates, cancellationToken);
+        var command = new UpdateProductCommand(productId, productUpdates);
+        var updateResult = await handler.Handle(command, cancellationToken);
 
         if (updateResult.IsFailure)
         {

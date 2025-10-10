@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CSharpFunctionalExtensions;
-using Tea_Shop.Contract.Products;
+﻿using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Tags;
 using Tea_Shop.Shared;
 
@@ -49,12 +47,12 @@ public class Product: Entity
         IEnumerable<Guid> photosIds)
     {
         Id = id;
-        Title = title;
-        Description = description;
+        _title = title;
+        _description = description;
         Season = season;
-        Price = price;
-        Amount = amount;
-        StockQuantity = stockQuantity;
+        _price = price;
+        _amount = amount;
+        _stockQuantity = stockQuantity;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
 
@@ -87,22 +85,14 @@ public class Product: Entity
     public ProductId Id { get; set; }
 
     /// <summary>
-    /// Gets or sets заголовок продукта
+    /// Gets заголовок продукта
     /// </summary>
-    public string Title
-    {
-        get => _title;
-        set => UpdateTitle(value);
-    }
+    public string Title => _title;
 
     /// <summary>
-    /// Gets or sets описание продукта
+    /// Gets описание продукта
     /// </summary>
-    public string Description
-    {
-        get => _description;
-        set => UpdateDescription(value);
-    }
+    public string Description => _description;
 
     /// <summary>
     /// Gets or sets сезон данного продукта
@@ -110,31 +100,19 @@ public class Product: Entity
     public Season Season { get; set; }
 
     /// <summary>
-    /// Gets or sets цену продукта
+    /// Gets цену продукта
     /// </summary>
-    public float Price
-    {
-        get => _price;
-        set => UpdatePrice(value);
-    }
+    public float Price => _price;
 
     /// <summary>
-    /// Gets or sets количество продукта в граммах
+    /// Gets количество продукта в граммах
     /// </summary>
-    public float Amount
-    {
-        get => _amount;
-        set => UpdateAmount(value);
-    }
+    public float Amount => _amount;
 
     /// <summary>
-    /// Gets or sets количество продукта на складе
+    /// Gets количество продукта на складе
     /// </summary>
-    public int StockQuantity
-    {
-        get => _stockQuantity;
-        set => UpdateStockQuantity(value);
-    }
+    public int StockQuantity => _stockQuantity;
 
     /// <summary>
     /// Gets or sets сумма рейтингов обзоров у продукта
@@ -185,64 +163,88 @@ public class Product: Entity
 
 
 
-    public void UpdateTitle(string title)
+    public UnitResult<Error> UpdateTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
-            throw new ValidationException("Product title cannot be empty");
+            return Error.Validation(
+                "update.product",
+                "Product title cannot be empty");
         }
 
         if (!(title.Length >= Constants.Limit2) || !(title.Length <= Constants.Limit100))
         {
-            throw new ValidationException("Product title has to be between 2 and 100 characters.");
+            return Error.Validation(
+                "update.product",
+                "Product title has to be between 2 and 100 characters.");
         }
 
         _title = title;
+
+        return UnitResult.Success<Error>();
     }
 
-    public void UpdateDescription(string description)
+    public UnitResult<Error> UpdateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))
         {
-            throw new ValidationException("Product description cannot be empty");
+            return Error.Validation(
+                "update.product",
+                "Product description cannot be empty");
         }
 
         if (!(description.Length >= Constants.Limit2) || !(description.Length <= Constants.Limit2000))
         {
-            throw new ValidationException("Product description has to be between 2 and 2000 characters.");
+            return Error.Validation(
+                "update.product",
+                "Product description has to be between 2 and 2000 characters.");
         }
 
         _description = description;
+
+        return UnitResult.Success<Error>();
     }
 
-    public void UpdatePrice(float price)
+    public UnitResult<Error> UpdatePrice(float price)
     {
         if (price <= 0)
         {
-            throw new ValidationException("Price must be greater than 0");
+            return Error.Validation(
+                "update.product",
+                "Price must be greater than 0");
         }
 
         _price = price;
+
+        return UnitResult.Success<Error>();
     }
 
-    public void UpdateAmount(float amount)
+    public UnitResult<Error> UpdateAmount(float amount)
     {
         if (amount <= 0)
         {
-            throw new ValidationException("Amount must be greater than 0");
+            return Error.Validation(
+                "update.product",
+                "Amount must be greater than 0");
         }
 
         _amount = amount;
+
+        return UnitResult.Success<Error>();
     }
 
-    public void UpdateStockQuantity(int stockQuantity)
+    public UnitResult<Error> UpdateStockQuantity(int stockQuantity)
     {
         if (stockQuantity <= 0)
         {
-            throw new ValidationException("Stock quantity must be greater than 0");
+            return Error.Validation(
+                "update.product",
+                "Stock quantity must be greater than 0");
         }
 
         _stockQuantity = stockQuantity;
+
+        return UnitResult.Success<Error>();
     }
 
     public void UpdateIngredients(Ingrendient[] ingredients)

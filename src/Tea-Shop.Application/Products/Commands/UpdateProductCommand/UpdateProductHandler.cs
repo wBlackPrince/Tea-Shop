@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
 using Tea_Shop.Domain.Products;
@@ -12,11 +12,10 @@ namespace Tea_Shop.Application.Products.Commands.UpdateProductCommand;
 public class UpdateProductHandler(
     IProductsRepository productsRepository,
     ILogger<CreateProductHandler> logger,
-    ITransactionManager transactionManager)
+    ITransactionManager transactionManager): ICommandHandler<Guid, UpdateProductCommand>
 {
     public async Task<Result<Guid, Error>> Handle(
-        Guid productId,
-        JsonPatchDocument<Product> productUpdates,
+        UpdateProductCommand command,
         CancellationToken cancellationToken)
     {
         var transactionScopeResult = await transactionManager.BeginTransactionAsync(
@@ -33,7 +32,7 @@ public class UpdateProductHandler(
 
 
         Product? product = await productsRepository.GetProductById(
-            productId,
+            command.ProductId,
             cancellationToken);
 
         if (product is null)
@@ -42,15 +41,37 @@ public class UpdateProductHandler(
             return Error.NotFound("update product", "product not found");
         }
 
-        try
+        UnitResult<Error> result = new UnitResult<Error>();
+
+        switch (command.ProductUpdates.Property)
         {
-            productUpdates.ApplyTo(product);
+            case nameof(product.Title):
+                result = product.UpdateTitle(command.ProductUpdates.NewValue);
+                break;
+            case nameof(product.Amount):
+                result = product.UpdateAmount(float.Parse(command.ProductUpdates.NewValue));
+                break;
+            case nameof(product.Description):
+                result = product.UpdateDescription(command.ProductUpdates.NewValue);
+                break;
+            case nameof(product.Price):
+                result = product.UpdatePrice(float.Parse(command.ProductUpdates.NewValue));
+                break;
+            case nameof(product.StockQuantity):
+                result = product.UpdateStockQuantity(int.Parse(command.ProductUpdates.NewValue));
+                break;
+            case nameof(product.Season):
+                product.Season = (Season)Enum.Parse(typeof(Season), command.ProductUpdates.NewValue);
+                break;
+            default:
+                return Error.NotFound("update.product", "invalid property to update");
         }
-        catch (Exception e)
+
+        if (result.IsFailure)
         {
-            logger.LogError(e, e.Message);
+            logger.LogError("fail to update product");
             transactionScope.Rollback();
-            return Error.Validation("update.product", e.Message);
+            return result.Error;
         }
 
         product.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
@@ -70,7 +91,7 @@ public class UpdateProductHandler(
 
 
 
-        logger.LogInformation("Update product {productId}", productId);
+        logger.LogInformation("Update product {productId}", command.ProductId);
 
         return product.Id.Value;
     }
