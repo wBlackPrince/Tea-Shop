@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20251009183120_Initial")]
+    [Migration("20251013192800_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,116 +25,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "ltree");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_baskets");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("baskets", (string)null);
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Baskets.BasketItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("BasketId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("basket_id");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("product_id");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("Id")
-                        .HasName("pk_baskets_items");
-
-                    b.HasIndex("BasketId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("baskets_items", (string)null);
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int>("Depth")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Identifier")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("parent_id");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("ltree")
-                        .HasColumnName("path");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer")
-                        .HasColumnName("rating");
-
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("review_id");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_comments");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("Path")
-                        .HasDatabaseName("idx_departments_path");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Path"), "gist");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("comments", (string)null);
-                });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
@@ -294,7 +184,96 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.ToTable("products_tags", (string)null);
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Products.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_tags");
+
+                    b.ToTable("tags", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Social.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("integer")
+                        .HasColumnName("depth");
+
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("identifier");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("parent_id");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("ltree")
+                        .HasColumnName("path");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("review_id");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_comments");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("Path")
+                        .HasDatabaseName("idx_departments_path");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Path"), "gist");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("comments", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Social.Review", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -379,10 +358,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("description");
 
                     b.Property<Guid>("KitId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("kit_id");
 
-                    b.Property<int>("Sum")
-                        .HasColumnType("integer")
+                    b.Property<float>("Sum")
+                        .HasColumnType("real")
                         .HasColumnName("sum");
 
                     b.HasKey("Id")
@@ -429,11 +409,13 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnName("id");
 
                     b.Property<Guid>("KitId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("kit_id");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("state");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -447,30 +429,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("subscriptions", (string)null);
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Tags.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("character varying(400)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_tags");
-
-                    b.ToTable("tags", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Tokens.EmailVerificationToken", b =>
@@ -507,15 +465,18 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ExpireOnUtc")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expire_on_utc");
 
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("token");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("refresh_tokens_pk");
@@ -526,6 +487,53 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("refresh_tokens", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Users.Basket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_baskets");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("baskets", (string)null);
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Users.BasketItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("basket_id");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.HasKey("Id")
+                        .HasName("pk_baskets_items");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("baskets_items", (string)null);
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Users.Role", b =>
@@ -566,6 +574,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("address");
 
                     b.Property<Guid?>("AvatarId")
                         .HasColumnType("uuid")
@@ -619,7 +632,8 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("role");
 
                     b.HasKey("Id")
                         .HasName("pk_users");
@@ -642,46 +656,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("user_roles", (string)null);
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Users.User", null)
-                        .WithOne()
-                        .HasForeignKey("Tea_Shop.Domain.Baskets.Basket", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Baskets.BasketItem", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Baskets.Basket", null)
-                        .WithMany("Items")
-                        .HasForeignKey("BasketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Tea_Shop.Domain.Comments.Comment", b =>
-                {
-                    b.HasOne("Tea_Shop.Domain.Comments.Comment", "ParentComment")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Tea_Shop.Domain.Users.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentComment");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
@@ -779,7 +753,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
 
             modelBuilder.Entity("Tea_Shop.Domain.Products.ProductsTags", b =>
                 {
-                    b.HasOne("Tea_Shop.Domain.Tags.Tag", null)
+                    b.HasOne("Tea_Shop.Domain.Products.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -794,7 +768,23 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Reviews.Review", b =>
+            modelBuilder.Entity("Tea_Shop.Domain.Social.Comment", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Social.Comment", "ParentComment")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentComment");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Social.Review", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Products.Product", null)
                         .WithMany()
@@ -872,6 +862,30 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Tea_Shop.Domain.Users.Basket", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("Tea_Shop.Domain.Users.Basket", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Users.BasketItem", b =>
+                {
+                    b.HasOne("Tea_Shop.Domain.Users.Basket", null)
+                        .WithMany("Items")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tea_Shop.Domain.Products.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Tea_Shop.Domain.Users.UserRole", b =>
                 {
                     b.HasOne("Tea_Shop.Domain.Users.Role", "Role")
@@ -891,11 +905,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Tea_Shop.Domain.Baskets.Basket", b =>
-                {
-                    b.Navigation("Items");
-                });
-
             modelBuilder.Entity("Tea_Shop.Domain.Orders.Order", b =>
                 {
                     b.Navigation("OrderItems");
@@ -912,6 +921,11 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired();
 
                     b.Navigation("KitItems");
+                });
+
+            modelBuilder.Entity("Tea_Shop.Domain.Users.Basket", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

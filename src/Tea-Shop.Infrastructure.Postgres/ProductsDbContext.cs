@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Domain;
-using Tea_Shop.Domain.Comments;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Subscriptions;
 using Tea_Shop.Domain.Tokens;
 using Tea_Shop.Domain.Users;

@@ -1,6 +1,12 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
+using OpenTelemetry;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Infrastructure.Postgres;
 using Tea_Shop.Infrastructure.Postgres.Seeders;
@@ -42,6 +48,29 @@ builder.Services.AddScoped<IReadDbContext, ProductsDbContext>(_ => new ProductsD
 
 builder.Services.Configure<MinioOptions>(builder.Configuration.GetSection("Minio"));
 builder.Services.AddMinioDependencies(builder.Configuration);
+
+// openTelemetry
+
+var endpoint = builder.Configuration["OpenTelemetry:Endpoint"] ?? "http://localhost:18889";
+
+builder.Logging.AddOpenTelemetry(logging =>
+{
+    logging.IncludeScopes = true;
+    logging.IncludeFormattedMessage = true;
+});
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
+    .WithMetrics(metrics =>
+        metrics
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddNpgsqlInstrumentation()
+            .AddConsoleExporter())
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddConsoleExporter())
+    .UseOtlpExporter();
 
 // Раннее выявление ошибок внедрения зависимостей (для прода)
 builder.Host.UseDefaultServiceProvider(

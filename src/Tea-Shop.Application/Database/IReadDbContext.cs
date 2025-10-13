@@ -1,7 +1,6 @@
-﻿using Tea_Shop.Domain.Comments;
-using Tea_Shop.Domain.Orders;
+﻿using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Application.Database;

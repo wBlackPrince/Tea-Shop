@@ -86,6 +86,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     basket_id = table.Column<Guid>(type: "uuid", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
+                    address = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     middle_name = table.Column<string>(type: "text", nullable: false),
@@ -94,7 +95,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     bonus_points = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     avatar_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    Role = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -108,15 +109,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
-                    sum = table.Column<int>(type: "integer", nullable: false),
-                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                    sum = table.Column<float>(type: "real", nullable: false),
+                    kit_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("kit_details_pk", x => x.id);
                     table.ForeignKey(
-                        name: "FK_kits_details_kits_KitId",
-                        column: x => x.KitId,
+                        name: "FK_kits_details_kits_kit_id",
+                        column: x => x.kit_id,
                         principalTable: "kits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -198,12 +199,12 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     text = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    Identifier = table.Column<string>(type: "text", nullable: false),
+                    identifier = table.Column<string>(type: "text", nullable: false),
                     rating = table.Column<int>(type: "integer", nullable: false),
                     review_id = table.Column<Guid>(type: "uuid", nullable: false),
                     parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     path = table.Column<string>(type: "ltree", nullable: false),
-                    Depth = table.Column<int>(type: "integer", nullable: false),
+                    depth = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -273,16 +274,16 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Token = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExpireOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    token = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    expire_on_utc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("refresh_tokens_pk", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_refresh_tokens_users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_refresh_tokens_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -325,15 +326,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    State = table.Column<string>(type: "text", nullable: false),
-                    KitId = table.Column<Guid>(type: "uuid", nullable: false)
+                    kit_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    state = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("ipk_subscriptions", x => x.id);
                     table.ForeignKey(
-                        name: "FK_subscriptions_kits_KitId",
-                        column: x => x.KitId,
+                        name: "FK_subscriptions_kits_kit_id",
+                        column: x => x.kit_id,
                         principalTable: "kits",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -478,9 +479,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "product_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_kits_details_KitId",
+                name: "IX_kits_details_kit_id",
                 table: "kits_details",
-                column: "KitId",
+                column: "kit_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -509,15 +510,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "tag_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_refresh_tokens_Token",
+                name: "IX_refresh_tokens_token",
                 table: "refresh_tokens",
-                column: "Token",
+                column: "token",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_refresh_tokens_UserId",
+                name: "IX_refresh_tokens_user_id",
                 table: "refresh_tokens",
-                column: "UserId");
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_product_id",
@@ -530,9 +531,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_subscriptions_KitId",
+                name: "IX_subscriptions_kit_id",
                 table: "subscriptions",
-                column: "KitId");
+                column: "kit_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_subscriptions_user_id",

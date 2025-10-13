@@ -13,8 +13,7 @@ using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Orders;
 
-[Authorize(Roles = Role.AdminRoleName)]
-[Authorize(Roles = Role.UserRoleName)]
+[Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
 [ApiController]
 [Route("[controller]")]
 public class OrdersController: ControllerBase

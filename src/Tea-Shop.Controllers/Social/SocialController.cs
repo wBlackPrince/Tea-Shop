@@ -16,14 +16,12 @@ using Tea_Shop.Application.Social.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Contract.Social;
-using Tea_Shop.Domain.Comments;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Social;
 
-[Authorize(Roles = Role.AdminRoleName)]
-[Authorize(Roles = Role.UserRoleName)]
+[Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
 [ApiController]
 [Route("[controller]")]
 public class SocialController: ControllerBase
@@ -95,7 +93,6 @@ public class SocialController: ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateCommentResponseDto>> CreateComment(
         [FromBody] CreateCommentRequestDto request,
@@ -114,7 +111,7 @@ public class SocialController: ControllerBase
         return Ok(result.Value);
     }
 
-    [Authorize]
+
     [HttpPatch("{commentId:guid}")]
     public async Task<IActionResult> UpdateComment(
         [FromRoute] Guid commentId,
@@ -132,7 +129,7 @@ public class SocialController: ControllerBase
         return Ok();
     }
 
-    [Authorize]
+
     [HttpDelete("{commentId:guid}")]
     public async Task<ActionResult<CommentWithOnlyIdDto>> DeleteComment(
         [FromRoute] Guid commentId,
@@ -177,7 +174,7 @@ public class SocialController: ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+
     [HttpPost("reviews")]
     public async Task<IActionResult> CreateReview(
         [FromBody] CreateReviewRequestDto request,
@@ -190,7 +187,7 @@ public class SocialController: ControllerBase
         return Ok();
     }
 
-    [Authorize]
+
     [HttpPatch("reviews/{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(
         [FromRoute] Guid reviewId,
@@ -208,7 +205,7 @@ public class SocialController: ControllerBase
         return Ok($"Updated review by id {result.Value}");
     }
 
-    [Authorize]
+
     [HttpDelete("reviews/{reviewId:guid}")]
     public async Task<IActionResult> DeleteReview(
         [FromRoute] Guid reviewId,

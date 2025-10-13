@@ -5,6 +5,7 @@ public record CreateUserRequestDto(
     string FirstName,
     string LastName,
     string Email,
+    string Address,
     string PhoneNumber,
     string Role,
     string MiddleName,

@@ -27,8 +27,7 @@ namespace Tea_Shop.Products;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult<GetProductDto?>> GetProductById(
         [FromServices] IQueryHandler<GetProductDto, GetProductByIdQuery> handler,
@@ -42,8 +41,7 @@ public class ProductsController : ControllerBase
         return Ok(getResult);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet]
     public async Task<ActionResult<GetProductDto[]>> GetProducts(
         [FromServices] IQueryHandler<GetProductsResponseDto, GetProductsQuery> handler,
@@ -57,8 +55,7 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("{productId:guid}/ingridients")]
     public async Task<ActionResult<GetIngrendientsResponseDto[]>> GetProductsIngredients(
         [FromServices] IQueryHandler<GetIngrendientsResponseDto[], GetProductsIngredientsQuery> handler,
@@ -72,8 +69,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("{productId:guid}/reviews")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetProductReviews(
         [FromServices] IQueryHandler<GetReviewResponseDto[], GetProductReviewsQuery> handler,
@@ -87,8 +83,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("popular")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetPopularProducts(
         [FromServices] IQueryHandler<
@@ -113,8 +108,7 @@ public class ProductsController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("{productId:guid}/similar")]
     public async Task<ActionResult<GetReviewResponseDto[]>> GetSimilarProducts(
         [FromRoute] Guid productId,

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Social;
-using Tea_Shop.Domain.Comments;
+using Tea_Shop.Domain.Social;
 
 namespace Tea_Shop.Application.Social.Queries.GetCommentByIdQuery;
 

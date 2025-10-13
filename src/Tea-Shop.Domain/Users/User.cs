@@ -12,6 +12,7 @@ public class User: Entity
     private string _password;
     private string _firstName;
     private string _lastName;
+    string _address;
     private string _email;
     private int _bonusPoints;
     private string _middleName;
@@ -25,6 +26,7 @@ public class User: Entity
     /// <param name="firstName"> Имя.</param>
     /// <param name="lastName">Фамилия.</param>
     /// <param name="email">Электронная почта.</param>
+    /// /// <param name="address">Адрес.</param>
     /// <param name="phoneNumber">Номер телефона.</param>
     /// <param name="role">Роль в системе.</param>
     /// <param name="basketId"> Идентификатор коризны.</param>
@@ -36,6 +38,7 @@ public class User: Entity
         string firstName,
         string lastName,
         string email,
+        string address,
         string phoneNumber,
         string role,
         BasketId basketId,
@@ -47,6 +50,7 @@ public class User: Entity
         FirstName = firstName;
         LastName = lastName;
         Email = email;
+        Address = address;
         EmailVerified = false;
         _bonusPoints = 0;
         PhoneNumber = phoneNumber;
@@ -79,6 +83,15 @@ public class User: Entity
     {
         get => _password;
         set => UpdatePassword(value);
+    }
+
+    /// <summary>
+    /// Gets or sets Адрес пользователя
+    /// </summary>
+    public string Address
+    {
+        get => _address;
+        set => _address = value;
     }
 
     /// <summary>

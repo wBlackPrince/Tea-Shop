@@ -84,6 +84,7 @@ public class CreateUserHandler(
             command.Request.FirstName,
             command.Request.LastName,
             command.Request.Email,
+            command.Request.Address,
             command.Request.PhoneNumber,
             command.Request.Role,
             basketId,

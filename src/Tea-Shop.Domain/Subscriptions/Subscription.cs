@@ -16,6 +16,7 @@ public class Subscription
     {
         Id = id;
         UserId = userId;
+        KitId = kit.Id;
         State = new ActiveState(SubscriptionStatus.MONTHLY, durationInMonths);
         Kit = kit;
     }
@@ -34,6 +35,11 @@ public class Subscription
     /// Gets or sets идентификатор пользователя.
     /// </summary>
     public UserId UserId { get; set; }
+
+    /// <summary>
+    /// Gets or sets идентификатор набора.
+    /// </summary>
+    public KitId KitId { get; set; }
 
     /// <summary>
     /// Gets or sets состояние подписки.

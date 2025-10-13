@@ -28,6 +28,7 @@ public class CreateUserCommandTests
             "Edaurd",
             "Nikitin",
             "myemail@example.com",
+            "Cheboksary",
             "73947484994",
             "USER",
             "Anatolyevich",

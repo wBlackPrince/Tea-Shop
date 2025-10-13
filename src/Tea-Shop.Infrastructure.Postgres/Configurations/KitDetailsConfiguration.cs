@@ -26,5 +26,10 @@ public sealed class KitDetailsConfiguration : IEntityTypeConfiguration<KitDetail
         builder
             .Property(kd => kd.Sum)
             .HasColumnName("sum");
+
+        builder
+            .Property(kd => kd.KitId)
+            .HasConversion(kd => kd.Value, id => new KitId(id))
+            .HasColumnName("kit_id");
     }
 }

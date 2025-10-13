@@ -23,12 +23,18 @@ public sealed class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscri
         builder.Property(s => s.State)
             .HasConversion(
                 s => SubscriptionState.ConverToString(s),
-                str => SubscriptionState.ConverToState(str));
+                str => SubscriptionState.ConverToState(str))
+            .HasColumnName("state");
 
         builder
             .Property(s => s.UserId)
             .HasConversion(u => u.Value, id => new UserId(id))
             .HasColumnName("user_id");
+
+        builder
+            .Property(s => s.KitId)
+            .HasConversion(u => u.Value, id => new KitId(id))
+            .HasColumnName("kit_id");
 
         builder
             .HasOne<User>()

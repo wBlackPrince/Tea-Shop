@@ -7,7 +7,7 @@ using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Social;
 using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 

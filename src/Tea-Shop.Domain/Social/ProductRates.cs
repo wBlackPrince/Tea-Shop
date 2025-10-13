@@ -1,4 +1,4 @@
-﻿namespace Tea_Shop.Domain.Reviews;
+﻿namespace Tea_Shop.Domain.Social;
 
 public enum ProductRates
 {

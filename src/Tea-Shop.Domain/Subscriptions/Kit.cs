@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Tea_Shop.Domain.Products;
-
-namespace Tea_Shop.Domain.Subscriptions;
+﻿namespace Tea_Shop.Domain.Subscriptions;
 
 /// <summary>
 /// Domain-модель чайного набора
@@ -19,7 +16,7 @@ public class Kit
     public Kit(
         KitId id,
         string name,
-        int sum,
+        float sum,
         string description,
         IEnumerable<KitItem> products)
     {

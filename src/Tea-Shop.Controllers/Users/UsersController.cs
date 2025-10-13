@@ -30,8 +30,7 @@ namespace Tea_Shop.Users;
 [Route("[controller]")]
 public class UsersController: ControllerBase
 {
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<GetUserResponseDto>> GetUserById(
         [FromRoute] Guid userId,
@@ -61,8 +60,7 @@ public class UsersController: ControllerBase
         return Ok(users);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("orders")]
     public async Task<ActionResult<GetUserOrdersResponseDto?>> GetUserOrders(
         [FromQuery] GetUserOrdersRequestDto request,
@@ -76,8 +74,7 @@ public class UsersController: ControllerBase
         return Ok(userOrders);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("comments")]
     public async Task<ActionResult<GetUserCommentsResponseDto?>> GetUserComments(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -91,8 +88,7 @@ public class UsersController: ControllerBase
         return Ok(userComments);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("reviews")]
     public async Task<ActionResult<GetUserReviewsResponseDto?>> GetUserReviews(
         [FromQuery] GetUserWithPaginationRequestDto request,
@@ -130,6 +126,7 @@ public class UsersController: ControllerBase
                 request.FirstName,
                 request.LastName,
                 request.Email,
+                request.Address,
                 request.PhoneNumber,
                 request.Role,
                 request.MiddleName,
@@ -215,8 +212,7 @@ public class UsersController: ControllerBase
 
 
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpPatch("{userId:guid}")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
@@ -234,8 +230,7 @@ public class UsersController: ControllerBase
         return Ok(updateResult.Value);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult<UserWithOnlyIdDto>> DeleteUser(
         [FromRoute] Guid userId,
@@ -257,8 +252,7 @@ public class UsersController: ControllerBase
 
 
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("baskets/{basketId:guid}")]
     public async Task<ActionResult<BasketDto?>> GetBasketById(
         [FromRoute] Guid basketId,
@@ -274,8 +268,7 @@ public class UsersController: ControllerBase
         return Ok(basket);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpGet("basket-items/{basketItemId:guid}")]
     public async Task<ActionResult<BasketDto?>> GetBasketItemById(
         [FromRoute] Guid basketId,
@@ -291,8 +284,7 @@ public class UsersController: ControllerBase
         return Ok(basket);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpPost("basket-items")]
     public async Task<ActionResult<CreateOrderResponseDto>> AddBasketItem(
         [FromBody] AddBasketItemDto request,
@@ -311,9 +303,7 @@ public class UsersController: ControllerBase
         return Ok(result.Value);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [Authorize(Roles = Role.UserRoleName)]
-    [Authorize]
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
     [HttpDelete("basket-items")]
     public async Task<ActionResult<CreateOrderResponseDto>> RemoveBasketItem(
         [FromBody] RemoveBasketItemDto request,

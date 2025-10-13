@@ -1,0 +1,6 @@
+﻿using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Orders;
+
+namespace Tea_Shop.Application.Subscriptions.Commands.CreateOrderBasedOnSubscriptionCommand;
+
+public record CreateOrderBasedOnSubscriptionCommand(CreateOrderBasedOnSubscriptionRequestDto Request): ICommand;

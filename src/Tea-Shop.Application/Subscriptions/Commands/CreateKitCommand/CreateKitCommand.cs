@@ -1,3 +1,6 @@
-﻿namespace Tea_Shop.Application.Subscriptions.Commands.CreateKitCommand;
+﻿using Tea_Shop.Application.Abstractions;
+using Tea_Shop.Contract.Subscriptions;
 
-public record CreateKitCommand();
+namespace Tea_Shop.Application.Subscriptions.Commands.CreateKitCommand;
+
+public record CreateKitCommand(CreateKitRequestDto Request): ICommand;

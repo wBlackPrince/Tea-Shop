@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tea_Shop.Domain.Comments;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
-using Path = Tea_Shop.Domain.Comments.Path;
+using Path = Tea_Shop.Domain.Social.Path;
 
 namespace Tea_Shop.Infrastructure.Postgres.Configurations;
 
@@ -60,7 +59,8 @@ public sealed class CommentConfiguration: IEntityTypeConfiguration<Comment>
         builder
             .Property(c => c.Identifier)
             .IsRequired()
-            .HasConversion(ident => ident.Value, id => new Identifier(id));
+            .HasConversion(ident => ident.Value, id => new Identifier(id))
+            .HasColumnName("identifier");
 
         builder
             .Property(c => c.Path)
@@ -72,6 +72,10 @@ public sealed class CommentConfiguration: IEntityTypeConfiguration<Comment>
             .HasIndex(c => c.Path)
             .HasMethod("gist")
             .HasDatabaseName("idx_departments_path");
+
+        builder
+            .Property(c => c.Depth)
+            .HasColumnName("depth");
 
         builder
             .HasMany<Comment>()

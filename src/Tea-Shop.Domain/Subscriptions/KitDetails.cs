@@ -14,7 +14,7 @@ public class KitDetails
     public KitDetails(
         KitDetailsId id,
         string description,
-        int sum)
+        float sum)
     {
         Id = id;
         Description = description;
@@ -39,5 +39,10 @@ public class KitDetails
     /// <summary>
     /// Gets or sets стоимость всех товаров в подписке
     /// </summary>
-    public int Sum { get; set; }
+    public float Sum { get; set; }
+
+    /// <summary>
+    /// Gets or sets идентификатор набора
+    /// </summary>
+    public KitId KitId { get; set; }
 }

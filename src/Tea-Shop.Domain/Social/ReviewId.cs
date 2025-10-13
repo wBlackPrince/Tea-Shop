@@ -1,3 +1,3 @@
-﻿namespace Tea_Shop.Domain.Reviews;
+﻿namespace Tea_Shop.Domain.Social;
 
 public record ReviewId(Guid Value): EntityId;

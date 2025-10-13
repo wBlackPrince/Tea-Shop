@@ -3,7 +3,7 @@ using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
-namespace Tea_Shop.Domain.Reviews;
+namespace Tea_Shop.Domain.Social;
 
 /// <summary>
 /// Domain-модель обзора

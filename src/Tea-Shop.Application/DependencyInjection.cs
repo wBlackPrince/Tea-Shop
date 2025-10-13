@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Tea_Shop.Application.Abstractions;
-using Tea_Shop.Application.Auth;
 using Tea_Shop.Application.EmailVerification;
 using Tea_Shop.Application.Orders.Commands.CreateOrderCommand;
 using Tea_Shop.Application.Orders.Commands.DeleteOrderCommand;
@@ -36,7 +35,8 @@ using Tea_Shop.Application.Social.Queries.GetHierarchyQuery;
 using Tea_Shop.Application.Social.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewCommentsQuery;
-using Tea_Shop.Application.Users;
+using Tea_Shop.Application.Subscriptions.Commands.CreateKitCommand;
+using Tea_Shop.Application.Subscriptions.Queries.GetKitByIdQuery;
 using Tea_Shop.Application.Users.Commands.AddBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
 using Tea_Shop.Application.Users.Commands.DeleteUserCommand;
@@ -56,6 +56,7 @@ using Tea_Shop.Application.Users.Queries.GetUsersQuery;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Contract.Social;
+using Tea_Shop.Contract.Subscriptions;
 using Tea_Shop.Contract.Users;
 
 namespace Tea_Shop.Application;
@@ -126,6 +127,14 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<DeleteOrderDto, DeleteOrderCommand>,
             DeleteOrderHandler>();
+
+        // handlers для наборов
+        services.AddScoped<
+            IQueryHandler<KitDto?, GetKitByIdQuery>,
+            GetKitByIdHandler>();
+        services.AddScoped<
+            ICommandHandler<KitDto, CreateKitCommand>,
+            CreateKitHandler>();
 
         // handlers для комментов
         services.AddScoped<

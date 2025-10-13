@@ -4,6 +4,7 @@ using Tea_Shop.Application.Database;
 using Tea_Shop.Application.Orders;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Social;
+using Tea_Shop.Application.Subscriptions;
 using Tea_Shop.Application.Users;
 using Tea_Shop.Infrastructure.Postgres.Auth;
 using Tea_Shop.Infrastructure.Postgres.Database;
@@ -19,12 +20,9 @@ public static class DependencyInjection
         services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
         services.AddScoped<IProductsRepository, ProductsRepository>();
 
-        // выбираем для DI либо ef core либо postgres
-
-        // services.AddScoped<IProductsRepository, ProductsSqlRepository>();
-
         services.AddScoped<IOrdersRepository, OrdersRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<ISubscriptionsRepository, SubscriptionsRepository>();
         services.AddScoped<ISocialRepository, SocialRepository>();
         services.AddScoped<ITokensRepository, TokensRepository>();
         services.AddScoped<ISeeder, ProductsSeeders>();

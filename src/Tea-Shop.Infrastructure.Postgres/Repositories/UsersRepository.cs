@@ -7,20 +7,13 @@ using Tea_Shop.Shared;
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository(ProductsDbContext dbContext): IUsersRepository
 {
-    private readonly ProductsDbContext _dbContext;
-
-    public UsersRepository(ProductsDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-
     public async Task<User?> GetUserById(
         UserId userId,
         CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users
+        User? user = await dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
         return user;
@@ -30,7 +23,7 @@ public class UsersRepository : IUsersRepository
         string email,
         CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users
+        User? user = await dbContext.Users
             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user;
@@ -40,7 +33,7 @@ public class UsersRepository : IUsersRepository
         string email,
         CancellationToken cancellationToken)
     {
-        User? user = await _dbContext.Users.FirstOrDefaultAsync(
+        User? user = await dbContext.Users.FirstOrDefaultAsync(
             u => u.Email == email,
             cancellationToken);
 
@@ -50,19 +43,19 @@ public class UsersRepository : IUsersRepository
 
     public async Task AddUserRole(UserRole userRole, CancellationToken cancellationToken)
     {
-        await _dbContext.UserRoles.AddAsync(userRole, cancellationToken);
+        await dbContext.UserRoles.AddAsync(userRole, cancellationToken);
     }
 
     public async Task<Guid> CreateUser(User user, CancellationToken cancellationToken)
     {
-        await _dbContext.Users.AddAsync(user, cancellationToken);
+        await dbContext.Users.AddAsync(user, cancellationToken);
 
         return user.Id.Value;
     }
 
     public async Task<Result<Guid, Error>> DeleteUser(UserId userId, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(
+        var user = await dbContext.Users.FirstOrDefaultAsync(
             u => u.Id == userId,
             cancellationToken);
 
@@ -71,7 +64,7 @@ public class UsersRepository : IUsersRepository
             return Error.Failure("DeleteUser", "User not found");
         }
 
-        await _dbContext.Users
+        await dbContext.Users
             .Where(u => u.Id == userId)
             .ExecuteDeleteAsync(cancellationToken);
 
@@ -80,17 +73,17 @@ public class UsersRepository : IUsersRepository
 
     public async Task<Basket?> GetBasketById(BasketId basketId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Baskets.FirstOrDefaultAsync(b => b.Id == basketId, cancellationToken);
+        return await dbContext.Baskets.FirstOrDefaultAsync(b => b.Id == basketId, cancellationToken);
     }
 
     public async Task<BasketItem?> GetBasketItemById(BasketItemId basketItemId, CancellationToken cancellationToken)
     {
-        return await _dbContext.BasketsItems.FirstOrDefaultAsync(b => b.Id == basketItemId, cancellationToken);
+        return await dbContext.BasketsItems.FirstOrDefaultAsync(b => b.Id == basketItemId, cancellationToken);
     }
 
     public async Task<Guid> CreateBasket(Basket basket, CancellationToken cancellationToken)
     {
-        await _dbContext.Baskets.AddAsync(basket, cancellationToken);
+        await dbContext.Baskets.AddAsync(basket, cancellationToken);
 
         return basket.Id.Value;
     }

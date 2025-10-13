@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tea_Shop.Application.Social;
-using Tea_Shop.Domain.Comments;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 
 namespace Tea_Shop.Infrastructure.Postgres.Repositories;
 

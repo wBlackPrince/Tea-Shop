@@ -181,3 +181,17 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Microsoft.Identi
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\FluentEmail.Core.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\FluentEmail.Smtp.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Npgsql.OpenTelemetry.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Api.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Api.ProviderBuilderExtensions.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Exporter.Console.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Exporter.OpenTelemetryProtocol.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Extensions.Hosting.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Instrumentation.AspNetCore.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Instrumentation.EntityFrameworkCore.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\OpenTelemetry.Instrumentation.Http.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.APM.Abstractions.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.OpenTelemetry.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.OpenTelemetry.Hosting.dll

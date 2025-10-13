@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Tea_Shop.Domain.Reviews;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
-namespace Tea_Shop.Domain.Comments;
+namespace Tea_Shop.Domain.Social;
 
 /// <summary>
 /// Domain-модель комментария

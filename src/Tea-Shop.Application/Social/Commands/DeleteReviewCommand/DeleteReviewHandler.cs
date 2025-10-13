@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Contract.Social;
-using Tea_Shop.Domain.Reviews;
+using Tea_Shop.Domain.Social;
 using Tea_Shop.Shared;
 
 namespace Tea_Shop.Application.Social.Commands.DeleteReviewCommand;
