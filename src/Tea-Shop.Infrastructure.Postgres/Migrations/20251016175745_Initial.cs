@@ -253,6 +253,7 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     delivery_address = table.Column<string>(type: "text", nullable: false),
                     payment_way = table.Column<string>(type: "text", nullable: false),
+                    DeliveryWay = table.Column<int>(type: "integer", nullable: false),
                     expected_delivery_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     order_status = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

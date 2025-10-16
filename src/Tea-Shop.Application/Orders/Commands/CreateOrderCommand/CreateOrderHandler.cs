@@ -154,15 +154,6 @@ public class CreateOrderHandler(
                     "You cannot order 15 or more items and pay after delivery");
             }
 
-            var updateStockResult = product.UpdateStockQuantity(product.StockQuantity - command.Request.Items[i].Quantity);
-
-            if (updateStockResult.IsFailure)
-            {
-                logger.LogError("UpdateStockQuantity failed");
-                transactionScope.Rollback();
-                return updateStockResult.Error;
-            }
-
             newBonuses += (int)(product.Price * 0.15f * command.Request.Items[i].Quantity);
             orderSum += product.Price;
 
@@ -198,12 +189,23 @@ public class CreateOrderHandler(
                 "Too many order items");
         }
 
+        PaymentWay paymentWay = (PaymentWay)Enum.Parse(typeof(PaymentWay), command.Request.PaymentMethod);
+        DeliveryWay deliveryWay = (DeliveryWay)Enum.Parse(typeof(DeliveryWay), command.Request.DeliveryWay);
+
+        DateTime createAt = DateTime.UtcNow;
+        DateTime updatedAt = DateTime.UtcNow;
+        DateTime expectedDeliveryDate = CalculExpectedDeliveryTime.Calcul(
+            createAt,
+            command.Request.DeliveryAddress,
+            deliveryWay);
+
         var order = new Order(
             new OrderId(Guid.NewGuid()),
             new UserId(command.Request.UserId),
             command.Request.DeliveryAddress,
-            (PaymentWay)Enum.Parse(typeof(PaymentWay), command.Request.PaymentMethod),
-            command.Request.ExpectedTimeDelivery,
+            paymentWay,
+            deliveryWay,
+            expectedDeliveryDate,
             orderItems,
             DateTime.UtcNow,
             DateTime.UtcNow);
@@ -249,7 +251,10 @@ public class CreateOrderHandler(
             OrderSum = orderSum,
             Items = order.OrderItems
                 .Select(o =>
-                    new OrderItemResponseDto(o.ProductId.Value, o.Quantity))
+                    new OrderItemResponseDto{
+                        ProductId = o.ProductId.Value,
+                        Quantity = o.Quantity,
+                    })
                 .ToArray(),
         };
 

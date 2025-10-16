@@ -38,6 +38,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("text")
                         .HasColumnName("delivery_address");
 
+                    b.Property<int>("DeliveryWay")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("ExpectedDeliveryTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expected_delivery_time");

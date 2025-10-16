@@ -764,6 +764,8 @@ public class ProductsSeeders: ISeeder
         _logger.LogInformation("Seeding orders in batching...");
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
+        DeliveryWay[] deliveryWays = { DeliveryWay.Courier, DeliveryWay.Pickup };
+
         var usersIds = _dbContext.UsersRead.Select(u => u.Id.Value).ToArray();
         var productIds = _dbContext.ProductsRead.Select(u => u.Id.Value).ToArray();
 
@@ -772,6 +774,7 @@ public class ProductsSeeders: ISeeder
         Guid userId;
         Guid productId;
         string deliveryAddress;
+        DeliveryWay deliveryWay;
         PaymentWay paymentWay;
         OrderStatus orderStatus;
         DateTime createdAt;
@@ -791,6 +794,7 @@ public class ProductsSeeders: ISeeder
             userId = usersIds[_random.Next(0, usersIds.Length)];
             deliveryAddress = deliveryAddresses[_random.Next(0, deliveryAddresses.Length)];
             paymentWay = PaymentWays[_random.Next(0, PaymentWays.Length)];
+            deliveryWay = deliveryWays[_random.Next(0, deliveryWays.Length)];
             createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
             updatedAt = createdAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
             expectedTimeDelivery = updatedAt.AddDays(_random.Next(0, 25)).ToUniversalTime();
@@ -812,6 +816,7 @@ public class ProductsSeeders: ISeeder
                 new UserId(userId),
                 deliveryAddress,
                 paymentWay,
+                deliveryWay,
                 expectedTimeDelivery,
                 orderItems,
                 createdAt,

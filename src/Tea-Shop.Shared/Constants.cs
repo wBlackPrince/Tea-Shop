@@ -4,6 +4,8 @@ public readonly struct Constants
 {
     public static readonly int Limit2 = 2;
 
+    public static readonly int Limit15 = 25;
+
     public static readonly int Limit25 = 25;
 
     public static readonly int Limit50 = 50;
@@ -19,6 +21,8 @@ public readonly struct Constants
     public static readonly int Limit1000 = 1000;
 
     public static readonly int Limit2000 = 2000;
+
+    public static readonly int EndOfWorkingDay = 16;
 
     public const string VerifyEmail = "VerifyEmail";
 }

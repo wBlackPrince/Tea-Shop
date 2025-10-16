@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20251013192800_Initial")]
+    [Migration("20251016175745_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("delivery_address");
+
+                    b.Property<int>("DeliveryWay")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ExpectedDeliveryTime")
                         .HasColumnType("timestamp with time zone")

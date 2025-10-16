@@ -1,8 +1,10 @@
 ﻿using System.Data;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Mvc.Formatters.Xml;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
+using Tea_Shop.Application.Products;
 using Tea_Shop.Contract.Users;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
@@ -12,6 +14,7 @@ namespace Tea_Shop.Application.Users.Commands.AddBasketItemCommand;
 
 public class AddBasketItemHandler(
     IUsersRepository usersRepository,
+    IProductsRepository productsRepository,
     ILogger<AddBasketItemHandler> logger,
     ITransactionManager transactionManager): ICommandHandler<AddBasketItemDto?,  AddBasketItemCommand>
 {
@@ -57,6 +60,21 @@ public class AddBasketItemHandler(
             logger.LogError("Basket {basketId} not found", basketId.Value);
             transactionScope.Rollback();
             return addResult.Error;
+        }
+
+        var product = await productsRepository.GetProductById(
+            command.AddBasketItemDto.ProductId,
+            cancellationToken);
+
+        if (command.AddBasketItemDto.Quantity > Constants.Limit15)
+        {
+            logger.LogError("Basket {basketId} not found", basketId.Value);
+            transactionScope.Rollback();
+            return Error.Validation("add.basket_item", $"You cannot add more than 15 products to basket");
+        }
+        else
+        {
+            product.UpdateStockQuantity(product.StockQuantity - command.AddBasketItemDto.Quantity);
         }
 
 

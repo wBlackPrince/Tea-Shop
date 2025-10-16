@@ -20,6 +20,7 @@ public class Order: Entity
     /// <param name="userId">Идентификатор пользователя.</param>
     /// <param name="deliveryAddress">Адрес доставки.</param>
     /// <param name="paymentWay">Способ оплаты.</param>
+    /// <param name="deliveryWay">Способ доставки.</param>
     /// <param name="expectedDeliveryTime">Ожидаемое время доставки.</param>
     /// <param name="orderItems">Список заказанных товаров.</param>
     /// <param name="createdAt">Дата создания.</param>
@@ -29,6 +30,7 @@ public class Order: Entity
         UserId userId,
         string deliveryAddress,
         PaymentWay paymentWay,
+        DeliveryWay deliveryWay,
         DateTime expectedDeliveryTime,
         IEnumerable<OrderItem> orderItems,
         DateTime createdAt,
@@ -39,6 +41,7 @@ public class Order: Entity
         DeliveryAddress = deliveryAddress;
         PaymentWay = paymentWay;
         ExpectedDeliveryTime = expectedDeliveryTime;
+        DeliveryWay = deliveryWay;
         OrderStatus = OrderStatus.Pending;
         _orderItems = orderItems.ToList();
         CreatedAt = createdAt;
@@ -73,6 +76,11 @@ public class Order: Entity
     /// Gets or sets способ оплаты
     /// </summary>
     public PaymentWay PaymentWay { get; set; }
+
+    /// <summary>
+    /// Gets or sets споосб доставки
+    /// </summary>
+    public DeliveryWay DeliveryWay { get; set; }
 
     /// <summary>
     /// Gets or sets ожидаемая дата доставки
