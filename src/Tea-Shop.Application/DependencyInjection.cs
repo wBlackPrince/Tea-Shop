@@ -86,7 +86,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<Guid, DeleteTagCommand>,
             DeleteTagHandler>();
-        services.AddScoped<UpdateProductHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid, UpdateProductCommand>,
+            UpdateProductHandler>();
         services.AddScoped<
             ICommandHandler<ProductWithOnlyIdDto, UpdatePreparationDescriptionCommand>,
             UpdatePreparationDescriptionHandler>();
@@ -155,7 +157,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<CreateCommentResponseDto, CreateCommentCommand>,
             CreateCommentHandler>();
-        services.AddScoped<UpdateCommentHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid?, UpdateCommentCommand>,
+            UpdateCommentHandler>();
         services.AddScoped<
             ICommandHandler<CommentWithOnlyIdDto, DeleteCommentCommand>,
             DeleteCommentHandler>();
@@ -170,7 +174,9 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<CreateReviewResponseDto, CreateReviewCommand>,
             CreateReviewHandler>();
-        services.AddScoped<UpdateReviewHandler>();
+        services.AddScoped<
+            ICommandHandler<Guid, UpdateReviewCommand>,
+            UpdateReviewHandler>();
         services.AddScoped<
             ICommandHandler<DeleteReviewDto, DeleteReviewCommand>,
             DeleteReviewHandler>();

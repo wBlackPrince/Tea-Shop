@@ -24,5 +24,14 @@ public readonly struct Constants
 
     public static readonly int EndOfWorkingDay = 16;
 
+
+    public static readonly int ReviewTitleMaxLength = 50;
+
+    public static readonly int ReviewTextMaxLength = 2000;
+
+    public static readonly int MinVote = -1;
+
+    public static readonly int MaxVote = 1;
+
     public const string VerifyEmail = "VerifyEmail";
 }

@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Tea_Shop.Application.Abstractions;
 using Tea_Shop.Application.Database;
 using Tea_Shop.Domain.Social;
 using Tea_Shop.Shared;
@@ -11,11 +12,10 @@ namespace Tea_Shop.Application.Social.Commands.UpdateReviewCommand;
 public class UpdateReviewHandler(
     ISocialRepository reviewsRepository,
     ILogger<UpdateReviewHandler> logger,
-    ITransactionManager transactionManager)
+    ITransactionManager transactionManager): ICommandHandler<Guid, UpdateReviewCommand>
 {
     public async Task<Result<Guid, Error>> Handle(
-        Guid reviewId,
-        JsonPatchDocument<Review> reviewUpdates,
+        UpdateReviewCommand command,
         CancellationToken cancellationToken)
     {
         var transactionScopeResult = await transactionManager.BeginTransactionAsync(
@@ -32,7 +32,7 @@ public class UpdateReviewHandler(
 
 
         Review? review = await reviewsRepository.GetReviewById(
-            new ReviewId(reviewId),
+            new ReviewId(command.ReviewId),
             cancellationToken);
 
         if (review is null)
@@ -41,16 +41,32 @@ public class UpdateReviewHandler(
             return Error.NotFound("update review", "review not found");
         }
 
-        try
+        UnitResult<Error> result = new UnitResult<Error>();
+
+        switch (command.Request.Property)
         {
-            reviewUpdates.ApplyTo(review);
+            case nameof(review.Title):
+                result = review.UpdateTitle(command.Request.NewValue);
+                break;
+            case nameof(review.Text):
+                result = review.UpdateText(command.Request.NewValue);
+                break;
+            case nameof(review.Rating):
+                result = review.UpdateRating(int.Parse(command.Request.NewValue));
+                break;
+            default:
+                logger.LogError("Validation error while updating review with id {reviewId}", command.ReviewId);
+                transactionScope.Rollback();
+                return Error.Validation("update review", "invalid property to update");
         }
-        catch (Exception e)
+
+        if (result.IsFailure)
         {
-            logger.LogError("Validation error while updating review with id {reviewId}", reviewId);
+            logger.LogError("fail to update comment");
             transactionScope.Rollback();
-            return Error.Validation("update review", e.Message);
+            return result.Error;
         }
+
 
         review.UpdatedAt = DateTime.UtcNow.ToUniversalTime();
 
@@ -67,7 +83,7 @@ public class UpdateReviewHandler(
         }
 
 
-        logger.LogInformation("Update review {reviewId}", reviewId);
+        logger.LogInformation("Update review {reviewId}", command.ReviewId);
 
         return review.Id.Value;
     }

@@ -15,6 +15,7 @@ using Tea_Shop.Application.Social.Queries.GetHierarchyQuery;
 using Tea_Shop.Application.Social.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewCommentsQuery;
+using Tea_Shop.Contract;
 using Tea_Shop.Contract.Social;
 using Tea_Shop.Domain.Social;
 using Tea_Shop.Domain.Users;
@@ -115,11 +116,12 @@ public class SocialController: ControllerBase
     [HttpPatch("{commentId:guid}")]
     public async Task<IActionResult> UpdateComment(
         [FromRoute] Guid commentId,
-        [FromServices] UpdateCommentHandler handler,
-        [FromBody] JsonPatchDocument<Comment> commentUpdates,
+        [FromServices] ICommandHandler<Guid?, UpdateCommentCommand> handler,
+        [FromBody] UpdateEntityRequestDto commentUpdates,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(commentId, commentUpdates, cancellationToken);
+        var command = new UpdateCommentCommand(commentId, commentUpdates);
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
@@ -191,11 +193,12 @@ public class SocialController: ControllerBase
     [HttpPatch("reviews/{reviewId:guid}")]
     public async Task<IActionResult> UpdateReview(
         [FromRoute] Guid reviewId,
-        [FromBody] JsonPatchDocument<Review> reviewUpdates,
-        [FromServices] UpdateReviewHandler handler,
+        [FromBody] UpdateEntityRequestDto reviewUpdates,
+        [FromServices] ICommandHandler<Guid, UpdateReviewCommand> handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(reviewId, reviewUpdates, cancellationToken);
+        var command = new UpdateReviewCommand(reviewId, reviewUpdates);
+        var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {

@@ -169,7 +169,7 @@ public class ProductsController : ControllerBase
     [Authorize(Roles = Role.AdminRoleName)]
     [HttpPatch("{productId:guid}")]
     public async Task<IActionResult> Update(
-        [FromServices] UpdateProductHandler handler,
+        [FromServices] ICommandHandler<Guid, UpdateProductCommand> handler,
         [FromRoute] Guid productId,
         [FromBody] UpdateEntityRequestDto productUpdates,
         CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
 
@@ -10,6 +11,7 @@ namespace Tea_Shop.Domain.Social;
 public class Comment: Entity
 {
     private string _text;
+    private int _rating;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Comment"/> class.
@@ -38,7 +40,7 @@ public class Comment: Entity
         UserId = userId;
         ReviewId = reviewId;
         Identifier = identifier;
-        Text = text;
+        _text = text;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
         Path = path;
@@ -61,13 +63,9 @@ public class Comment: Entity
     public UserId UserId { get; set; }
 
     /// <summary>
-    /// Gets or sets текст комментария
+    /// Gets текст комментария
     /// </summary>
-    public string Text
-    {
-        get => _text;
-        set => UpdateText(value);
-    }
+    public string Text => _text;
 
     /// <summary>
     /// Gets or sets иднетификатор пути
@@ -75,9 +73,9 @@ public class Comment: Entity
     public Identifier Identifier { get; set; }
 
     /// <summary>
-    /// Gets or sets рейтинг комментария
+    /// Gets рейтинг комментария
     /// </summary>
-    public int Rating { get; set; } = 0;
+    public int Rating => _rating;
 
     /// <summary>
     /// Gets идентификатор обзора
@@ -165,18 +163,41 @@ public class Comment: Entity
             parentId);
     }
 
-    public void UpdateText(string text)
+    public UnitResult<Error> UpdateText(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
-            throw new ValidationException("Text cannot be null or empty.");
+            return Error.Validation(
+                "comment.update",
+                "Text cannot be null or whitespace.");
         }
 
         if (text.Length > Constants.Limit2000)
         {
-            throw new ValidationException("Text cannot be longer than 200 characters.");
+            return Error.Validation(
+                "comment.update",
+                "Text cannot be longer than 200 characters.");
         }
 
         _text = text;
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateRating(int vote)
+    {
+        if (vote < -1)
+        {
+            return Error.Validation("comment.update", "Rating cannot be below -1");
+        }
+
+        if (vote > 1)
+        {
+            return Error.Validation("comment.update", "Rating cannot be abow 1");
+        }
+
+        _rating += vote;
+
+        return UnitResult.Success<Error>();
     }
 }

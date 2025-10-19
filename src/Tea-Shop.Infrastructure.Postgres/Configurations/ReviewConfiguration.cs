@@ -28,12 +28,12 @@ public sealed class ReviewConfiguration: IEntityTypeConfiguration<Review>
 
         builder
             .Property(r => r.Title)
-            .HasMaxLength(Constants.Limit50)
+            .HasMaxLength(Constants.ReviewTitleMaxLength)
             .HasColumnName("title");
 
         builder
             .Property(r => r.Text)
-            .HasMaxLength(Constants.Limit2000)
+            .HasMaxLength(Constants.ReviewTextMaxLength)
             .HasColumnName("text");
 
         builder

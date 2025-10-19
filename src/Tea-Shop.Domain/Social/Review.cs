@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CSharpFunctionalExtensions;
 using Tea_Shop.Domain.Products;
 using Tea_Shop.Domain.Users;
 using Tea_Shop.Shared;
@@ -11,6 +11,8 @@ namespace Tea_Shop.Domain.Social;
 public class Review: Entity
 {
     private string _title = string.Empty;
+    private string _text = string.Empty;
+    private int _rating = 0;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Review"/> class.
@@ -37,8 +39,8 @@ public class Review: Entity
         ProductId = productId;
         UserId = userId;
         ProductRating = (ProductRates)productRating;
-        Title = title;
-        Text = text;
+        _title = title;
+        _text = text;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
@@ -66,21 +68,17 @@ public class Review: Entity
     /// <summary>
     /// Gets or sets заголовок обзора
     /// </summary>
-    public string Title
-    {
-        get => _title;
-        set => UpdateTitle(value);
-    }
+    public string Title => _title;
 
     /// <summary>
     /// Gets or sets текст обзора
     /// </summary>
-    public string Text { get; set; }
+    public string Text => _text;
 
     /// <summary>
     /// Gets or sets рейтинг обзора
     /// </summary>
-    public int Rating { get; set; } = 0;
+    public int Rating => _rating;
 
     /// <summary>
     /// Gets or sets рейтинг обзора
@@ -97,18 +95,62 @@ public class Review: Entity
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 
-    public void UpdateTitle(string title)
+    public UnitResult<Error> UpdateTitle(string title)
     {
         if (string.IsNullOrWhiteSpace(title))
         {
-            throw new ValidationException("Title can't be empty");
+            return Error.Validation(
+                "update.review",
+                "Title can't be empty");
         }
 
-        if (title.Length > Constants.Limit2000)
+        if (title.Length > Constants.ReviewTitleMaxLength)
         {
-            throw new ValidationException("Title can't be longer than 2000 characters");
+            return Error.Validation(
+                "update.review",
+                "Title can't be longer than 50 characters");
         }
 
         _title = title;
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateText(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return Error.Validation(
+                "update.review",
+                "Text can't be empty");
+        }
+
+        if (text.Length > Constants.ReviewTextMaxLength)
+        {
+            return Error.Validation(
+                "update.review",
+                "Text can't be longer than 2000 characters");
+        }
+
+        _text = text;
+
+        return UnitResult.Success<Error>();
+    }
+
+    public UnitResult<Error> UpdateRating(int vote)
+    {
+        if (vote < -1)
+        {
+            return Error.Validation("review.update", "Rating cannot be below -1");
+        }
+
+        if (vote > 1)
+        {
+            return Error.Validation("review.update", "Rating cannot be abow 1");
+        }
+
+        _rating += vote;
+
+        return UnitResult.Success<Error>();
     }
 }
