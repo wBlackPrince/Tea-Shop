@@ -195,3 +195,6 @@ D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.APM.Abst
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.OpenTelemetry.dll
 D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Rougamo.OpenTelemetry.Hosting.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Quartz.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Quartz.Extensions.DependencyInjection.dll
+D:\MyWebApplications\Tea-Shop\src\Tea-Shop.Web\bin\Debug\net9.0\Quartz.Extensions.Hosting.dll

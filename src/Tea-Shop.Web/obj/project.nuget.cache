@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "b4UlJcao4pg=",
+  "dgSpecHash": "xoad7RGpuvA=",
   "success": true,
   "projectFilePath": "D:\\MyWebApplications\\Tea-Shop\\src\\Tea-Shop.Web\\Tea-Shop.Web.csproj",
   "expectedPackageFiles": [
@@ -94,6 +94,9 @@
     "C:\\Users\\maste\\.nuget\\packages\\opentelemetry.instrumentation.aspnetcore\\1.12.0\\opentelemetry.instrumentation.aspnetcore.1.12.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\opentelemetry.instrumentation.entityframeworkcore\\1.12.0-beta.2\\opentelemetry.instrumentation.entityframeworkcore.1.12.0-beta.2.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\opentelemetry.instrumentation.http\\1.12.0\\opentelemetry.instrumentation.http.1.12.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\quartz\\3.15.0\\quartz.3.15.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\quartz.extensions.dependencyinjection\\3.15.0\\quartz.extensions.dependencyinjection.3.15.0.nupkg.sha512",
+    "C:\\Users\\maste\\.nuget\\packages\\quartz.extensions.hosting\\3.15.0\\quartz.extensions.hosting.3.15.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\rougamo.apm.abstractions\\5.0.0-preview-1733726557\\rougamo.apm.abstractions.5.0.0-preview-1733726557.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\rougamo.fody\\5.0.0\\rougamo.fody.5.0.0.nupkg.sha512",
     "C:\\Users\\maste\\.nuget\\packages\\rougamo.opentelemetry\\5.0.0\\rougamo.opentelemetry.5.0.0.nupkg.sha512",

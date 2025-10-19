@@ -619,6 +619,10 @@
               "target": "Package",
               "version": "[9.0.4, )"
             },
+            "Quartz.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[3.15.0, )"
+            },
             "StyleCop.Analyzers": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
