@@ -7,7 +7,6 @@ using Tea_Shop.Application.Database;
 using Tea_Shop.Application.FilesStorage;
 using Tea_Shop.Application.Products;
 using Tea_Shop.Application.Products.Commands.CreateProductCommand;
-using Tea_Shop.Contract;
 using Tea_Shop.Contract.Products;
 using Tea_Shop.Shared;
 

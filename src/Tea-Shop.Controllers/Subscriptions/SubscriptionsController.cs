@@ -8,6 +8,7 @@ using Tea_Shop.Application.Subscriptions.Queries.GetKitByIdQuery;
 using Tea_Shop.Contract.Orders;
 using Tea_Shop.Contract.Subscriptions;
 using Tea_Shop.Domain.Users;
+using Tea_Shop.Shared;
 
 namespace Tea_Shop.Subscriptions;
 
@@ -44,9 +45,9 @@ public class SubscriptionsController: ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = Role.AdminRoleName)]
-    [HttpPost("/order")]
-    public async Task<ActionResult<KitDto>> CreateKit(
+    [Authorize(Roles = $"{Role.AdminRoleName},{Role.UserRoleName}")]
+    [HttpPost("/order", Name = Constants.CreateOrderBasedOnSubscription)]
+    public async Task<ActionResult<KitDto>> CreateOrderBasedOnSubscription(
         [FromBody] CreateOrderBasedOnSubscriptionRequestDto request,
         [FromServices] ICommandHandler<CreateOrderResponseDto, CreateOrderBasedOnSubscriptionCommand> handler,
         CancellationToken cancellationToken)

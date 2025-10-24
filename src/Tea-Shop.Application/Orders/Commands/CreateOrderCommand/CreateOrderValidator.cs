@@ -22,6 +22,10 @@ public class CreateOrderValidator: AbstractValidator<CreateOrderRequestDto>
             .Must(BeValidDeliveryWay).WithMessage("Delivery way is invalid");
 
         this
+            .RuleFor(o => o.UsedBonuses)
+            .GreaterThanOrEqualTo(0).WithMessage("Used bonus count must be greater than 0");
+
+        this
             .RuleForEach(o => o.Items)
             .ChildRules(items =>
             {

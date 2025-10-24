@@ -37,7 +37,19 @@ public sealed class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscri
             .HasColumnName("kit_id");
 
         builder
-            .HasOne<User>()
+            .Property(s => s.CreatedAt)
+            .HasColumnName("created_at");
+
+        builder
+            .Property(s => s.UpdatedAt)
+            .HasColumnName("updated_at");
+
+        builder
+            .Property(s => s.LastOrder)
+            .HasColumnName("last_order");
+
+        builder
+            .HasOne(u => u.User)
             .WithMany()
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);

@@ -13,6 +13,6 @@ public class LoggingBackgroundJobSetup: IConfigureOptions<QuartzOptions>
             .AddJob<LoggingBackgroundJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
             .AddTrigger(trigger => trigger
                 .ForJob(jobKey)
-                .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(5).RepeatForever()));
+                .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(100).RepeatForever()));
     }
 }

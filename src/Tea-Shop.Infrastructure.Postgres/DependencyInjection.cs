@@ -48,6 +48,7 @@ public static class DependencyInjection
         });
 
         services.ConfigureOptions<LoggingBackgroundJobSetup>();
+        services.ConfigureOptions<CreateOrderBasedOnSubscriptionJobSetup>();
 
         return services;
     }

@@ -36,8 +36,9 @@ public class CreateOrderHandler(
                 "Validation failed {validationError}",
                 validationResult.Errors.First().ErrorMessage);
             return Error.Validation(
-                "create.order",
-                $"Validation failed {validationResult.Errors.First().ErrorMessage}");
+                "order.create",
+                $"Validation failed {validationResult.Errors.First().ErrorMessage}",
+                validationResult.Errors.First().PropertyName);
         }
 
 

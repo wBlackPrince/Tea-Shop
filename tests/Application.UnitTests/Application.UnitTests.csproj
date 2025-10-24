@@ -24,7 +24,6 @@
       <Folder Include="Buskets\" />
       <Folder Include="Comments\" />
       <Folder Include="Kits\" />
-      <Folder Include="Orders\" />
       <Folder Include="Reviews\" />
       <Folder Include="Tags\" />
     </ItemGroup>

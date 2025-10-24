@@ -408,14 +408,26 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<Guid>("KitId")
                         .HasColumnType("uuid")
                         .HasColumnName("kit_id");
+
+                    b.Property<DateTime>("LastOrder")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_order");
 
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("state");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -831,13 +843,15 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tea_Shop.Domain.Users.User", null)
+                    b.HasOne("Tea_Shop.Domain.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Kit");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tea_Shop.Domain.Tokens.EmailVerificationToken", b =>

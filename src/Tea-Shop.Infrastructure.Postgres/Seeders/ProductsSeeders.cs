@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tea_Shop.Domain.Orders;
 using Tea_Shop.Domain.Products;
@@ -555,7 +556,7 @@ public class ProductsSeeders: ISeeder
         _logger.LogInformation("Seeding subscriptions in batching...");
         _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
 
-        var usersIds = _dbContext.UsersRead.Select(u => u.Id).ToArray();
+        var users = _dbContext.Users.ToArray();
         var kits = _dbContext.Kits.ToArray();
 
         const int batchSize = 1000;
@@ -563,13 +564,30 @@ public class ProductsSeeders: ISeeder
 
         Subscription subscription;
 
+        DateTime createdAt;
+        DateTime updatedAt;
+        DateTime lastOrder;
+        DateTime startDate = new DateTime(2023, 1, 1);
+        DateTime endDate = new DateTime(2025, 9, 8);
+        int durationInMonths;
+
         for (int i = 0; i < SUBSCRIPTIONS_COUNT; i++)
         {
+            createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
+            updatedAt = createdAt;
+            durationInMonths = _random.Next(1, 12);
+            lastOrder = createdAt.AddMonths(_random.Next(1, 5) * durationInMonths).ToUniversalTime();
+
+            var user = users[_random.Next(0, users.Length)];
             subscription = new Subscription(
                 new SubscriptionId(Guid.NewGuid()),
-                usersIds[_random.Next(0, usersIds.Length)],
-                _random.Next(1, 12),
+                user.Id,
+                user,
+                durationInMonths,
+                createdAt,
+                updatedAt,
                 kits[_random.Next(0, kits.Length)]);
+            subscription.LastOrder = lastOrder;
 
             subscriptions.Add(subscription);
 
