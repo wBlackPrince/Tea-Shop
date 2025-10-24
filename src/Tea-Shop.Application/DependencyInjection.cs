@@ -36,7 +36,6 @@ using Tea_Shop.Application.Social.Queries.GetNeighboursQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewByIdQuery;
 using Tea_Shop.Application.Social.Queries.GetReviewCommentsQuery;
 using Tea_Shop.Application.Subscriptions.Commands.CreateKitCommand;
-using Tea_Shop.Application.Subscriptions.Commands.CreateOrderBasedOnSubscriptionCommand;
 using Tea_Shop.Application.Subscriptions.Queries.GetKitByIdQuery;
 using Tea_Shop.Application.Users.Commands.AddBasketItemCommand;
 using Tea_Shop.Application.Users.Commands.CreateUserCommand;
@@ -138,9 +137,6 @@ public static class DependencyInjection
         services.AddScoped<
             ICommandHandler<KitDto, CreateKitCommand>,
             CreateKitHandler>();
-        services.AddScoped<
-            ICommandHandler<CreateOrderResponseDto, CreateOrderBasedOnSubscriptionCommand>,
-            CreateOrderBasedOnSubscriptionHandler>();
 
         // handlers для комментов
         services.AddScoped<

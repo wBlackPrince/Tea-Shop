@@ -34,6 +34,4 @@ public readonly struct Constants
     public static readonly int MaxVote = 1;
 
     public const string VerifyEmail = "VerifyEmail";
-
-    public const string CreateOrderBasedOnSubscription = "CreateOrderBasedOnSubscription";
 }
