@@ -13,6 +13,6 @@ public class CancelSubscriptionsJobSetup: IConfigureOptions<QuartzOptions>
             .AddJob<CancelSubscriptionsJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
             .AddTrigger(trigger => trigger
                 .ForJob(jobKey)
-                .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(10).RepeatForever()));
+                .WithSimpleSchedule(schedule => schedule.WithIntervalInHours(24).RepeatForever()));
     }
 }

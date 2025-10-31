@@ -47,9 +47,11 @@ public static class DependencyInjection
             options.WaitForJobsToComplete = true;
         });
 
+        // фоновые задачи
         services.ConfigureOptions<LoggingBackgroundJobSetup>();
         services.ConfigureOptions<CreateOrderBasedOnSubscriptionJobSetup>();
         services.ConfigureOptions<CancelSubscriptionsJobSetup>();
+        services.ConfigureOptions<RemoveEmailVerificationTokensJobSetup>();
 
         return services;
     }
