@@ -38,8 +38,12 @@ public sealed class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscri
                 .HasColumnName("is_active");
 
             sb
-                .Property(b => b.StatusDuration)
-                .HasColumnName("status_duration");
+                .Property(b => b.IntervalBetweenOrders)
+                .HasColumnName("interval_between_orders");
+
+            sb
+                .Property(b => b.NumberOfOrders)
+                .HasColumnName("number_of_orders");
         });
 
         builder

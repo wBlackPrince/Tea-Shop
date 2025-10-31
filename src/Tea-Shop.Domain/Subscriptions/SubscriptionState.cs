@@ -5,11 +5,13 @@ public class SubscriptionState
     public SubscriptionState(
         IntervalType intervalType,
         int interval,
-        int statusDuration)
+        int intervalBetweenOrders,
+        int numberOfOrders)
     {
         IntervalType = intervalType;
         Interval = interval;
-        StatusDuration = statusDuration;
+        IntervalBetweenOrders = intervalBetweenOrders;
+        NumberOfOrders = numberOfOrders;
         IsActive = true;
     }
 
@@ -26,7 +28,12 @@ public class SubscriptionState
     /// <summary>
     /// Gets or sets длительность подписки.
     /// </summary>
-    public int StatusDuration { get; set; }
+    public int IntervalBetweenOrders { get; set; }
+
+    /// <summary>
+    /// Gets or sets количество заказов в рамках подписки
+    /// </summary>
+    public int NumberOfOrders { get; set; }
 
     /// <summary>
     /// Gets or sets активность подписки

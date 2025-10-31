@@ -131,6 +131,7 @@ public class CreateOrderBasedOnSubscriptionsJob(
                 updatedAt);
 
             await ordersRepository.CreateOrder(order, CancellationToken.None);
+            subscriptionWithKit.LastOrder = DateTime.UtcNow;
 
 
             var saveResult = await transactionManager.SaveChangesAsync(CancellationToken.None);
@@ -180,7 +181,7 @@ public class CreateOrderBasedOnSubscriptionsJob(
                                                                                                 WHEN 'MONTHLY' THEN interval '1 month'
                                                                                                 WHEN 'WEEKLY' THEN interval '1 week'
                                                                                                 WHEN 'DAILY' THEN interval '1 day'
-                                                                                               End) * s.status_duration)::date = current_date
+                                                                                               End) * s.interval_between_orders)::date = current_date and s.is_active
                                                                         """)).ToArray();
 
             return subscriptions;

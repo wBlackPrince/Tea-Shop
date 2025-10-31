@@ -11,7 +11,8 @@ public class Subscription: Entity
         SubscriptionId id,
         UserId userId,
         User user,
-        int durationInMonths,
+        int numberOfOrders,
+        int intervalBetweenOrders,
         IntervalType intervalType,
         int interval,
         DateTime createdAt,
@@ -25,7 +26,8 @@ public class Subscription: Entity
         State = new SubscriptionState(
             intervalType,
             interval,
-            durationInMonths);
+            intervalBetweenOrders,
+            numberOfOrders);
         Kit = kit;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;

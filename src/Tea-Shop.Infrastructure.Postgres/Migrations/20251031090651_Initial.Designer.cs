@@ -12,7 +12,7 @@ using Tea_Shop.Infrastructure.Postgres;
 namespace Tea_Shop.Infrastructure.Postgres.Migrations
 {
     [DbContext(typeof(ProductsDbContext))]
-    [Migration("20251030130714_Initial")]
+    [Migration("20251031090651_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -856,6 +856,10 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                                 .HasColumnType("integer")
                                 .HasColumnName("interval");
 
+                            b1.Property<int>("IntervalBetweenOrders")
+                                .HasColumnType("integer")
+                                .HasColumnName("interval_between_orders");
+
                             b1.Property<string>("IntervalType")
                                 .IsRequired()
                                 .HasColumnType("text")
@@ -865,9 +869,9 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                                 .HasColumnType("boolean")
                                 .HasColumnName("is_active");
 
-                            b1.Property<int>("StatusDuration")
+                            b1.Property<int>("NumberOfOrders")
                                 .HasColumnType("integer")
-                                .HasColumnName("status_duration");
+                                .HasColumnName("number_of_orders");
 
                             b1.HasKey("SubscriptionId");
 

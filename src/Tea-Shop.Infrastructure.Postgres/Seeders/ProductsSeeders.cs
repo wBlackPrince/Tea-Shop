@@ -572,6 +572,7 @@ public class ProductsSeeders: ISeeder
         DateTime endDate = new DateTime(2025, 9, 8);
         int durationInMonths;
         int interval;
+        int numberOrOrders;
 
         for (int i = 0; i < SUBSCRIPTIONS_COUNT; i++)
         {
@@ -579,6 +580,7 @@ public class ProductsSeeders: ISeeder
             updatedAt = createdAt;
             durationInMonths = _random.Next(4, 12);
             interval = _random.Next(1, 2);
+            numberOrOrders = _random.Next(1, 8);
             lastOrder = createdAt.AddMonths(_random.Next(1, 5) * durationInMonths).ToUniversalTime();
 
             var user = users[_random.Next(0, users.Length)];
@@ -586,6 +588,7 @@ public class ProductsSeeders: ISeeder
                 new SubscriptionId(Guid.NewGuid()),
                 user.Id,
                 user,
+                numberOrOrders,
                 durationInMonths,
                 intervalTypes[_random.Next(0, intervalTypes.Length)],
                 interval,
