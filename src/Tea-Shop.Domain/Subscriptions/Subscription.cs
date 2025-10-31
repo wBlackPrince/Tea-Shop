@@ -1,5 +1,4 @@
-﻿using Tea_Shop.Domain.Products;
-using Tea_Shop.Domain.Users;
+﻿using Tea_Shop.Domain.Users;
 
 namespace Tea_Shop.Domain.Subscriptions;
 
@@ -13,6 +12,8 @@ public class Subscription: Entity
         UserId userId,
         User user,
         int durationInMonths,
+        IntervalType intervalType,
+        int interval,
         DateTime createdAt,
         DateTime updatedAt,
         Kit kit)
@@ -21,7 +22,10 @@ public class Subscription: Entity
         UserId = userId;
         User = user;
         KitId = kit.Id;
-        State = new ActiveState(SubscriptionStatus.MONTHLY, durationInMonths);
+        State = new SubscriptionState(
+            intervalType,
+            interval,
+            durationInMonths);
         Kit = kit;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;

@@ -561,6 +561,7 @@ public class ProductsSeeders: ISeeder
 
         const int batchSize = 1000;
         List<Subscription> subscriptions = [];
+        IntervalType[] intervalTypes = { IntervalType.DAILY, IntervalType.WEEKLY, IntervalType.MONTHLY, };
 
         Subscription subscription;
 
@@ -570,12 +571,14 @@ public class ProductsSeeders: ISeeder
         DateTime startDate = new DateTime(2023, 1, 1);
         DateTime endDate = new DateTime(2025, 9, 8);
         int durationInMonths;
+        int interval;
 
         for (int i = 0; i < SUBSCRIPTIONS_COUNT; i++)
         {
             createdAt = GetRandomDate(startDate, endDate).ToUniversalTime();
             updatedAt = createdAt;
-            durationInMonths = _random.Next(1, 12);
+            durationInMonths = _random.Next(4, 12);
+            interval = _random.Next(1, 2);
             lastOrder = createdAt.AddMonths(_random.Next(1, 5) * durationInMonths).ToUniversalTime();
 
             var user = users[_random.Next(0, users.Length)];
@@ -584,6 +587,8 @@ public class ProductsSeeders: ISeeder
                 user.Id,
                 user,
                 durationInMonths,
+                intervalTypes[_random.Next(0, intervalTypes.Length)],
+                interval,
                 createdAt,
                 updatedAt,
                 kits[_random.Next(0, kits.Length)]);

@@ -2,50 +2,34 @@
 
 public class SubscriptionState
 {
-    private const string delimiter = "-";
-
-    public static string ConverToString(SubscriptionState state)
+    public SubscriptionState(
+        IntervalType intervalType,
+        int interval,
+        int statusDuration)
     {
-        string strState = string.Empty;
-
-        if (state is ActiveState || state is SkipState)
-        {
-            ActiveState activeState = state as ActiveState;
-            strState = activeState.Status.ToString();
-            strState += delimiter;
-            strState += activeState.StatusDuration.ToString();
-        }
-        else
-        {
-            PausedState pauseState = state as PausedState;
-            strState = pauseState.Status.ToString();
-        }
-
-        return strState;
+        IntervalType = intervalType;
+        Interval = interval;
+        StatusDuration = statusDuration;
+        IsActive = true;
     }
 
-    public static SubscriptionState ConverToState(string strState)
-    {
-        string[] strAttributes = strState.Split(delimiter);
+    /// <summary>
+    /// Gets or sets интервал подписки.
+    /// </summary>
+    public int Interval { get; set; }
 
-        if (strAttributes.Length > 1)
-        {
-            if (strAttributes[0] == "MONTHLY")
-            {
-                return new ActiveState(
-                    SubscriptionStatus.MONTHLY,
-                    int.Parse(strAttributes[1]));
-            }
-            else
-            {
-                return new SkipState(
-                    SubscriptionStatus.SKIP,
-                    int.Parse(strAttributes[1]));
-            }
-        }
-        else
-        {
-            return new PausedState(SubscriptionStatus.PAUSE);
-        }
-    }
+    /// <summary>
+    /// Gets or sets тип интервала подписки: дни, недели, месяцы.
+    /// </summary>
+    public IntervalType IntervalType { get; set; }
+
+    /// <summary>
+    /// Gets or sets длительность подписки.
+    /// </summary>
+    public int StatusDuration { get; set; }
+
+    /// <summary>
+    /// Gets or sets активность подписки
+    /// </summary>
+    public bool IsActive { get; set; }
 }

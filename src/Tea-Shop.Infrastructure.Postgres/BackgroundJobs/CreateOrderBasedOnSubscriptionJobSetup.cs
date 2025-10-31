@@ -13,6 +13,6 @@ public class CreateOrderBasedOnSubscriptionJobSetup: IConfigureOptions<QuartzOpt
             .AddJob<CreateOrderBasedOnSubscriptionsJob>(jobBuilder => jobBuilder.WithIdentity(jobKey))
             .AddTrigger(trigger => trigger
                 .ForJob(jobKey)
-                .WithSimpleSchedule(schedule => schedule.WithIntervalInHours(24).RepeatForever()));
+                .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(10).RepeatForever()));
     }
 }

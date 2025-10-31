@@ -420,11 +420,6 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_order");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("state");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
@@ -849,7 +844,40 @@ namespace Tea_Shop.Infrastructure.Postgres.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Tea_Shop.Domain.Subscriptions.SubscriptionState", "State", b1 =>
+                        {
+                            b1.Property<Guid>("SubscriptionId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Interval")
+                                .HasColumnType("integer")
+                                .HasColumnName("interval");
+
+                            b1.Property<string>("IntervalType")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("interval_type");
+
+                            b1.Property<bool>("IsActive")
+                                .HasColumnType("boolean")
+                                .HasColumnName("is_active");
+
+                            b1.Property<int>("StatusDuration")
+                                .HasColumnType("integer")
+                                .HasColumnName("status_duration");
+
+                            b1.HasKey("SubscriptionId");
+
+                            b1.ToTable("subscriptions");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SubscriptionId");
+                        });
+
                     b.Navigation("Kit");
+
+                    b.Navigation("State")
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

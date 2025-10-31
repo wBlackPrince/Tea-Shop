@@ -176,7 +176,11 @@ public class CreateOrderBasedOnSubscriptionsJob(
                                                                             u.id as user_id,
                                                                             s.id as subscription_id
                                                                         from users as u join subscriptions as s on u.id = s.user_id
-                                                                        where (s.last_order + interval '1 month' * cast(substring(s.state, 9) as integer)).date = current_date
+                                                                        where (s.last_order + (case s.interval_type
+                                                                                                WHEN 'MONTHLY' THEN interval '1 month'
+                                                                                                WHEN 'WEEKLY' THEN interval '1 week'
+                                                                                                WHEN 'DAILY' THEN interval '1 day'
+                                                                                               End) * s.status_duration)::date = current_date
                                                                         """)).ToArray();
 
             return subscriptions;

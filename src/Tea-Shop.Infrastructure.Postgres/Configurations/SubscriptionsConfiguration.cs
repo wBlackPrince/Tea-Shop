@@ -20,11 +20,27 @@ public sealed class SubscriptionsConfiguration: IEntityTypeConfiguration<Subscri
             .HasConversion(s => s.Value, id => new SubscriptionId(id))
             .HasColumnName("id");
 
-        builder.Property(s => s.State)
-            .HasConversion(
-                s => SubscriptionState.ConverToString(s),
-                str => SubscriptionState.ConverToState(str))
-            .HasColumnName("state");
+        builder.OwnsOne(s => s.State, sb =>
+        {
+            sb
+                .Property(b => b.Interval)
+                .HasColumnName("interval");
+
+            sb
+                .Property(b => b.IntervalType)
+                .HasConversion(
+                    p => p.ToString(),
+                    season => (IntervalType)Enum.Parse(typeof(IntervalType), season))
+                .HasColumnName("interval_type");
+
+            sb
+                .Property(b => b.IsActive)
+                .HasColumnName("is_active");
+
+            sb
+                .Property(b => b.StatusDuration)
+                .HasColumnName("status_duration");
+        });
 
         builder
             .Property(s => s.UserId)
